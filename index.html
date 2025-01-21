@@ -1,0 +1,3524 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ARAS85  Orchestration et containers </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="workshop.css">
+  </head>
+  <body>
+    <!--
+    <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
+      <h1 style="font-size: 3em;">Loading ...</h1>
+      The slides should show up here. If they don't, it might be
+      because you are accessing this file directly from your filesystem.
+      It needs to be served from a web server. You can try this:
+      <pre>
+        docker-compose up -d
+        open http://localhost:8888/workshop.html # on MacOS
+        xdg-open http://localhost:8888/workshop.html # on Linux
+      </pre>
+      Once the slides are loaded, this notice disappears when you
+      go full screen (e.g. by hitting "f").
+    </div>
+    -->
+    <textarea id="source">class: title, in-person
+
+ARAS85 <br/>Orchestration et containers<br/><br /><br />
+
+<div style="text-align: right"><a href="https://www.youtube.com/watch?v=h16zyxiwDLY"> Video </a></div>
+
+[@GuillaumeMorini]: https://twitter.com/GuillaumeMorini
+
+.footnote[
+    Enseignant: [@GuillaumeMorini] <br/>
+    Formation Ingénieur en apprentissage<br/>
+    majeure « Réseaux et Sécurité »<br/>
+    2ème année
+    <!-- **Slides: https://container.training/** -->
+]
+
+<!--
+WiFi: **Something**<br/>
+Password: **Something**
+
+**Be kind to the WiFi!**<br/>
+*Use the 5G network.*
+*Don't use your hotspot.*<br/>
+*Don't stream videos or download big files during the workshop*<br/>
+*Thank you!*
+-->
+
+.debug[
+```
+?? slides/efrei_day_1.yml
+
+```
+
+These slides have been built from commit: 906b2b2
+
+
+[shared/title.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/title.md)]
+---
+## Introductions
+
+- Hello! I am Guillaume Morini ([@GuillaumeMorini])
+   - I have worked at PSA Peugeot Citroën <img src="images/psa.jpeg" alt="PSA" width="64"/>, PMU 🏇, Cisco <img src="images/cisco2.png" alt="Cisco" width="64"/>, Docker 🐳, VMware <img src="images/vmware.png" alt="VMware" width="32"/>and Google Cloud <img src="images/google_cloud.png" alt="Google Cloud" width="32"/>
+
+- The training will run for 4 hours, with a 30 minutes break in the middle
+
+- Feel free to interrupt for questions at any time. 
+  - *Especially when you see full screen container pictures!*
+
+- Use [Teams](https://teams.microsoft.com/l/team/19%3AhDyLe_wF4EzV8ZwhO0X9vj_j1Cg7baPkrFbvI4homEM1%40thread.tacv2/conversations?groupId=9388dd59-aeb3-474e-b7c7-620e860359de&tenantId=413600cf-bd4e-4c7c-8a61-69e73cddf731) to ask questions, get help, etc.
+
+
+[@GuillaumeMorini]: https://twitter.com/GuillaumeMorini
+
+.debug[[logistics.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/logistics.md)]
+---
+
+## Exercises
+
+- During the sessions, there are exercises
+
+- To make the most out of the training, please try the exercises!
+
+  (it will help to practice and memorize the content of the day)
+
+- We recommend to take at least one hour to work on the exercises
+
+  (if you understood the content of the day, it will be much faster)
+
+- Each session will start with a quick review of the exercises of the previous session
+
+.debug[[logistics.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/logistics.md)]
+---
+## A brief introduction
+
+- These materials reuse work done by [Jérôme Petazzoni](https://twitter.com/jpetazzo) and [multiple contributors](https://https://github.com/GuillaumeMorini/orchestration-workshop/graphs/contributors)
+
+- I have included as much information as possible in these slides
+
+- ... but be comfortable spending some time reading the Docker
+ [documentation](https://docs.docker.com/) ...
+
+- ... And looking for answers in the [Docker forums](https://forums.docker.com),
+  [StackOverflow](http://stackoverflow.com/questions/tagged/docker),
+  and other outlets
+
+.debug[[containers/intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/intro.md)]
+---
+
+class: self-paced
+
+## Hands on, you shall practice
+
+- Nobody ever became a Jedi by spending their lives reading Wookiepedia
+
+- Likewise, it will take more than merely *reading* these slides
+  to make you an expert
+
+- These slides include *tons* of demos, exercises, and examples
+
+- They assume that you have access to a machine running Docker
+
+- If you are attending a workshop or tutorial:
+  <br/>you will be given specific instructions to access a cloud VM
+
+- If you are doing this on your own:
+  <br/>we will tell you how to install Docker or access a Docker environment
+
+.debug[[containers/intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/intro.md)]
+---
+## Chat room
+
+- A Microsot Teams teams has been set up for the duration of the training
+
+- We'll use it to ask questions, get help, share feedback ...
+
+  (let's keep an eye on it during the training!)
+
+- Reminder, the room is [Teams](https://teams.microsoft.com/l/team/19%3AhDyLe_wF4EzV8ZwhO0X9vj_j1Cg7baPkrFbvI4homEM1%40thread.tacv2/conversations?groupId=9388dd59-aeb3-474e-b7c7-620e860359de&tenantId=413600cf-bd4e-4c7c-8a61-69e73cddf731)
+
+- Say hi in the chat room!
+
+
+.debug[[shared/chat-room-teams.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/chat-room-teams.md)]
+---
+
+name: toc-part-1
+
+## Table of contents
+
+- [Docker 30,000ft overview](#toc-docker-ft-overview)
+- [History of containers ... and Docker](#toc-history-of-containers--and-docker)
+- [Our training environment](#toc-our-training-environment)
+- [Our first containers](#toc-our-first-containers)
+- [Background containers](#toc-background-containers)
+- [Understanding Docker images](#toc-understanding-docker-images)
+- [Building images interactively](#toc-building-images-interactively)
+- [Building Docker images with a Dockerfile](#toc-building-docker-images-with-a-dockerfile)
+- [`CMD` and `ENTRYPOINT`](#toc-cmd-and-entrypoint)
+- [Copying files during the build](#toc-copying-files-during-the-build)
+- [Exercise — writing Dockerfiles](#toc-exercise--writing-dockerfiles)
+
+.debug[(auto-generated TOC)]
+
+
+
+.debug[[shared/toc.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/toc.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-docker-ft-overview
+class: title
+
+ Docker 30,000ft overview
+
+.nav[
+[Previous part](#toc-)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-history-of-containers--and-docker)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Docker 30,000ft overview
+
+In this lesson, we will learn about:
+
+* Why containers (non-technical elevator pitch)
+
+* Why containers (technical elevator pitch)
+
+* How Docker helps us to build, ship, and run
+
+* The history of containers
+
+We won't actually run Docker or containers in this chapter (yet!).
+
+Don't worry, we will get to that fast enough!
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## Elevator pitch
+
+### (for your manager, your boss...)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## OK... Why the buzz around containers?
+
+* The software industry has changed
+
+* Before:
+  * monolithic applications
+  * long development cycles
+  * single environment
+  * slowly scaling up
+
+* Now:
+  * decoupled services
+  * fast, iterative improvements
+  * multiple environments
+  * quickly scaling out
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## Deployment becomes very complex
+
+* Many different stacks:
+  * languages
+  * frameworks
+  * databases
+
+* Many different targets:
+  * individual development environments
+  * pre-production, QA, staging...
+  * production: on prem, cloud, hybrid
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## The deployment problem
+
+![problem](images/shipping-software-problem.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## The matrix from hell
+
+![matrix](images/shipping-matrix-from-hell.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## The parallel with the shipping industry
+
+![history](images/shipping-industry-problem.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## Intermodal shipping containers
+
+![shipping](images/shipping-industry-solution.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## A new shipping ecosystem
+
+![shipeco](images/shipping-indsutry-results.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## A shipping container system for applications
+
+![shipapp](images/shipping-software-solution.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+## Eliminate the matrix from hell
+
+![elimatrix](images/shipping-matrix-solved.png)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## Results
+
+* [Dev-to-prod reduced from 9 months to 15 minutes (ING)](
+  https://gallant-turing-d0d520.netlify.com/docker-case-studies/CS_ING_01.25.2015_1.pdf)
+
+* [Continuous integration job time reduced by more than 60% (BBC)](
+  https://gallant-turing-d0d520.netlify.com/docker-case-studies/CS_BBCNews_01.25.2015_1.pdf)
+
+* [Deploy 100 times a day instead of once a week (GILT)](
+  https://gallant-turing-d0d520.netlify.com/docker-case-studies/CS_Gilt_Groupe_03.18.2015_0.pdf)
+
+* [70% infrastructure consolidation (MetLife)](
+  https://www.youtube.com/watch?v=Bwt3xigvlj0)
+
+* etc.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## Elevator pitch
+
+### (for your fellow devs and ops)
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## Escape dependency hell
+
+1. Write installation instructions into an `INSTALL.txt` file
+
+2. Using this file, write an `install.sh` script that works *for you*
+
+3. Turn this file into a `Dockerfile`, test it on your machine
+
+4. If the Dockerfile builds on your machine, it will build *anywhere*
+
+5. Rejoice as you escape dependency hell and "works on my machine"
+
+Never again "worked in dev - ops problem now!"
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+## On-board developers and contributors rapidly
+
+1. Write Dockerfiles for your application components
+
+2. Use pre-made images from the Docker Hub (mysql, redis...)
+
+3. Describe your stack with a Compose file
+
+4. On-board somebody with two commands:
+
+```bash
+git clone ...
+docker-compose up
+```
+
+With this, you can create development, integration, QA environments in minutes!
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Implement reliable CI easily
+
+1. Build test environment with a Dockerfile or Compose file
+
+2. For each test run, stage up a new container or stack
+
+3. Each run is now in a clean environment
+
+4. No pollution from previous tests
+
+Way faster and cheaper than creating VMs each time!
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Use container images as build artefacts
+
+1. Build your app from Dockerfiles
+
+2. Store the resulting images in a registry
+
+3. Keep them forever (or as long as necessary)
+
+4. Test those images in QA, CI, integration...
+
+5. Run the same images in production
+
+6. Something goes wrong? Rollback to previous image
+
+7. Investigating old regression? Old image has your back!
+
+Images contain all the libraries, dependencies, etc. needed to run the app.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Decouple "plumbing" from application logic
+
+1. Write your code to connect to named services ("db", "api"...)
+
+2. Use Compose to start your stack
+
+3. Docker will setup per-container DNS resolver for those names
+
+4. You can now scale, add load balancers, replication ... without changing your code
+
+Note: this is not covered in this intro level workshop!
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## What did Docker bring to the table?
+
+### Docker before/after
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Formats and APIs, before Docker
+
+* No standardized exchange format.
+  <br/>(No, a rootfs tarball is *not* a format!)
+
+* Containers are hard to use for developers.
+  <br/>(Where's the equivalent of `docker run debian`?)
+
+* As a result, they are *hidden* from the end users.
+
+* No re-usable components, APIs, tools.
+  <br/>(At best: VM abstractions, e.g. libvirt.)
+
+Analogy: 
+
+* Shipping containers are not just steel boxes.
+* They are steel boxes that are a standard size, with the same hooks and holes.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Formats and APIs, after Docker
+
+* Standardize the container format, because containers were not portable.
+
+* Make containers easy to use for developers.
+
+* Emphasis on re-usable components, APIs, ecosystem of standard tools.
+
+* Improvement over ad-hoc, in-house, specific tools.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Shipping, before Docker
+
+* Ship packages: deb, rpm, gem, jar, homebrew...
+
+* Dependency hell.
+
+* "Works on my machine."
+
+* Base deployment often done from scratch (debootstrap...) and unreliable.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Shipping, after Docker
+
+* Ship container images with all their dependencies.
+
+* Images are bigger, but they are broken down into layers.
+
+* Only ship layers that have changed.
+
+* Save disk, network, memory usage.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Example
+
+Layers:
+
+* CentOS
+* JRE
+* Tomcat
+* Dependencies
+* Application JAR
+* Configuration
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Devs vs Ops, before Docker
+
+* Drop a tarball (or a commit hash) with instructions.
+
+* Dev environment very different from production.
+
+* Ops don't always have a dev environment themselves ...
+
+* ... and when they do, it can differ from the devs'.
+
+* Ops have to sort out differences and make it work ...
+
+* ... or bounce it back to devs.
+
+* Shipping code causes frictions and delays.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: extra-details
+
+## Devs vs Ops, after Docker
+
+* Drop a container image or a Compose file.
+
+* Ops can always run that container image.
+
+* Ops can always run that Compose file.
+
+* Ops still have to adapt to prod environment,
+  but at least they have a reference point.
+
+* Ops have tools allowing to use the same image
+  in dev and prod.
+
+* Devs can be empowered to make releases themselves
+  more easily.
+
+.debug[[containers/Docker_Overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_Overview.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-history-of-containers--and-docker
+class: title
+
+ History of containers ... and Docker
+
+.nav[
+[Previous part](#toc-docker-ft-overview)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-our-training-environment)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# History of containers ... and Docker
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## First experimentations
+
+* [IBM VM/370 (1972)](https://en.wikipedia.org/wiki/VM_%28operating_system%29)
+
+* [Linux VServers (2001)](http://www.solucorp.qc.ca/changes.hc?projet=vserver)
+
+* [Solaris Containers (2004)](https://en.wikipedia.org/wiki/Solaris_Containers)
+
+* [FreeBSD jails (1999-2000)](https://www.freebsd.org/cgi/man.cgi?query=jail&sektion=8&manpath=FreeBSD+4.0-RELEASE)
+
+Containers have been around for a *very long time* indeed.
+
+(See [this excellent blog post by Serge Hallyn](https://s3hh.wordpress.com/2018/03/22/history-of-containers/) for more historic details.)
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+class: pic
+
+## The VPS age (until 2007-2008)
+
+![lightcont](images/containers-as-lightweight-vms.png)
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Containers = cheaper than VMs
+
+* Users: hosting providers.
+
+* Highly specialized audience with strong ops culture.
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+class: pic
+
+## The PAAS period (2008-2013)
+
+![heroku 2007](images/heroku-first-homepage.png)
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Containers = easier than VMs
+
+* I can't speak for Heroku, but containers were (one of) dotCloud's secret weapon
+
+* dotCloud was operating a PaaS, using a custom container engine.
+
+* This engine was based on OpenVZ (and later, LXC) and AUFS.
+
+* It started (circa 2008) as a single Python script.
+
+* By 2012, the engine had multiple (~10) Python components.
+  <br/>(and ~100 other micro-services!)
+
+* End of 2012, dotCloud refactors this container engine.
+
+* The codename for this project is "Docker."
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## First public release of Docker
+
+* March 2013, PyCon, Santa Clara:
+  <br/>"Docker" is shown to a public audience for the first time.
+
+* It is released with an open source license.
+
+* Very positive reactions and feedback!
+
+* The dotCloud team progressively shifts to Docker development.
+
+* The same year, dotCloud changes name to Docker.
+
+* In 2014, the PaaS activity is sold.
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Docker early days (2013-2014)
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## First users of Docker
+
+* PAAS builders (Flynn, Dokku, Tsuru, Deis...)
+
+* PAAS users (those big enough to justify building their own)
+
+* CI platforms
+
+* developers, developers, developers, developers
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Positive feedback loop
+
+* In 2013, the technology under containers (cgroups, namespaces, copy-on-write storage...)
+  had many blind spots.
+
+* The growing popularity of Docker and containers exposed many bugs.
+
+* As a result, those bugs were fixed, resulting in better stability for containers.
+
+* Any decent hosting/cloud provider can run containers today.
+
+* Containers become a great tool to deploy/move workloads to/from on-prem/cloud.
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Maturity (2015-2016)
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Docker becomes an industry standard
+
+* Docker reaches the symbolic 1.0 milestone.
+
+* Existing systems like Mesos and Cloud Foundry add Docker support.
+
+* Standardization around the OCI (Open Containers Initiative).
+
+* Other container engines are developed.
+
+* Creation of the CNCF (Cloud Native Computing Foundation).
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+## Docker becomes a platform
+
+* The initial container engine is now known as "Docker Engine."
+
+* Other tools are added:
+  * Docker Compose (formerly "Fig")
+  * Docker Machine
+  * Docker Swarm
+  * Kitematic
+  * Docker Cloud (formerly "Tutum")
+  * Docker Datacenter
+  * etc.
+
+* Docker Inc. launches commercial offers.
+
+.debug[[containers/Docker_History.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Docker_History.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-our-training-environment
+class: title
+
+ Our training environment
+
+.nav[
+[Previous part](#toc-history-of-containers--and-docker)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-our-first-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Our training environment
+
+![SSH terminal](images/title-our-training-environment.jpg)
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+## Our training environment
+
+- 2 VMs has been provisioned for three students
+
+- They were created just before the training.
+
+- They will stay up during the whole training.
+
+- They will be destroyed shortly after the training.
+
+- They do not come pre-loaded with Docker, so you need to install everything.
+
+<img src="images/qrcode_docs.google.com.png" alt="VMs Sheets QR Code" width="200" align="right"/>
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+## What *is* Docker?
+
+- "Installing Docker" really means "Installing the Docker Engine and CLI".
+
+- The Docker Engine is a daemon (a service running in the background).
+
+- This daemon manages containers, the same way that a hypervisor manages VMs.
+
+- We interact with the Docker Engine by using the Docker CLI.
+
+- The Docker CLI and the Docker Engine communicate through an API.
+
+- There are many other programs and client libraries which use that API.
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+## Why don't we run Docker locally?
+
+- We are going to download container images and distribution packages.
+
+- This could put a bit of stress on the local WiFi and slow us down.
+
+- Instead, we use remote VMs that has a good connectivity
+
+- In some rare cases, installing Docker locally is challenging:
+
+  - no administrator/root access (computer managed by strict corp IT)
+
+  - 32-bit CPU or OS
+
+  - old OS version (e.g. CentOS 6, OSX pre-Yosemite, Windows 7)
+
+- It's better to spend time learning containers than fiddling with the installer!
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+## Connecting to your Virtual Machine
+
+You need an SSH client.
+
+* On OS X, Linux, and other UNIX systems, just use `ssh`:
+
+```bash
+$ ssh <login>@<ip-address>
+```
+
+* On Windows, if you don't have an SSH client, you can download:
+
+  * Putty (www.putty.org)
+
+  * Git BASH (https://git-for-windows.github.io/)
+
+  * MobaXterm (https://mobaxterm.mobatek.net/)
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+## Checking your Virtual Machine
+
+Once logged in, goal is to be able to run a basic Docker command:
+
+.small[
+```bash
+$ docker version
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built:         Wed Mar 21 23:10:06 2018
+ OS/Arch:       linux/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:08:35 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+```
+]
+
+If this doesn't work, raise your hand so that an instructor can assist you!
+
+???
+
+:EN:Container concepts
+:FR:Premier contact avec les conteneurs
+
+:EN:- What's a container engine?
+:FR:- Qu'est-ce qu'un *container engine* ?
+
+.debug[[containers/Training_Environment.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Training_Environment.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/blue-containers.jpg)]
+
+---
+
+name: toc-our-first-containers
+class: title
+
+ Our first containers
+
+.nav[
+[Previous part](#toc-our-training-environment)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-background-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Our first containers
+
+![Colorful plastic tubs](images/title-our-first-containers.jpg)
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Objectives
+
+At the end of this lesson, you will have:
+
+* Seen Docker in action.
+
+* Started your first containers.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Hello World
+
+In your Docker environment, just run the following command:
+
+```bash
+$ docker run busybox echo hello world
+hello world
+```
+
+(If your Docker install is brand new, you will also see a few extra lines,
+corresponding to the download of the `busybox` image.)
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## That was our first container!
+
+* We used one of the smallest, simplest images available: `busybox`.
+
+* `busybox` is typically used in embedded systems (phones, routers...)
+
+* We ran a single process and echo'ed `hello world`.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## A more useful container
+
+Let's run a more exciting container:
+
+```bash
+$ docker run -it ubuntu
+root@04c0bb0a6c07:/#
+```
+
+* This is a brand new container.
+
+* It runs a bare-bones, no-frills `ubuntu` system.
+
+* `-it` is shorthand for `-i -t`.
+
+  * `-i` tells Docker to connect us to the container's stdin.
+
+  * `-t` tells Docker that we want a pseudo-terminal.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Do something in our container
+
+Try to run `figlet` in our container.
+
+```bash
+root@04c0bb0a6c07:/# figlet hello
+bash: figlet: command not found
+```
+
+Alright, we need to install it.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Install a package in our container
+
+We want `figlet`, so let's install it:
+
+```bash
+root@04c0bb0a6c07:/# apt-get update
+...
+Fetched 1514 kB in 14s (103 kB/s)
+Reading package lists... Done
+root@04c0bb0a6c07:/# apt-get install figlet
+Reading package lists... Done
+...
+```
+
+One minute later, `figlet` is installed!
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Try to run our freshly installed program
+
+The `figlet` program takes a message as parameter.
+
+```bash
+root@04c0bb0a6c07:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+Beautiful! 😍
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+class: in-person
+
+## Counting packages in the container
+
+Let's check how many packages are installed there.
+
+```bash
+root@04c0bb0a6c07:/# dpkg -l | wc -l
+97
+```
+
+* `dpkg -l` lists the packages installed in our container
+
+* `wc -l` counts them
+
+How many packages do we have on our host?
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+class: in-person
+
+## Counting packages on the host
+
+Exit the container by logging out of the shell, like you would usually do.
+
+(E.g. with `^D` or `exit`)
+
+```bash
+root@04c0bb0a6c07:/# exit
+```
+
+Now, try to:
+
+* run `dpkg -l | wc -l`. How many packages are installed?
+
+* run `figlet`. Does that work?
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+class: self-paced
+
+## Comparing the container and the host
+
+Exit the container by logging out of the shell, with `^D` or `exit`.
+
+Now try to run `figlet`. Does that work?
+
+(It shouldn't; except if, by coincidence, you are running on a machine where figlet was installed before.)
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Host and containers are independent things
+
+* We ran an `ubuntu` container on an Linux/Windows/macOS host.
+
+* They have different, independent packages.
+
+* Installing something on the host doesn't expose it to the container.
+
+* And vice-versa.
+
+* Even if both the host and the container have the same Linux distro!
+
+* We can run *any container* on *any host*.
+
+  (One exception: Windows containers can only run on Windows hosts; at least for now.)
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Where's our container?
+
+* Our container is now in a *stopped* state.
+
+* It still exists on disk, but all compute resources have been freed up.
+
+* We will see later how to get back to that container.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Starting another container
+
+What if we start a new container, and try to run `figlet` again?
+ 
+```bash
+$ docker run -it ubuntu
+root@b13c164401fb:/# figlet
+bash: figlet: command not found
+```
+
+* We started a *brand new container*.
+
+* The basic Ubuntu image was used, and `figlet` is not here.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Where's my container?
+
+* Can we reuse that container that we took time to customize?
+
+  *We can, but that's not the default workflow with Docker.*
+
+* What's the default workflow, then?
+
+  *Always start with a fresh container.*
+  <br/>
+  *If we need something installed in our container, build a custom image.*
+
+* That seems complicated!
+
+  *We'll see that it's actually pretty easy!*
+
+* And what's the point?
+
+  *This puts a strong emphasis on automation and repeatability. Let's see why ...*
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Pets vs. Cattle
+
+* In the "pets vs. cattle" metaphor, there are two kinds of servers.
+
+* Pets:
+
+  * have distinctive names and unique configurations
+
+  * when they have an outage, we do everything we can to fix them
+
+* Cattle:
+
+  * have generic names (e.g. with numbers) and generic configuration
+
+  * configuration is enforced by configuration management, golden images ...
+
+  * when they have an outage, we can replace them immediately with a new server
+
+* What's the connection with Docker and containers?
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Local development environments
+
+* When we use local VMs (with e.g. VirtualBox or VMware), our workflow looks like this:
+
+  * create VM from base template (Ubuntu, CentOS...)
+
+  * install packages, set up environment
+
+  * work on project
+
+  * when done, shut down VM
+
+  * next time we need to work on project, restart VM as we left it
+
+  * if we need to tweak the environment, we do it live
+
+* Over time, the VM configuration evolves, diverges.
+
+* We don't have a clean, reliable, deterministic way to provision that environment.
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+## Local development with Docker
+
+* With Docker, the workflow looks like this:
+
+  * create container image with our dev environment
+
+  * run container with that image
+
+  * work on project
+
+  * when done, shut down container
+
+  * next time we need to work on project, start a new container
+
+  * if we need to tweak the environment, we create a new image
+
+* We have a clear definition of our environment, and can share it reliably with others.
+
+* Let's see in the next chapters how to bake a custom image with `figlet`!
+
+???
+
+:EN:- Running our first container
+:FR:- Lancer nos premiers conteneurs
+
+.debug[[containers/First_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/First_Containers.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-background-containers
+class: title
+
+ Background containers
+
+.nav[
+[Previous part](#toc-our-first-containers)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-understanding-docker-images)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Background containers
+
+![Background containers](images/title-background-containers.jpg)
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Objectives
+
+Our first containers were *interactive*.
+
+We will now see how to:
+
+* Run a non-interactive container.
+* Run a container in the background.
+* List running containers.
+* Check the logs of a container.
+* Stop a container.
+* List stopped containers.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## A non-interactive container
+
+We will run a small custom container.
+
+This container just displays the time every second.
+
+```bash
+$ docker run jpetazzo/clock
+Fri Feb 20 00:28:53 UTC 2015
+Fri Feb 20 00:28:54 UTC 2015
+Fri Feb 20 00:28:55 UTC 2015
+...
+```
+
+* This container will run forever.
+* To stop it, press `^C`.
+* Docker has automatically downloaded the image `jpetazzo/clock`.
+* This image is a user image, created by `jpetazzo`.
+* We will hear more about user images (and other types of images) later.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## When `^C` doesn't work...
+
+Sometimes, `^C` won't be enough.
+
+Why? And how can we stop the container in that case?
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## What happens when we hit `^C`
+
+`SIGINT` gets sent to the container, which means:
+
+- `SIGINT` gets sent to PID 1 (default case)
+
+- `SIGINT` gets sent to *foreground processes* when running with `-ti`
+
+But there is a special case for PID 1: it ignores all signals!
+
+- except `SIGKILL` and `SIGSTOP`
+
+- except signals handled explicitly
+
+TL,DR: there are many circumstances when `^C` won't stop the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+class: extra-details
+
+## Why is PID 1 special?
+
+- PID 1 has some extra responsibilities:
+
+  - it starts (directly or indirectly) every other process
+
+  - when a process exits, its processes are "reparented" under PID 1
+
+- When PID 1 exits, everything stops:
+
+  - on a "regular" machine, it causes a kernel panic
+
+  - in a container, it kills all the processes
+
+- We don't want PID 1 to stop accidentally
+
+- That's why it has these extra protections
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## How to stop these containers, then?
+
+- Start another terminal and forget about them
+
+  (for now!)
+
+- We'll shortly learn about `docker kill`
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Run a container in the background
+
+Containers can be started in the background, with the `-d` flag (daemon mode):
+
+```bash
+$ docker run -d jpetazzo/clock
+47d677dcfba4277c6cc68fcaa51f932b544cab1a187c853b7d0caf4e8debe5ad
+```
+
+* We don't see the output of the container.
+* But don't worry: Docker collects that output and logs it!
+* Docker gives us the ID of the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## List running containers
+
+How can we check that our container is still running?
+
+With `docker ps`, just like the UNIX `ps` command, lists running processes.
+
+```bash
+$ docker ps
+CONTAINER ID  IMAGE           ...  CREATED        STATUS        ...
+47d677dcfba4  jpetazzo/clock  ...  2 minutes ago  Up 2 minutes  ...
+```
+
+Docker tells us:
+
+* The (truncated) ID of our container.
+* The image used to start the container.
+* That our container has been running (`Up`) for a couple of minutes.
+* Other information (COMMAND, PORTS, NAMES) that we will explain later.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Starting more containers
+
+Let's start two more containers.
+
+```bash
+$ docker run -d jpetazzo/clock
+57ad9bdfc06bb4407c47220cf59ce21585dce9a1298d7a67488359aeaea8ae2a
+```
+
+```bash
+$ docker run -d jpetazzo/clock
+068cc994ffd0190bbe025ba74e4c0771a5d8f14734af772ddee8dc1aaf20567d
+```
+
+Check that `docker ps` correctly reports all 3 containers.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Viewing only the last container started
+
+When many containers are already running, it can be useful to
+see only the last container that was started.
+
+This can be achieved with the `-l` ("Last") flag:
+
+```bash
+$ docker ps -l
+CONTAINER ID  IMAGE           ...  CREATED        STATUS        ...
+068cc994ffd0  jpetazzo/clock  ...  2 minutes ago  Up 2 minutes  ...
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## View only the IDs of the containers
+
+Many Docker commands will work on container IDs: `docker stop`, `docker rm`...
+
+If we want to list only the IDs of our containers (without the other columns
+or the header line),
+we can use the `-q` ("Quiet", "Quick") flag:
+
+```bash
+$ docker ps -q
+068cc994ffd0
+57ad9bdfc06b
+47d677dcfba4
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Combining flags
+
+We can combine `-l` and `-q` to see only the ID of the last container started:
+
+```bash
+$ docker ps -lq
+068cc994ffd0
+```
+
+At a first glance, it looks like this would be particularly useful in scripts.
+
+However, if we want to start a container and get its ID in a reliable way,
+it is better to use `docker run -d`, which we will cover in a bit.
+
+(Using `docker ps -lq` is prone to race conditions: what happens if someone
+else, or another program or script, starts another container just before
+we run `docker ps -lq`?)
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## View the logs of a container
+
+We told you that Docker was logging the container output.
+
+Let's see that now.
+
+```bash
+$ docker logs 068
+Fri Feb 20 00:39:52 UTC 2015
+Fri Feb 20 00:39:53 UTC 2015
+...
+```
+
+* We specified a *prefix* of the full container ID.
+* You can, of course, specify the full ID.
+* The `logs` command will output the *entire* logs of the container.
+  <br/>(Sometimes, that will be too much. Let's see how to address that.)
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## View only the tail of the logs
+
+To avoid being spammed with eleventy pages of output,
+we can use the `--tail` option:
+
+```bash
+$ docker logs --tail 3 068
+Fri Feb 20 00:55:35 UTC 2015
+Fri Feb 20 00:55:36 UTC 2015
+Fri Feb 20 00:55:37 UTC 2015
+```
+
+* The parameter is the number of lines that we want to see.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Follow the logs in real time
+
+Just like with the standard UNIX command `tail -f`, we can
+follow the logs of our container:
+
+```bash
+$ docker logs --tail 1 --follow 068
+Fri Feb 20 00:57:12 UTC 2015
+Fri Feb 20 00:57:13 UTC 2015
+^C
+```
+
+* This will display the last line in the log file.
+* Then, it will continue to display the logs in real time.
+* Use `^C` to exit.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Stop our container
+
+There are two ways we can terminate our detached container.
+
+* Killing it using the `docker kill` command.
+* Stopping it using the `docker stop` command.
+
+The first one stops the container immediately, by using the
+`KILL` signal.
+
+The second one is more graceful. It sends a `TERM` signal,
+and after 10 seconds, if the container has not stopped, it
+sends `KILL.`
+
+Reminder: the `KILL` signal cannot be intercepted, and will
+forcibly terminate the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Stopping our containers
+
+Let's stop one of those containers:
+
+```bash
+$ docker stop 47d6
+47d6
+```
+
+This will take 10 seconds:
+
+* Docker sends the TERM signal;
+* the container doesn't react to this signal
+  (it's a simple Shell script with no special
+  signal handling);
+* 10 seconds later, since the container is still
+  running, Docker sends the KILL signal;
+* this terminates the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## Killing the remaining containers
+
+Let's be less patient with the two other containers:
+
+```bash
+$ docker kill 068 57ad
+068
+57ad
+```
+
+The `stop` and `kill` commands can take multiple container IDs.
+
+Those containers will be terminated immediately (without
+the 10-second delay).
+
+Let's check that our containers don't show up anymore:
+
+```bash
+$ docker ps
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+## List stopped containers
+
+We can also see stopped containers, with the `-a` (`--all`) option.
+
+```bash
+$ docker ps -a
+CONTAINER ID  IMAGE           ...  CREATED      STATUS
+068cc994ffd0  jpetazzo/clock  ...  21 min. ago  Exited (137) 3 min. ago
+57ad9bdfc06b  jpetazzo/clock  ...  21 min. ago  Exited (137) 3 min. ago
+47d677dcfba4  jpetazzo/clock  ...  23 min. ago  Exited (137) 3 min. ago
+5c1dfd4d81f1  jpetazzo/clock  ...  40 min. ago  Exited (0) 40 min. ago
+b13c164401fb  ubuntu          ...  55 min. ago  Exited (130) 53 min. ago
+```
+
+???
+
+:EN:- Foreground and background containers
+:FR:- Exécution interactive ou en arrière-plan
+
+.debug[[containers/Background_Containers.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Background_Containers.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/container-cranes.jpg)]
+
+---
+
+name: toc-understanding-docker-images
+class: title
+
+ Understanding Docker images
+
+.nav[
+[Previous part](#toc-background-containers)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-building-images-interactively)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Understanding Docker images
+
+![image](images/title-understanding-docker-images.png)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Objectives
+
+In this section, we will explain:
+
+* What is an image.
+
+* What is a layer.
+
+* The various image namespaces.
+
+* How to search and download images.
+
+* Image tags and when to use them.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## What is an image?
+
+* Image = files + metadata
+
+* These files form the root filesystem of our container.
+
+* The metadata can indicate a number of things, e.g.:
+
+  * the author of the image
+  * the command to execute in the container when starting it
+  * environment variables to be set
+  * etc.
+
+* Images are made of *layers*, conceptually stacked on top of each other.
+
+* Each layer can add, change, and remove files and/or metadata.
+
+* Images can share layers to optimize disk usage, transfer times, and memory use.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Example for a Java webapp
+
+Each of the following items will correspond to one layer:
+
+* CentOS base layer
+* Packages and configuration files added by our local IT
+* JRE
+* Tomcat
+* Our application's dependencies
+* Our application code and assets
+* Our application configuration
+
+(Note: app config is generally added by orchestration facilities.)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+## The read-write layer
+
+![layers](images/container-layers.jpg)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Differences between containers and images
+
+* An image is a read-only filesystem.
+
+* A container is an encapsulated set of processes,
+
+  running in a read-write copy of that filesystem.
+
+* To optimize container boot time, *copy-on-write* is used
+  instead of regular copy.
+
+* `docker run` starts a container from a given image.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+## Multiple containers sharing the same image
+
+![layers](images/sharing-layers.jpg)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Comparison with object-oriented programming
+
+* Images are conceptually similar to *classes*.
+
+* Layers are conceptually similar to *inheritance*.
+
+* Containers are conceptually similar to *instances*.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Wait a minute...
+
+If an image is read-only, how do we change it?
+
+* We don't.
+
+* We create a new container from that image.
+
+* Then we make changes to that container.
+
+* When we are satisfied with those changes, we transform them into a new layer.
+
+* A new image is created by stacking the new layer on top of the old image.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## A chicken-and-egg problem
+
+* The only way to create an image is by "freezing" a container.
+
+* The only way to create a container is by instantiating an image.
+
+* Help!
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Creating the first images
+
+There is a special empty image called `scratch`.
+
+* It allows to *build from scratch*.
+
+The `docker import` command loads a tarball into Docker.
+
+* The imported tarball becomes a standalone image.
+* That new image has a single layer.
+
+Note: you will probably never have to do this yourself.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Creating other images
+
+`docker commit`
+
+* Saves all the changes made to a container into a new layer.
+* Creates a new image (effectively a copy of the container).
+
+`docker build` **(used 99% of the time)**
+
+* Performs a repeatable build sequence.
+* This is the preferred method!
+
+We will explain both methods in a moment.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Images namespaces
+
+There are three namespaces:
+
+* Official images
+
+    e.g. `ubuntu`, `busybox` ...
+
+* User (and organizations) images
+
+    e.g. `jpetazzo/clock`
+
+* Self-hosted images
+
+    e.g. `registry.example.com:5000/my-private/image`
+
+Let's explain each of them.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Root namespace
+
+The root namespace is for official images.
+
+They are gated by Docker Inc.
+
+They are generally authored and maintained by third parties.
+
+Those images include:
+
+* Small, "swiss-army-knife" images like busybox.
+
+* Distro images to be used as bases for your builds, like ubuntu, fedora...
+
+* Ready-to-use components and services, like redis, postgresql...
+
+* Over 150 at this point!
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## User namespace
+
+The user namespace holds images for Docker Hub users and organizations.
+
+For example:
+
+```bash
+jpetazzo/clock
+```
+
+The Docker Hub user is:
+
+```bash
+jpetazzo
+```
+
+The image name is:
+
+```bash
+clock
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Self-hosted namespace
+
+This namespace holds images which are not hosted on Docker Hub, but on third
+party registries.
+
+They contain the hostname (or IP address), and optionally the port, of the
+registry server.
+
+For example:
+
+```bash
+localhost:5000/wordpress
+```
+
+* `localhost:5000` is the host and port of the registry
+* `wordpress` is the name of the image
+
+Other examples:
+
+```bash
+quay.io/coreos/etcd
+gcr.io/google-containers/hugo
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## How do you store and manage images?
+
+Images can be stored:
+
+* On your Docker host.
+* In a Docker registry.
+
+You can use the Docker client to download (pull) or upload (push) images.
+
+To be more accurate: you can use the Docker client to tell a Docker Engine
+to push and pull images to and from a registry.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Showing current images
+
+Let's look at what images are on our host now.
+
+```bash
+$ docker images
+REPOSITORY       TAG       IMAGE ID       CREATED         SIZE
+fedora           latest    ddd5c9c1d0f2   3 days ago      204.7 MB
+centos           latest    d0e7f81ca65c   3 days ago      196.6 MB
+ubuntu           latest    07c86167cdc4   4 days ago      188 MB
+redis            latest    4f5f397d4b7c   5 days ago      177.6 MB
+postgres         latest    afe2b5e1859b   5 days ago      264.5 MB
+alpine           latest    70c557e50ed6   5 days ago      4.798 MB
+debian           latest    f50f9524513f   6 days ago      125.1 MB
+busybox          latest    3240943c9ea3   2 weeks ago     1.114 MB
+training/namer   latest    902673acc741   9 months ago    289.3 MB
+jpetazzo/clock   latest    12068b93616f   12 months ago   2.433 MB
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Searching for images
+
+We cannot list *all* images on a remote registry, but
+we can search for a specific keyword:
+
+```bash
+$ docker search marathon
+NAME                     DESCRIPTION                     STARS  OFFICIAL  AUTOMATED
+mesosphere/marathon      A cluster-wide init and co...   105              [OK]
+mesoscloud/marathon      Marathon                        31               [OK]
+mesosphere/marathon-lb   Script to update haproxy b...   22               [OK]
+tobilg/mongodb-marathon  A Docker image to start a ...   4                [OK]
+```
+
+
+* "Stars" indicate the popularity of the image.
+
+* "Official" images are those in the root namespace.
+
+* "Automated" images are built automatically by the Docker Hub.
+  <br/>(This means that their build recipe is always available.)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Downloading images
+
+There are two ways to download images.
+
+* Explicitly, with `docker pull`.
+
+* Implicitly, when executing `docker run` and the image is not found locally.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Pulling an image
+
+```bash
+$ docker pull debian:jessie
+Pulling repository debian
+b164861940b8: Download complete
+b164861940b8: Pulling image (jessie) from debian
+d1881793a057: Download complete
+```
+
+* As seen previously, images are made up of layers.
+
+* Docker has downloaded all the necessary layers.
+
+* In this example, `:jessie` indicates which exact version of Debian
+  we would like.
+
+  It is a *version tag*.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Image and tags
+
+* Images can have tags.
+
+* Tags define image versions or variants.
+
+* `docker pull ubuntu` will refer to `ubuntu:latest`.
+
+* The `:latest` tag is generally updated often.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## When to (not) use tags
+
+Don't specify tags:
+
+* When doing rapid testing and prototyping.
+* When experimenting.
+* When you want the latest version.
+
+Do specify tags:
+
+* When recording a procedure into a script.
+* When going to production.
+* To ensure that the same version will be used everywhere.
+* To ensure repeatability later.
+
+This is similar to what we would do with `pip install`, `npm install`, etc.
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+class: extra-details
+
+## Multi-arch images
+
+- An image can support multiple architectures
+
+- More precisely, a specific *tag* in a given *repository* can have either:
+
+  - a single *manifest* referencing an image for a single architecture
+
+  - a *manifest list* (or *fat manifest*) referencing multiple images
+
+- In a *manifest list*, each image is identified by a combination of:
+
+  - `os` (linux, windows)
+
+  - `architecture` (amd64, arm, arm64...)
+
+  - optional fields like `variant` (for arm and arm64), `os.version` (for windows)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+class: extra-details
+
+## Working with multi-arch images
+
+- The Docker Engine will pull "native" images when available
+
+  (images matching its own os/architecture/variant)
+
+- We can ask for a specific image platform with `--platform`
+
+- The Docker Engine can run non-native images thanks to QEMU+binfmt
+
+  (automatically on Docker Desktop; with a bit of setup on Linux)
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+## Section summary
+
+We've learned how to:
+
+* Understand images and layers.
+* Understand Docker image namespacing.
+* Search and download images.
+
+???
+
+:EN:Building images
+:EN:- Containers, images, and layers
+:EN:- Image addresses and tags
+:EN:- Finding and transferring images
+
+:FR:Construire des images
+:FR:- La différence entre un conteneur et une image
+:FR:- La notion de *layer* partagé entre images
+
+.debug[[containers/Initial_Images.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/container-housing.jpg)]
+
+---
+
+name: toc-building-images-interactively
+class: title
+
+ Building images interactively
+
+.nav[
+[Previous part](#toc-understanding-docker-images)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-building-docker-images-with-a-dockerfile)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Building images interactively
+
+In this section, we will create our first container image.
+
+It will be a basic distribution image, but we will pre-install
+the package `figlet`.
+
+We will: 
+
+* Create a container from a base image.
+
+* Install software manually in the container, and turn it
+  into a new image.
+
+* Learn about new commands: `docker commit`, `docker tag`, and `docker diff`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## The plan
+
+1. Create a container (with `docker run`) using our base distro of choice.
+
+2. Run a bunch of commands to install and set up our software in the container.
+
+3. (Optionally) review changes in the container with `docker diff`.
+
+4. Turn the container into a new image with `docker commit`.
+
+5. (Optionally) add tags to the image with `docker tag`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Setting up our container
+
+Start an Ubuntu container:
+
+```bash
+$ docker run -it ubuntu
+root@<yourContainerId>:#/
+```
+
+Run the command `apt-get update` to refresh the list of packages available to install.
+
+Then run the command `apt-get install figlet` to install the program we are interested in.
+
+```bash
+root@<yourContainerId>:#/ apt-get update && apt-get install figlet
+.... OUTPUT OF APT-GET COMMANDS ....
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Inspect the changes
+
+Type `exit` at the container prompt to leave the interactive session.
+
+Now let's run `docker diff` to see the difference between the base image
+and our container.
+
+```bash
+$ docker diff <yourContainerId>
+C /root
+A /root/.bash_history
+C /tmp
+C /usr
+C /usr/bin
+A /usr/bin/figlet
+...
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+class: x-extra-details
+
+## Docker tracks filesystem changes
+
+As explained before:
+
+* An image is read-only.
+
+* When we make changes, they happen in a copy of the image.
+
+* Docker can show the difference between the image, and its copy.
+
+* For performance, Docker uses copy-on-write systems.
+  <br/>(i.e. starting a container based on a big image
+  doesn't incur a huge copy.)
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Copy-on-write security benefits
+
+* `docker diff` gives us an easy way to audit changes
+
+  (à la Tripwire)
+
+* Containers can also be started in read-only mode
+
+  (their root filesystem will be read-only, but they can still have read-write data volumes)
+
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Commit our changes into a new image
+
+The `docker commit` command will create a new layer with those changes,
+and a new image using this new layer.
+
+```bash
+$ docker commit <yourContainerId>
+<newImageId>
+```
+
+The output of the `docker commit` command will be the ID for your newly created image.
+
+We can use it as an argument to `docker run`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Testing our new image
+
+Let's run this image:
+
+```bash
+$ docker run -it <newImageId>
+root@fcfb62f0bfde:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+It works! 🎉
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Tagging images
+
+Referring to an image by its ID is not convenient. Let's tag it instead.
+
+We can use the `tag` command:
+
+```bash
+$ docker tag <newImageId> figlet
+```
+
+But we can also specify the tag as an extra argument to `commit`:
+
+```bash
+$ docker commit <containerId> figlet
+```
+
+And then run it using its tag:
+
+```bash
+$ docker run -it figlet
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+## What's next?
+
+Manual process = bad.
+
+Automated process = good.
+
+In the next chapter, we will learn how to automate the build
+process by writing a `Dockerfile`.
+
+???
+
+:EN:- Building our first images interactively
+:FR:- Fabriquer nos premières images à la main
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_Interactively.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/containers-by-the-water.jpg)]
+
+---
+
+name: toc-building-docker-images-with-a-dockerfile
+class: title
+
+ Building Docker images with a Dockerfile
+
+.nav[
+[Previous part](#toc-building-images-interactively)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-cmd-and-entrypoint)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Building Docker images with a Dockerfile
+
+![Construction site with containers](images/title-building-docker-images-with-a-dockerfile.jpg)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Objectives
+
+We will build a container image automatically, with a `Dockerfile`.
+
+At the end of this lesson, you will be able to:
+
+* Write a `Dockerfile`.
+
+* Build an image from a `Dockerfile`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## `Dockerfile` overview
+
+* A `Dockerfile` is a build recipe for a Docker image.
+
+* It contains a series of instructions telling Docker how an image is constructed.
+
+* The `docker build` command builds an image from a `Dockerfile`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Writing our first `Dockerfile`
+
+Our Dockerfile must be in a **new, empty directory**.
+
+1. Create a directory to hold our `Dockerfile`.
+
+```bash
+$ mkdir myimage
+```
+
+2. Create a `Dockerfile` inside this directory.
+
+```bash
+$ cd myimage
+$ vim Dockerfile
+```
+
+Of course, you can use any other editor of your choice.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Type this into our Dockerfile...
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install figlet
+```
+
+* `FROM` indicates the base image for our build.
+
+* Each `RUN` line will be executed by Docker during the build.
+
+* Our `RUN` commands **must be non-interactive.**
+  <br/>(No input can be provided to Docker during the build.)
+
+* In many cases, we will add the `-y` flag to `apt-get`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Build it!
+
+Save our file, then execute:
+
+```bash
+$ docker build -t figlet .
+```
+
+* `-t` indicates the tag to apply to the image.
+
+* `.` indicates the location of the *build context*.
+
+We will talk more about the build context later.
+
+To keep things simple for now: this is the directory where our Dockerfile is located.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## What happens when we build the image?
+
+It depends if we're using BuildKit or not!
+
+If there are lots of blue lines and the first line looks like this:
+```
+[+] Building 1.8s (4/6)
+```
+... then we're using BuildKit.
+
+If the output is mostly black-and-white and the first line looks like this:
+```
+Sending build context to Docker daemon  2.048kB
+```
+... then we're using the "classic" or "old-style" builder.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## To BuildKit or Not To BuildKit
+
+Classic builder:
+
+- copies the whole "build context" to the Docker Engine
+
+- linear (processes lines one after the other)
+
+- requires a full Docker Engine
+
+BuildKit:
+
+- only transfers parts of the "build context" when needed
+
+- will parallelize operations (when possible)
+
+- can run in non-privileged containers (e.g. on Kubernetes)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## With the classic builder
+
+The output of `docker build` looks like this:
+
+.small[
+```bash
+docker build -t figlet .
+Sending build context to Docker daemon  2.048kB
+Step 1/3 : FROM ubuntu
+ ---> f975c5035748
+Step 2/3 : RUN apt-get update
+ ---> Running in e01b294dbffd
+(...output of the RUN command...)
+Removing intermediate container e01b294dbffd
+ ---> eb8d9b561b37
+Step 3/3 : RUN apt-get install figlet
+ ---> Running in c29230d70f9b
+(...output of the RUN command...)
+Removing intermediate container c29230d70f9b
+ ---> 0dfd7a253f21
+Successfully built 0dfd7a253f21
+Successfully tagged figlet:latest
+```
+]
+
+* The output of the `RUN` commands has been omitted.
+* Let's explain what this output means.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Sending the build context to Docker
+
+```bash
+Sending build context to Docker daemon 2.048 kB
+```
+
+* The build context is the `.` directory given to `docker build`.
+
+* It is sent (as an archive) by the Docker client to the Docker daemon.
+
+* This allows to use a remote machine to build using local files.
+
+* Be careful (or patient) if that directory is big and your link is slow.
+
+* You can speed up the process with a [`.dockerignore`](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file
+
+  * It tells docker to ignore specific files in the directory
+
+  * Only ignore files that you won't need in the build context!
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Executing each step
+
+```bash
+Step 2/3 : RUN apt-get update
+ ---> Running in e01b294dbffd
+(...output of the RUN command...)
+Removing intermediate container e01b294dbffd
+ ---> eb8d9b561b37
+```
+
+* A container (`e01b294dbffd`) is created from the base image.
+
+* The `RUN` command is executed in this container.
+
+* The container is committed into an image (`eb8d9b561b37`).
+
+* The build container (`e01b294dbffd`) is removed.
+
+* The output of this step will be the base image for the next one.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## With BuildKit
+
+.small[
+```bash
+[+] Building 7.9s (7/7) FINISHED
+ => [internal] load build definition from Dockerfile                                                 0.0s
+ => => transferring dockerfile: 98B                                                                  0.0s
+ => [internal] load .dockerignore                                                                    0.0s
+ => => transferring context: 2B                                                                      0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                     1.2s
+ => [1/3] FROM docker.io/library/ubuntu@sha256:cf31af331f38d1d7158470e095b132acd126a7180a54f263d386  3.2s
+ => => resolve docker.io/library/ubuntu@sha256:cf31af331f38d1d7158470e095b132acd126a7180a54f263d386  0.0s
+ => => sha256:cf31af331f38d1d7158470e095b132acd126a7180a54f263d386da88eb681d93 1.20kB / 1.20kB       0.0s
+ => => sha256:1de4c5e2d8954bf5fa9855f8b4c9d3c3b97d1d380efe19f60f3e4107a66f5cae 943B / 943B           0.0s
+ => => sha256:6a98cbe39225dadebcaa04e21dbe5900ad604739b07a9fa351dd10a6ebad4c1b 3.31kB / 3.31kB       0.0s
+ => => sha256:80bc30679ac1fd798f3241208c14accd6a364cb8a6224d1127dfb1577d10554f 27.14MB / 27.14MB     2.3s
+ => => sha256:9bf18fab4cfbf479fa9f8409ad47e2702c63241304c2cdd4c33f2a1633c5f85e 850B / 850B           0.5s
+ => => sha256:5979309c983a2adeff352538937475cf961d49c34194fa2aab142effe19ed9c1 189B / 189B           0.4s
+ => => extracting sha256:80bc30679ac1fd798f3241208c14accd6a364cb8a6224d1127dfb1577d10554f            0.7s
+ => => extracting sha256:9bf18fab4cfbf479fa9f8409ad47e2702c63241304c2cdd4c33f2a1633c5f85e            0.0s
+ => => extracting sha256:5979309c983a2adeff352538937475cf961d49c34194fa2aab142effe19ed9c1            0.0s
+ => [2/3] RUN apt-get update                                                                         2.5s
+ => [3/3] RUN apt-get install figlet                                                                 0.9s
+ => exporting to image                                                                               0.1s
+ => => exporting layers                                                                              0.1s
+ => => writing image sha256:3b8aee7b444ab775975dfba691a72d8ac24af2756e0a024e056e3858d5a23f7c         0.0s
+ => => naming to docker.io/library/figlet                                                            0.0s
+ ```
+ ]
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Understanding BuildKit output
+
+- BuildKit transfers the Dockerfile and the *build context*
+
+  (these are the first two `[internal]` stages)
+
+- Then it executes the steps defined in the Dockerfile
+
+  (`[1/3]`, `[2/3]`, `[3/3]`)
+
+- Finally, it exports the result of the build
+
+  (image definition + collection of layers)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: extra-details
+
+## BuildKit plain output
+
+- When running BuildKit in e.g. a CI pipeline, its output will be different
+
+- We can see the same output format by using `--progress=plain`
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## The caching system
+
+If you run the same build again, it will be instantaneous. Why?
+
+* After each build step, Docker takes a snapshot of the resulting image.
+
+* Before executing a step, Docker checks if it has already built the same sequence.
+
+* Docker uses the exact strings defined in your Dockerfile, so:
+
+  * `RUN apt-get install figlet cowsay`
+    <br/> is different from
+    <br/> `RUN apt-get install cowsay figlet`
+
+  * `RUN apt-get update` is not re-executed when the mirrors are updated
+
+You can force a rebuild with `docker build --no-cache ...`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Running the image
+
+The resulting image is not different from the one produced manually.
+
+```bash
+$ docker run -ti figlet
+root@91f3c974c9a1:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+
+Yay! 🎉
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Using image and viewing history
+
+The `history` command lists all the layers composing an image.
+
+For each layer, it shows its creation time, size, and creation command.
+
+When an image was built with a Dockerfile, each layer corresponds to
+a line of the Dockerfile.
+
+```bash
+$ docker history figlet
+IMAGE         CREATED            CREATED BY                     SIZE
+f9e8f1642759  About an hour ago  /bin/sh -c apt-get install fi  1.627 MB
+7257c37726a1  About an hour ago  /bin/sh -c apt-get update      21.58 MB
+07c86167cdc4  4 days ago         /bin/sh -c #(nop) CMD ["/bin   0 B
+<missing>     4 days ago         /bin/sh -c sed -i 's/^#\s*\(   1.895 kB
+<missing>     4 days ago         /bin/sh -c echo '#!/bin/sh'    194.5 kB
+<missing>     4 days ago         /bin/sh -c #(nop) ADD file:b   187.8 MB
+```
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: extra-details
+
+## Why `sh -c`?
+
+* On UNIX, to start a new program, we need two system calls:
+
+  - `fork()`, to create a new child process;
+
+  - `execve()`, to replace the new child process with the program to run.
+
+* Conceptually, `execve()` works like this:
+
+  `execve(program, [list, of, arguments])`
+
+* When we run a command, e.g. `ls -l /tmp`, something needs to parse the command.
+
+  (i.e. split the program and its arguments into a list.)
+
+* The shell is usually doing that.
+
+  (It also takes care of expanding environment variables and special things like `~`.)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: extra-details
+
+## Why `sh -c`?
+
+* When we do `RUN ls -l /tmp`, the Docker builder needs to parse the command.
+
+* Instead of implementing its own parser, it outsources the job to the shell.
+
+* That's why we see `sh -c ls -l /tmp` in that case.
+
+* But we can also do the parsing jobs ourselves.
+
+* This means passing `RUN` a list of arguments.
+
+* This is called the *exec syntax*.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Shell syntax vs exec syntax
+
+Dockerfile commands that execute something can have two forms:
+
+* plain string, or *shell syntax*:
+  <br/>`RUN apt-get install figlet`
+
+* JSON list, or *exec syntax*:
+  <br/>`RUN ["apt-get", "install", "figlet"]`
+
+We are going to change our Dockerfile to see how it affects the resulting image.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Using exec syntax in our Dockerfile
+
+Let's change our Dockerfile as follows!
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+```
+
+Then build the new Dockerfile.
+
+```bash
+$ docker build -t figlet .
+```
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## History with exec syntax
+
+Compare the new history:
+
+```bash
+$ docker history figlet
+IMAGE         CREATED            CREATED BY                     SIZE
+27954bb5faaf  10 seconds ago     apt-get install figlet         1.627 MB
+7257c37726a1  About an hour ago  /bin/sh -c apt-get update      21.58 MB
+07c86167cdc4  4 days ago         /bin/sh -c #(nop) CMD ["/bin   0 B
+<missing>     4 days ago         /bin/sh -c sed -i 's/^#\s*\(   1.895 kB
+<missing>     4 days ago         /bin/sh -c echo '#!/bin/sh'    194.5 kB
+<missing>     4 days ago         /bin/sh -c #(nop) ADD file:b   187.8 MB
+```
+
+* Exec syntax specifies an *exact* command to execute.
+
+* Shell syntax specifies a command to be wrapped within `/bin/sh -c "..."`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## When to use exec syntax and shell syntax
+
+* shell syntax:
+
+  * is easier to write
+  * interpolates environment variables and other shell expressions
+  * creates an extra process (`/bin/sh -c ...`) to parse the string
+  * requires `/bin/sh` to exist in the container
+
+* exec syntax:
+
+  * is harder to write (and read!)
+  * passes all arguments without extra processing
+  * doesn't create an extra process
+  * doesn't require `/bin/sh` to exist in the container
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Pro-tip: the `exec` shell built-in
+
+POSIX shells have a built-in command named `exec`.
+
+`exec` should be followed by a program and its arguments.
+
+From a user perspective:
+
+- it looks like the shell exits right away after the command execution,
+
+- in fact, the shell exits just *before* command execution;
+
+- or rather, the shell gets *replaced* by the command.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Example using `exec`
+
+```dockerfile
+CMD exec figlet -f script hello
+```
+
+In this example, `sh -c` will still be used, but
+`figlet` will be PID 1 in the container.
+
+The shell gets replaced by `figlet` when `figlet` starts execution.
+
+This allows to run processes as PID 1 without using JSON.
+
+???
+
+:EN:- Towards automated, reproducible builds
+:EN:- Writing our first Dockerfile
+:FR:- Rendre le processus automatique et reproductible
+:FR:- Écrire son premier Dockerfile
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-cmd-and-entrypoint
+class: title
+
+ `CMD` and `ENTRYPOINT`
+
+.nav[
+[Previous part](#toc-building-docker-images-with-a-dockerfile)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-copying-files-during-the-build)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# `CMD` and `ENTRYPOINT`
+
+![Container entry doors](images/entrypoint.jpg)
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Objectives
+
+In this lesson, we will learn about two important
+Dockerfile commands:
+
+`CMD` and `ENTRYPOINT`.
+
+These commands allow us to set the default command
+to run in a container.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Defining a default command
+
+When people run our container, we want to greet them with a nice hello message, and using a custom font.
+
+For that, we will execute:
+
+```bash
+figlet -f script hello
+```
+
+* `-f script` tells figlet to use a fancy font.
+
+* `hello` is the message that we want it to display.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Adding `CMD` to our Dockerfile
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+CMD figlet -f script hello
+```
+
+* `CMD` defines a default command to run when none is given.
+
+* It can appear at any point in the file.
+
+* Each `CMD` will replace and override the previous one.
+
+* As a result, while you can have multiple `CMD` lines, it is useless.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t figlet .
+...
+Successfully built 042dff3b4a8d
+Successfully tagged figlet:latest
+```
+
+And run it:
+
+```bash
+$ docker run figlet
+ _          _   _       
+| |        | | | |      
+| |     _  | | | |  __  
+|/ \   |/  |/  |/  /  \_
+|   |_/|__/|__/|__/\__/ 
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding `CMD`
+
+If we want to get a shell into our container (instead of running
+`figlet`), we just have to specify a different program to run:
+
+```bash
+$ docker run -it figlet bash
+root@7ac86a641116:/# 
+```
+
+* We specified `bash`.
+
+* It replaced the value of `CMD`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Using `ENTRYPOINT`
+
+We want to be able to specify a different message on the command line,
+while retaining `figlet` and some default parameters.
+
+In other words, we would like to be able to do this:
+
+```bash
+$ docker run figlet salut
+           _            
+          | |           
+ ,   __,  | |       _|_ 
+/ \_/  |  |/  |   |  |  
+ \/ \_/|_/|__/ \_/|_/|_/
+```
+
+
+We will use the `ENTRYPOINT` verb in Dockerfile.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Adding `ENTRYPOINT` to our Dockerfile
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+ENTRYPOINT ["figlet", "-f", "script"]
+```
+
+* `ENTRYPOINT` defines a base command (and its parameters) for the container.
+
+* The command line arguments are appended to those parameters.
+
+* Like `CMD`, `ENTRYPOINT` can appear anywhere, and replaces the previous value.
+
+Why did we use JSON syntax for our `ENTRYPOINT`?
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Implications of JSON vs string syntax
+
+* When CMD or ENTRYPOINT use string syntax, they get wrapped in `sh -c`.
+
+* To avoid this wrapping, we can use JSON syntax.
+
+What if we used `ENTRYPOINT` with string syntax?
+
+```bash
+$ docker run figlet salut
+```
+
+This would run the following command in the `figlet` image:
+
+```bash
+sh -c "figlet -f script" salut
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t figlet .
+...
+Successfully built 36f588918d73
+Successfully tagged figlet:latest
+```
+
+And run it:
+
+```bash
+$ docker run figlet salut
+           _            
+          | |           
+ ,   __,  | |       _|_ 
+/ \_/  |  |/  |   |  |  
+ \/ \_/|_/|__/ \_/|_/|_/
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Using `CMD` and `ENTRYPOINT` together
+
+What if we want to define a default message for our container?
+
+Then we will use `ENTRYPOINT` and `CMD` together.
+
+* `ENTRYPOINT` will define the base command for our container.
+
+* `CMD` will define the default parameter(s) for this command.
+
+* They *both* have to use JSON syntax.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## `CMD` and `ENTRYPOINT` together
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+ENTRYPOINT ["figlet", "-f", "script"]
+CMD ["hello world"]
+```
+
+* `ENTRYPOINT` defines a base command (and its parameters) for the container.
+
+* If we don't specify extra command-line arguments when starting the container,
+  the value of `CMD` is appended.
+
+* Otherwise, our extra command-line arguments are used instead of `CMD`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t myfiglet .
+...
+Successfully built 6e0b6a048a07
+Successfully tagged myfiglet:latest
+```
+
+Run it without parameters:
+
+```bash
+$ docker run myfiglet
+ _          _   _                             _        
+| |        | | | |                           | |    |  
+| |     _  | | | |  __             __   ,_   | |  __|  
+|/ \   |/  |/  |/  /  \_  |  |  |_/  \_/  |  |/  /  |  
+|   |_/|__/|__/|__/\__/    \/ \/  \__/    |_/|__/\_/|_/
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding the image default parameters
+
+Now let's pass extra arguments to the image.
+
+```bash
+$ docker run myfiglet hola mundo
+ _           _                                               
+| |         | |                                      |       
+| |     __  | |  __,     _  _  _           _  _    __|   __  
+|/ \   /  \_|/  /  |    / |/ |/ |  |   |  / |/ |  /  |  /  \_
+|   |_/\__/ |__/\_/|_/    |  |  |_/ \_/|_/  |  |_/\_/|_/\__/ 
+```
+
+We overrode `CMD` but still used `ENTRYPOINT`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding `ENTRYPOINT`
+
+What if we want to run a shell in our container?
+
+We cannot just do `docker run myfiglet bash` because
+that would just tell figlet to display the word "bash."
+
+We use the `--entrypoint` parameter:
+
+```bash
+$ docker run -it --entrypoint bash myfiglet
+root@6027e44e2955:/# 
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## `CMD` and `ENTRYPOINT` recap
+
+- `docker run myimage` executes `ENTRYPOINT` + `CMD`
+
+- `docker run myimage args` executes `ENTRYPOINT` + `args` (overriding `CMD`)
+
+- `docker run --entrypoint prog myimage` executes `prog` (overriding both)
+
+.small[
+| Command                         | `ENTRYPOINT`       | `CMD`   | Result
+|---------------------------------|--------------------|---------|-------
+| `docker run figlet`             | none               | none    | Use values from base image (`bash`)
+| `docker run figlet hola`        | none               | none    | Error (executable `hola` not found)
+| `docker run figlet`             | `figlet -f script` | none    | `figlet -f script`
+| `docker run figlet hola`        | `figlet -f script` | none    | `figlet -f script hola`
+| `docker run figlet`             | none    | `figlet -f script` | `figlet -f script`
+| `docker run figlet hola`        | none    | `figlet -f script` | Error (executable `hola` not found)
+| `docker run figlet`             | `figlet -f script` | `hello` | `figlet -f script hello`
+| `docker run figlet hola`        | `figlet -f script` | `hello` | `figlet -f script hola`
+]
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## When to use `ENTRYPOINT` vs `CMD`
+
+`ENTRYPOINT` is great for "containerized binaries".
+
+Example: `docker run consul --help`
+
+(Pretend that the `docker run` part isn't there!)
+
+`CMD` is great for images with multiple binaries.
+
+Example: `docker run busybox ifconfig`
+
+(It makes sense to indicate *which* program we want to run!)
+
+???
+
+:EN:- CMD and ENTRYPOINT
+:FR:- CMD et ENTRYPOINT
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/lots-of-containers.jpg)]
+
+---
+
+name: toc-copying-files-during-the-build
+class: title
+
+ Copying files during the build
+
+.nav[
+[Previous part](#toc-cmd-and-entrypoint)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-exercise--writing-dockerfiles)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Copying files during the build
+
+![Monks copying books](images/title-copying-files-during-build.jpg)
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Objectives
+
+So far, we have installed things in our container images
+by downloading packages.
+
+We can also copy files from the *build context* to the
+container that we are building.
+
+Remember: the *build context* is the directory containing
+the Dockerfile.
+
+In this chapter, we will learn a new Dockerfile keyword: `COPY`.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Build some C code
+
+We want to build a container that compiles a basic "Hello world" program in C.
+
+Here is the program, `hello.c`:
+
+```bash
+int main () {
+  puts("Hello, world!");
+  return 0;
+}
+```
+
+Let's create a new directory, and put this file in there.
+
+Then we will write the Dockerfile.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## The Dockerfile
+
+On Debian and Ubuntu, the package `build-essential` will get us a compiler.
+
+When installing it, don't forget to specify the `-y` flag, otherwise the build will fail (since the build cannot be interactive).
+
+Then we will use `COPY` to place the source file into the container.
+
+```bash
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y build-essential
+COPY hello.c /
+RUN make hello
+CMD /hello
+```
+
+Create this Dockerfile.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Testing our C program
+
+* Create `hello.c` and `Dockerfile` in the same directory.
+
+* Run `docker build -t hello .` in this directory.
+
+* Run `docker run hello`, you should see `Hello, world!`.
+
+Success!
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## `COPY` and the build cache
+
+* Run the build again.
+
+* Now, modify `hello.c` and run the build again.
+
+* Docker can cache steps involving `COPY`.
+
+* Those steps will not be executed again if the files haven't been changed.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Details
+
+* We can `COPY` whole directories recursively
+
+* It is possible to do e.g. `COPY . .`
+
+  (but it might require some extra precautions to avoid copying too much)
+ 
+* In older Dockerfiles, you might see the `ADD` command; consider it deprecated
+
+  (it is similar to `COPY` but can automatically extract archives)
+
+* If we really wanted to compile C code in a container, we would:
+
+  * place it in a different directory, with the `WORKDIR` instruction
+
+  * even better, use the `gcc` official image
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+class: extra-details
+
+## `.dockerignore`
+
+- We can create a file named `.dockerignore`
+
+  (at the top-level of the build context)
+
+- It can contain file names and globs to ignore
+
+- They won't be sent to the builder
+
+  (and won't end up in the resulting image)
+
+- See the [documentation][dockerignore] for the little details
+
+  (exceptions can be made with `!`, multiple directory levels with `**`...)
+
+[dockerignore]: https://docs.docker.com/engine/reference/builder/#dockerignore-file
+
+???
+
+:EN:- Leveraging the build cache for faster builds
+:FR:- Tirer parti du cache afin d'optimiser la vitesse de *build*
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Copying_Files_During_Build.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/plastic-containers.JPG)]
+
+---
+
+name: toc-exercise--writing-dockerfiles
+class: title
+
+ Exercise — writing Dockerfiles
+
+.nav[
+[Previous part](#toc-copying-files-during-the-build)
+|
+[Back to table of contents](#toc-part-1)
+|
+[Next part](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exercise — writing Dockerfiles
+
+Let's write Dockerfiles for an existing application!
+
+1. Check out the code repository
+
+2. Read all the instructions
+
+3. Write Dockerfiles
+
+4. Build and test them individually
+
+<!--
+5. Test them together with the provided Compose file
+-->
+
+.debug[[containers/Exercise_Dockerfile_Basic.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Exercise_Dockerfile_Basic.md)]
+---
+
+## Code repository
+
+Clone the repository available at:
+
+https://github.com/jpetazzo/wordsmith
+
+It should look like this:
+```
+├── LICENSE
+├── README
+├── db/
+│   └── words.sql
+├── web/
+│   ├── dispatcher.go
+│   └── static/
+└── words/
+    ├── pom.xml
+    └── src/
+```
+
+.debug[[containers/Exercise_Dockerfile_Basic.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Exercise_Dockerfile_Basic.md)]
+---
+
+## Instructions
+
+The repository contains instructions in English and French.
+<br/>
+For now, we only care about the first part (about writing Dockerfiles).
+<br/>
+Place each Dockerfile in its own directory, like this:
+```
+├── LICENSE
+├── README
+├── db/
+│   ├── `Dockerfile`
+│   └── words.sql
+├── web/
+│   ├── `Dockerfile`
+│   ├── dispatcher.go
+│   └── static/
+└── words/
+    ├── `Dockerfile`
+    ├── pom.xml
+    └── src/
+```
+
+.debug[[containers/Exercise_Dockerfile_Basic.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Exercise_Dockerfile_Basic.md)]
+---
+
+## Build and test
+
+Build and run each Dockerfile individually.
+
+For `db`, we should be able to see some messages confirming that the data set
+was loaded successfully (some `INSERT` lines in the container output).
+
+For `web` and `words`, we should be able to see some message looking like
+"server started successfully".
+
+That's all we care about for now!
+
+Bonus question: make sure that each container stops correctly when hitting Ctrl-C.
+
+???
+
+## Test with a Compose file
+
+Place the following Compose file at the root of the repository:
+
+
+```yaml
+version: "3"
+services:
+  db:
+    build: db
+  words:
+    build: words
+  web:
+    build: web
+    ports:
+    - 8888:80
+```
+
+Test the whole app by bringin up the stack and connecting to port 8888.
+
+.debug[[containers/Exercise_Dockerfile_Basic.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Exercise_Dockerfile_Basic.md)]</textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightSpans: true,
+        slideNumberFormat: '%current%/%total%',
+        excludedClasses: ["self-paced"]
+      });
+    </script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: false });
+        slideshow.on('afterShowSlide', function (slide) {
+          mermaid.run({
+            nodes: document.querySelectorAll('div.remark-visible .mermaid'),
+          });
+        });
+        // Reminder, if you want to tinker with mermaid,
+        // you need to export it, for instance like this:
+        // window.mermaid = mermaid;
+    </script>
+
+    <!-- 
+    These two scripts will be available only when loading the
+    content using the pub/sub server. Otherwise, they'll just
+    404 and that's OK.
+    -->
+    <script src="/socket.io/socket.io.js">
+    </script>
+    <script src="/remote.js">
+    </script>
+
+  </body>
+</html>
