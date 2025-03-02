@@ -51,10 +51,15 @@ Password: **Something**
 .debug[
 ```
  M slides/efrei.yml
+ M slides/k8s/concepts-k8s.md
+ M slides/k8s/setup-overview.md
+ M slides/workshop.css
 ?? slides/containers/dockercoins.md
 ?? slides/efrei_day_1.yml
 ?? slides/efrei_day_2.yml
 ?? slides/efrei_day_3.yml
+?? slides/efrei_day_4.yml
+?? slides/images/congrats.gif
 ?? slides/images/floor_is_yours.jpg
 
 ```
@@ -63,91 +68,6 @@ These slides have been built from commit: 906b2b2
 
 
 [shared/title.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/title.md)]
----
-
-name: toc-part-1
-
-## Part 1
-
-- [Docker 30,000ft overview](#toc-docker-ft-overview)
-- [History of containers ... and Docker](#toc-history-of-containers--and-docker)
-- [Our training environment](#toc-our-training-environment)
-- [Our first containers](#toc-our-first-containers)
-- [Background containers](#toc-background-containers)
-- [Understanding Docker images](#toc-understanding-docker-images)
-- [Building images interactively](#toc-building-images-interactively)
-- [Building Docker images with a Dockerfile](#toc-building-docker-images-with-a-dockerfile)
-- [`CMD` and `ENTRYPOINT`](#toc-cmd-and-entrypoint)
-- [Copying files during the build](#toc-copying-files-during-the-build)
-- [Exercise — writing Dockerfiles](#toc-exercise--writing-dockerfiles)
-
-.debug[(auto-generated TOC)]
----
-name: toc-part-2
-
-## Part 2
-
-- [Exercise — writing Dockerfiles](#toc-exercise--writing-dockerfiles)
-- [Naming and inspecting containers](#toc-naming-and-inspecting-containers)
-- [Labels](#toc-labels)
-- [Restarting and attaching to containers](#toc-restarting-and-attaching-to-containers)
-- [Getting inside a container](#toc-getting-inside-a-container)
-- [Limiting resources](#toc-limiting-resources)
-- [Container networking basics](#toc-container-networking-basics)
-- [Container network drivers](#toc-container-network-drivers)
-- [The Container Network Model](#toc-the-container-network-model)
-- [Service discovery with containers](#toc-service-discovery-with-containers)
-- [Local development workflow with Docker](#toc-local-development-workflow-with-docker)
-- [Working with volumes](#toc-working-with-volumes)
-- [Gentle introduction to YAML](#toc-gentle-introduction-to-yaml)
-- [Compose for development stacks](#toc-compose-for-development-stacks)
-- [Exercise — writing a Compose file](#toc-exercise--writing-a-compose-file)
-
-.debug[(auto-generated TOC)]
----
-name: toc-part-3
-
-## Part 3
-
-- [Exercise — writing a Compose file](#toc-exercise--writing-a-compose-file)
-
-- [TP : Deploying a sample application](#toc-tp--deploying-a-sample-application)
-
-
-.debug[(auto-generated TOC)]
-
-
-
-.debug[[shared/toc.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/toc.md)]
----
-class: title, in-person
-
-ARAS85 <br/>Orchestration et containers<br/><br /><br />
-
-<div style="text-align: right"><a href="https://www.youtube.com/watch?v=h16zyxiwDLY"> Video </a></div>
-
-[@GuillaumeMorini]: https://twitter.com/GuillaumeMorini
-
-.footnote[
-    Enseignant: [@GuillaumeMorini] <br/>
-    Formation Ingénieur en apprentissage<br/>
-    majeure « Réseaux et Sécurité »<br/>
-    2ème année
-    <!-- **Slides: https://container.training/** -->
-]
-
-<!--
-WiFi: **Something**<br/>
-Password: **Something**
-
-**Be kind to the WiFi!**<br/>
-*Use the 5G network.*
-*Don't use your hotspot.*<br/>
-*Don't stream videos or download big files during the workshop*<br/>
-*Thank you!*
--->
-
-.debug[[shared/title.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/title.md)]
 ---
 ## Introductions
 
@@ -283,6 +203,19 @@ name: toc-part-3
 - [Exercise — writing a Compose file](#toc-exercise--writing-a-compose-file)
 
 - [TP : Deploying a sample application](#toc-tp--deploying-a-sample-application)
+
+
+.debug[(auto-generated TOC)]
+---
+name: toc-part-4
+
+## Part 4
+
+- [Kubernetes concepts](#toc-kubernetes-concepts)
+
+- [Declarative vs imperative](#toc-declarative-vs-imperative)
+
+- [Setting up Kubernetes](#toc-setting-up-kubernetes)
 
 
 .debug[(auto-generated TOC)]
@@ -8197,7 +8130,7 @@ class: title
 |
 [Back to table of contents](#toc-part-3)
 |
-[Next part](#toc-)
+[Next part](#toc-kubernetes-concepts)
 ]
 
 .debug[(automatically generated title slide)]
@@ -8374,7 +8307,981 @@ class: title, pic
 
 
 ![The floor is yours](images/floor_is_yours.jpg)
-.debug[[containers/dockercoins.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/dockercoins.md)]</textarea>
+.debug[[containers/dockercoins.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/dockercoins.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-kubernetes-concepts
+class: title
+
+ Kubernetes concepts
+
+.nav[
+[Previous part](#toc-tp--deploying-a-sample-application)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-declarative-vs-imperative)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Kubernetes concepts
+
+- Kubernetes is a container management system
+
+- It runs and manages containerized applications on a cluster
+
+--
+
+- What does that really mean?
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## What can we do with Kubernetes?
+
+- Let's imagine that we have a 3-tier e-commerce app:
+
+  - web frontend
+
+  - API backend
+
+  - database (that we will keep out of Kubernetes for now)
+
+- We have built images for our frontend and backend components
+
+  (e.g. with Dockerfiles and `docker build`)
+
+- We are running them successfully with a local environment
+
+  (e.g. with Docker Compose)
+
+- Let's see how we would deploy our app on Kubernetes!
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+
+## Basic things we can ask Kubernetes to do
+
+--
+
+- Start 5 containers using image `atseashop/api:v1.3`
+
+--
+
+- Place an internal load balancer in front of these containers
+
+--
+
+- Start 10 containers using image `atseashop/webfront:v1.3`
+
+--
+
+- Place a public load balancer in front of these containers
+
+--
+
+- It's Black Friday (or Christmas), traffic spikes, grow our cluster and add containers
+
+--
+
+- New release! Replace my containers with the new image `atseashop/webfront:v1.4`
+
+--
+
+- Keep processing requests during the upgrade; update my containers one at a time
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Other things that Kubernetes can do for us
+
+- Autoscaling
+
+  (straightforward on CPU; more complex on other metrics)
+
+- Resource management and scheduling
+
+  (reserve CPU/RAM for containers; placement constraints)
+
+- Advanced rollout patterns
+
+  (blue/green deployment, canary deployment)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## More things that Kubernetes can do for us
+
+- Batch jobs
+
+  (one-off; parallel; also cron-style periodic execution)
+
+- Fine-grained access control
+
+  (defining *what* can be done by *whom* on *which* resources)
+
+- Stateful services
+
+  (databases, message queues, etc.)
+
+- Automating complex tasks with *operators*
+
+  (e.g. database replication, failover, etc.)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Kubernetes architecture
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+
+![that one is more like the real thing](images/k8s-arch2.png)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Kubernetes architecture: the nodes
+
+- The nodes executing our containers run a collection of services:
+
+  - a container Engine (typically Docker)
+
+  - kubelet (the "node agent")
+
+  - kube-proxy (a necessary but not sufficient network component)
+
+- Nodes were formerly called "minions"
+
+  (You might see that word in older articles or documentation)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Kubernetes architecture: the control plane
+
+- The Kubernetes logic (its "brains") is a collection of services:
+
+  - the API server (our point of entry to everything!)
+
+  - core services like the scheduler and controller manager
+
+  - `etcd` (a highly available key/value store; the "database" of Kubernetes)
+
+- Together, these services form the control plane of our cluster
+
+- The control plane is also called the "master"
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+
+![One of the best Kubernetes architecture diagrams available](images/k8s-arch4-thanks-luxas.png)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Running the control plane on special nodes
+
+- It is common to reserve a dedicated node for the control plane
+
+  (Except for single-node development clusters, like when using minikube)
+
+- This node is then called a "master"
+
+  (Yes, this is ambiguous: is the "master" a node, or the whole control plane?)
+
+- Normal applications are restricted from running on this node
+
+  (By using a mechanism called ["taints"](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/))
+
+- When high availability is required, each service of the control plane must be resilient
+
+- The control plane is then replicated on multiple nodes
+
+  (This is sometimes called a "multi-master" setup)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Running the control plane outside containers
+
+- The services of the control plane can run in or out of containers
+
+- For instance: since `etcd` is a critical service, some people
+  deploy it directly on a dedicated cluster (without containers)
+
+  (This is illustrated on the first "super complicated" schema)
+
+- In some hosted Kubernetes offerings (e.g. AKS, GKE, EKS), the control plane is invisible
+
+  (We only "see" a Kubernetes API endpoint)
+
+- In that case, there is no "master node"
+
+*For this reason, it is more accurate to say "control plane" rather than "master."*
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+![](images/control-planes/single-node-dev.svg)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+![](images/control-planes/managed-kubernetes.svg)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+![](images/control-planes/single-control-and-workers.svg)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+![](images/control-planes/stacked-control-plane.svg)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## How many nodes should a cluster have?
+
+- There is no particular constraint
+
+  (no need to have an odd number of nodes for quorum)
+
+- A cluster can have zero node
+
+  (but then it won't be able to start any pods)
+
+- For testing and development, having a single node is fine
+
+- For production, make sure that you have extra capacity
+
+  (so that your workload still fits if you lose a node or a group of nodes)
+
+- Kubernetes is tested with [up to 5000 nodes](https://kubernetes.io/docs/setup/best-practices/cluster-large/)
+
+  (however, running a cluster of that size requires a lot of tuning)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Do we need to run Docker at all?
+
+No!
+
+--
+
+- The Docker Engine used to be the default option to run containers with Kubernetes
+
+- Support for Docker (specifically: dockershim) was removed in Kubernetes 1.24
+
+- We can leverage other pluggable runtimes through the *Container Runtime Interface*
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Some runtimes available through CRI
+
+- [containerd](https://github.com/containerd/containerd/blob/master/README.md)
+
+  - maintained by Docker, IBM, and community
+  - used by Docker Engine, microk8s, k3s, GKE; also standalone
+  - comes with its own CLI, `ctr`
+
+- [CRI-O](https://github.com/cri-o/cri-o/blob/master/README.md):
+
+  - maintained by Red Hat, SUSE, and community
+  - used by OpenShift and Kubic
+  - designed specifically as a minimal runtime for Kubernetes
+
+- [And more](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Do we need to run Docker at all?
+
+- On our Kubernetes clusters:
+
+  *Not anymore*
+
+- On our development environments, CI pipelines ... :
+
+  *Yes, almost certainly*
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Interacting with Kubernetes
+
+- We will interact with our Kubernetes cluster through the Kubernetes API
+
+- The Kubernetes API is (mostly) RESTful
+
+- It allows us to create, read, update, delete *resources*
+
+- A few common resource types are:
+
+  - node (a machine — physical or virtual — in our cluster)
+
+  - pod (group of containers running together on a node)
+
+  - service (stable network endpoint to connect to one or multiple containers)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+
+![Node, pod, container](images/k8s-arch3-thanks-weave.png)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Scaling
+
+- How would we scale the pod shown on the previous slide?
+
+- **Do** create additional pods
+
+  - each pod can be on a different node
+
+  - each pod will have its own IP address
+
+- **Do not** add more NGINX containers in the pod
+
+  - all the NGINX containers would be on the same node
+
+  - they would all have the same IP address
+    <br/>(resulting in `Address alreading in use` errors)
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+## Together or separate
+
+- Should we put e.g. a web application server and a cache together?
+  <br/>
+  ("cache" being something like e.g. Memcached or Redis)
+
+- Putting them **in the same pod** means:
+
+  - they have to be scaled together
+
+  - they can communicate very efficiently over `localhost`
+
+- Putting them **in different pods** means:
+
+  - they can be scaled separately
+
+  - they must communicate over remote IP addresses
+    <br/>(incurring more latency, lower performance)
+
+- Both scenarios can make sense, depending on our goals
+
+
+.debug[[k8s/concepts-k8s.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/concepts-k8s.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
+
+---
+
+name: toc-declarative-vs-imperative
+class: title
+
+ Declarative vs imperative
+
+.nav[
+[Previous part](#toc-kubernetes-concepts)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-setting-up-kubernetes)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Declarative vs imperative
+
+- Our container orchestrator puts a very strong emphasis on being *declarative*
+
+- Declarative:
+
+  *I would like a cup of tea.*
+
+- Imperative:
+
+  *Boil some water. Pour it in a teapot. Add tea leaves. Steep for a while. Serve in a cup.*
+
+--
+
+- Declarative seems simpler at first ... 
+
+--
+
+- ... As long as you know how to brew tea
+
+.debug[[shared/declarative.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/declarative.md)]
+---
+
+## Declarative vs imperative
+
+- What declarative would really be:
+
+  *I want a cup of tea, obtained by pouring an infusion¹ of tea leaves in a cup.*
+
+--
+
+  *¹An infusion is obtained by letting the object steep a few minutes in hot² water.*
+
+--
+
+  *²Hot liquid is obtained by pouring it in an appropriate container³ and setting it on a stove.*
+
+--
+
+  *³Ah, finally, containers! Something we know about. Let's get to work, shall we?*
+
+--
+
+.footnote[Did you know there was an [ISO standard](https://en.wikipedia.org/wiki/ISO_3103)
+specifying how to brew tea?]
+
+.debug[[shared/declarative.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/declarative.md)]
+---
+
+## Declarative vs imperative
+
+- Imperative systems:
+
+  - simpler
+
+  - if a task is interrupted, we have to restart from scratch
+
+- Declarative systems:
+
+  - if a task is interrupted (or if we show up to the party half-way through),
+    we can figure out what's missing and do only what's necessary
+
+  - we need to be able to *observe* the system
+
+  - ... and compute a "diff" between *what we have* and *what we want*
+
+.debug[[shared/declarative.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/declarative.md)]
+---
+## Declarative vs imperative in Kubernetes
+
+- With Kubernetes, we cannot say: "run this container"
+
+- All we can do is write a *spec* and push it to the API server
+
+  (by creating a resource like e.g. a Pod or a Deployment)
+
+- The API server will validate that spec (and reject it if it's invalid)
+
+- Then it will store it in etcd
+
+- A *controller* will "notice" that spec and act upon it
+
+.debug[[k8s/declarative.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/declarative.md)]
+---
+
+## Reconciling state
+
+- Watch for the `spec` fields in the YAML files later!
+
+- The *spec* describes *how we want the thing to be*
+
+- Kubernetes will *reconcile* the current state with the spec
+  <br/>(technically, this is done by a number of *controllers*)
+
+- When we want to change some resource, we update the *spec*
+
+- Kubernetes will then *converge* that resource
+
+???
+
+:EN:- Declarative vs imperative models
+:FR:- Modèles déclaratifs et impératifs
+
+.debug[[k8s/declarative.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/declarative.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
+
+---
+
+name: toc-setting-up-kubernetes
+class: title
+
+ Setting up Kubernetes
+
+.nav[
+[Previous part](#toc-declarative-vs-imperative)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Setting up Kubernetes
+
+- Kubernetes is made of many components that require careful configuration
+
+- Secure operation typically requires TLS certificates and a local CA
+
+  (certificate authority)
+
+- Setting up everything manually is possible, but rarely done
+
+  (except for learning purposes)
+
+- Let's do a quick overview of available options!
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Local development
+
+- Are you writing code that will eventually run on Kubernetes?
+
+- Then it's a good idea to have a development cluster!
+
+- Instead of shipping containers images, we can test them on Kubernetes
+
+- Extremely useful when authoring or testing Kubernetes-specific objects
+
+  (ConfigMaps, Secrets, StatefulSets, Jobs, RBAC, etc.)
+
+- Extremely convenient to quickly test/check what a particular thing looks like
+
+  (e.g. what are the fields a Deployment spec?)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## One-node clusters
+
+- It's perfectly fine to work with a cluster that has only one node
+
+- It simplifies a lot of things:
+
+  - pod networking doesn't even need CNI plugins, overlay networks, etc.
+
+  - these clusters can be fully contained (no pun intended) in an easy-to-ship VM or container image
+
+  - some of the security aspects may be simplified (different threat model)
+
+  - images can be built directly on the node (we don't need to ship them with a registry)
+
+- Examples: Docker Desktop, k3d, KinD, MicroK8s, Minikube
+
+  (some of these also support clusters with multiple nodes)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Managed clusters ("Turnkey Solutions")
+
+- Many cloud providers and hosting providers offer "managed Kubernetes"
+
+- The deployment and maintenance of the *control plane* is entirely managed by the provider
+
+  (ideally, clusters can be spun up automatically through an API, CLI, or web interface)
+
+- Given the complexity of Kubernetes, this approach is *strongly recommended*
+
+  (at least for your first production clusters)
+
+- After working for a while with Kubernetes, you will be better equipped to decide:
+
+  - whether to operate it yourself or use a managed offering
+
+  - which offering or which distribution works best for you and your needs
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Node management
+
+- Most "Turnkey Solutions" offer fully managed control planes
+
+  (including control plane upgrades, sometimes done automatically)
+
+- However, with most providers, we still need to take care of *nodes*
+
+  (provisioning, upgrading, scaling the nodes)
+
+- Example with Amazon EKS ["managed node groups"](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html):
+
+  *...when bugs or issues are reported [...] you're responsible for deploying these patched AMI versions to your managed node groups.*
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Managed clusters differences
+
+- Most providers let you pick which Kubernetes version you want
+
+  - some providers offer up-to-date versions
+
+  - others lag significantly (sometimes by 2 or 3 minor versions)
+
+- Some providers offer multiple networking or storage options
+
+- Others will only support one, tied to their infrastructure
+
+  (changing that is in theory possible, but might be complex or unsupported)
+
+- Some providers let you configure or customize the control plane
+
+  (generally through Kubernetes "feature gates")
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Choosing a provider
+
+- Pricing models differ from one provider to another
+
+  - nodes are generally charged at their usual price
+
+  - control plane may be free or incur a small nominal fee
+
+- Beyond pricing, there are *huge* differences in features between providers
+
+- The "major" providers are not always the best ones!
+
+- See [this page](https://kubernetes.io/docs/setup/production-environment/turnkey-solutions/) for a list of available providers
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Kubernetes distributions and installers
+
+- If you want to run Kubernetes yourselves, there are many options
+
+  (free, commercial, proprietary, open source ...)
+
+- Some of them are installers, while some are complete platforms
+
+- Some of them leverage other well-known deployment tools
+
+  (like Puppet, Terraform ...)
+
+- There are too many options to list them all
+
+  (check [this page](https://kubernetes.io/partners/#conformance) for an overview!)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## kubeadm
+
+- kubeadm is a tool part of Kubernetes to facilitate cluster setup
+
+- Many other installers and distributions use it (but not all of them)
+
+- It can also be used by itself
+
+- Excellent starting point to install Kubernetes on your own machines
+
+  (virtual, physical, it doesn't matter)
+
+- It even supports highly available control planes, or "multi-master"
+
+  (this is more complex, though, because it introduces the need for an API load balancer)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Manual setup
+
+- The resources below are mainly for educational purposes!
+
+- [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way) by Kelsey Hightower
+
+  *step by step guide to install Kubernetes on GCP, with certificates, HA...*
+
+- [Deep Dive into Kubernetes Internals for Builders and Operators](https://www.youtube.com/watch?v=3KtEAa7_duA)
+
+  *conference talk setting up a simplified Kubernetes cluster - no security or HA*
+
+- 🇫🇷[Démystifions les composants internes de Kubernetes](https://www.youtube.com/watch?v=OCMNA0dSAzc)
+
+  *improved version of the previous one, with certs and recent k8s versions*
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## About our training clusters
+
+- How will we set up these Kubernetes clusters that we will use?
+
+--
+
+- We will use `kubeadm` on our VMs running Debian
+
+    1. We already install Docker
+
+    2. We will need to install Kubernetes packages
+
+    3. Run `kubeadm init` on the first node (it deploys the control plane on that node)
+
+    4. Set up  Calico (the overlay network) with two `kubectl apply` commands
+
+    5. Run `kubeadm join` on the other nodes (with the token produced by `kubeadm init`)
+
+    6. Copy the configuration file generated by `kubeadm init`
+
+- More detailed instructions to follow
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## `kubeadm` "drawbacks"
+
+- Doesn't set up Docker or any other container engine
+
+  (this is by design, to give us choice)
+
+- Doesn't set up the overlay network
+
+  (this is also by design, for the same reasons)
+
+- HA control plane requires [some extra steps](https://kubernetes.io/docs/setup/independent/high-availability/)
+
+- Note that HA control plane also requires setting up a specific API load balancer
+
+  (which is beyond the scope of kubeadm)
+
+???
+
+:EN:- Various ways to install Kubernetes
+:FR:- Survol des techniques d'installation de Kubernetes
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - preps 1/8
+
+.lab[
+On both VMs, edit as root the file `/etc/containerd/config.toml`
+He should look like this:
+```bash
+#disabled_plugins = ["cri"]
+version = 2
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+   [plugins."io.containerd.grpc.v1.cri".containerd]
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+```
+Don't forget to restart containerd with the command `sudo systemctl restart containerd`
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - preps 2/8
+
+.lab[
+
+On both VMs
+
+```bash
+sudo swapoff -a
+```
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - master 3/8
+
+.lab2[
+
+On the first VM
+```bash
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+```
+
+You can then init the Kubernetes cluster:
+```bash
+kubeadm init --pod-network-cidr=192.168.0.0/16
+```
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - output master 4/8
+
+.lab[
+
+You should have a message similar to this one
+
+```bash
+
+Your Kubernetes control-plane has initialized successfully!
+
+....
+
+Then you can join any number of worker nodes by running this on each as root:
+
+kubeadm join 172.16.25.4:6443 --token 43fmlr.ng2dscnjrjsxom45 
+	--discovery-token-ca-cert-hash sha256:3545364e549f 
+
+```
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - check master 5/8
+
+.lab[
+
+
+Check everything is working well, you should have
+```bash
+$ export KUBECONFIG=/etc/kubernetes/admin.conf
+$ kubectl get nodes
+NAME             STATUS     ROLES           AGE   VERSION
+1224bdebstd002   NotReady   control-plane   13s   v1.32.2
+$ 
+```
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - add a node 6/8
+
+.lab[
+
+On the second VM
+```bash
+kubeadm join xxxxxx --token xxxx --discovery-token-ca-cert-hash xxxx
+```
+To get the exact command line look at the output on the first VM.
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - install CNI 7/8
+
+.lab3[
+
+Finally on the first VM, allow workload to run on the control plane
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+```
+
+Install the CNI
+```bash
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/custom-resources.yaml
+```
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Lab instructions - check CNI 8/8
+
+.lab3[
+
+Check if everything works well, after few minutes
+```bash
+$ kubectl get pods -A
+NAMESPACE          NAME                                       READY   STATUS    RESTARTS   AGE
+calico-apiserver   calico-apiserver-9657959cd-rztkj           1/1     Running   0          23m
+calico-apiserver   calico-apiserver-9657959cd-zb7wx           1/1     Running   0          23m
+calico-system      calico-kube-controllers-79655dc7cf-8zxcl   1/1     Running   0          23m
+calico-system      calico-node-7q9bm                          1/1     Running   0          23m
+calico-system      calico-node-jhbwp                          1/1     Running   0          23m
+calico-system      calico-typha-cbc6667cf-mv7kr               1/1     Running   0          23m
+calico-system      csi-node-driver-fnq5r                      2/2     Running   0          23m
+calico-system      csi-node-driver-k5sxj                      2/2     Running   0          23m
+kube-system        coredns-668d6bf9bc-2kfhq                   1/1     Running   0          32m
+kube-system        coredns-668d6bf9bc-4zsjx                   1/1     Running   0          32m
+kube-system        etcd-1224bdebstd002                        1/1     Running   23         32m
+kube-system        kube-apiserver-1224bdebstd002              1/1     Running   27         32m
+kube-system        kube-controller-manager-1224bdebstd002     1/1     Running   0          32m
+kube-system        kube-proxy-5w926                           1/1     Running   0          32m
+kube-system        kube-proxy-fh5l8                           1/1     Running   0          31m
+kube-system        kube-scheduler-1224bdebstd002              1/1     Running   26         32m
+tigera-operator    tigera-operator-ccfc44587-fnzb4            1/1     Running   0          23m
+$ 
+```
+
+]
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+class: pic
+![](images/congrats.gif)
+
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]</textarea>
     <script src="remark.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">
