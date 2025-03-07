@@ -9158,6 +9158,7 @@ kubeadm join 172.16.25.4:6443 --token 43fmlr.ng2dscnjrjsxom45
 	--discovery-token-ca-cert-hash sha256:3545364e549f 
 
 ```
+Copy the last 2 lines for later
 
 ]
 
@@ -9194,11 +9195,11 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 .lab[
 
-On the second VM
+On the second VM, reuse the 2 lines you copied previously
 ```bash
 kubeadm join xxxxxx --token xxxx --discovery-token-ca-cert-hash xxxx
 ```
-To get the exact command line look at the output on the first VM.
+
 
 ]
 
