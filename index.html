@@ -9178,11 +9178,11 @@ $ kubectl get nodes
 NAME             STATUS     ROLES           AGE   VERSION
 1224bdebstd002   NotReady   control-plane   13s   v1.32.2
 $ 
+```
 
 Still on the first VM, allow workload to run on the control plane
 ```bash
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-```
 ```
 
 ]
