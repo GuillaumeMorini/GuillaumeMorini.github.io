@@ -52,6 +52,7 @@ Password: **Something**
 ```
  M slides/efrei.yml
  M slides/k8s/concepts-k8s.md
+ M slides/k8s/kubectlget.md
  M slides/k8s/setup-overview.md
  M slides/workshop.css
 ?? slides/containers/dockercoins.md
@@ -216,6 +217,14 @@ name: toc-part-4
 - [Declarative vs imperative](#toc-declarative-vs-imperative)
 
 - [Setting up Kubernetes](#toc-setting-up-kubernetes)
+
+- [First contact with `kubectl`](#toc-first-contact-with-kubectl)
+
+- [Running our first containers on Kubernetes](#toc-running-our-first-containers-on-kubernetes)
+
+- [Revisiting `kubectl logs`](#toc-revisiting-kubectl-logs)
+
+- [Exposing containers](#toc-exposing-containers)
 
 
 .debug[(auto-generated TOC)]
@@ -8857,7 +8866,7 @@ class: title
 |
 [Back to table of contents](#toc-part-4)
 |
-[Next part](#toc-)
+[Next part](#toc-first-contact-with-kubectl)
 ]
 
 .debug[(automatically generated title slide)]
@@ -9144,7 +9153,7 @@ sudo swapoff -a
 
 .lab2[
 
-On the first VM
+On both VMs
 ```bash
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
@@ -9157,6 +9166,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
+On the first VM
 You can then init the Kubernetes cluster:
 ```bash
 kubeadm init --pod-network-cidr=192.168.0.0/16
@@ -9281,7 +9291,1836 @@ class: pic
 ![](images/congrats.gif)
 
 
-.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]</textarea>
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
+
+---
+
+name: toc-first-contact-with-kubectl
+class: title
+
+ First contact with `kubectl`
+
+.nav[
+[Previous part](#toc-setting-up-kubernetes)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-running-our-first-containers-on-kubernetes)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# First contact with `kubectl`
+
+- `kubectl` is (almost) the only tool we'll need to talk to Kubernetes
+
+- It is a rich CLI tool around the Kubernetes API
+
+  (Everything you can do with `kubectl`, you can do directly with the API)
+
+- On our machines, there is a `~/.kube/config` file with:
+
+  - the Kubernetes API address
+
+  - the path to our TLS certificates used to authenticate
+
+- You can also use the `--kubeconfig` flag to pass a config file
+
+- Or directly `--server`, `--user`, etc.
+
+- `kubectl` can be pronounced "Cube C T L", "Cube cuttle", "Cube cuddle"...
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## `kubectl` is the new SSH
+
+- We often start managing servers with SSH
+
+  (installing packages, troubleshooting ...)
+
+- At scale, it becomes tedious, repetitive, error-prone
+
+- Instead, we use config management, central logging, etc.
+
+- In many cases, we still need SSH:
+
+  - as the underlying access method (e.g. Ansible)
+
+  - to debug tricky scenarios
+
+  - to inspect and poke at things
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## The parallel with `kubectl`
+
+- We often start managing Kubernetes clusters with `kubectl`
+
+  (deploying applications, troubleshooting ...)
+
+- At scale (with many applications or clusters), it becomes tedious, repetitive, error-prone
+
+- Instead, we use automated pipelines, observability tooling, etc.
+
+- In many cases, we still need `kubectl`:
+
+  - to debug tricky scenarios
+
+  - to inspect and poke at things
+
+- The Kubernetes API is always the underlying access method
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## `kubectl get`
+
+- Let's look at our `Node` resources with `kubectl get`!
+
+.lab[
+
+- Look at the composition of our cluster:
+  ```bash
+  kubectl get node
+  ```
+
+- These commands are equivalent:
+  ```bash
+  kubectl get no
+  kubectl get node
+  kubectl get nodes
+  ```
+
+]
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Obtaining machine-readable output
+
+- `kubectl get` can output JSON, YAML, or be directly formatted
+
+.lab[
+
+- Give us more info about the nodes:
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+- Let's have some YAML:
+  ```bash
+  kubectl get no -o yaml
+  ```
+  See that `kind: List` at the end? It's the type of our result!
+
+]
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## (Ab)using `kubectl` and `jq`
+
+- It's super easy to build custom reports
+
+.lab[
+
+- Show the capacity of all our nodes as a stream of JSON objects:
+  ```bash
+    kubectl get nodes -o json |
+            jq ".items[] | {name:.metadata.name} + .status.capacity"
+  ```
+
+]
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## Exploring types and definitions
+
+- We can list all available resource types by running `kubectl api-resources`
+  <br/>
+  (In Kubernetes 1.10 and prior, this command used to be `kubectl get`)
+
+- We can view the definition for a resource type with:
+  ```bash
+  kubectl explain type
+  ```
+
+- We can view the definition of a field in a resource, for instance:
+  ```bash
+  kubectl explain node.spec
+  ```
+
+- Or get the full definition of all fields and sub-fields:
+  ```bash
+  kubectl explain node --recursive
+  ```
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## Introspection vs. documentation
+
+- We can access the same information by reading the [API documentation](https://kubernetes.io/docs/reference/#api-reference)
+
+- The API documentation is usually easier to read, but:
+
+  - it won't show custom types (like Custom Resource Definitions)
+
+  - we need to make sure that we look at the correct version
+
+- `kubectl api-resources` and `kubectl explain` perform *introspection*
+
+  (they communicate with the API server and obtain the exact type definitions)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Type names
+
+- The most common resource names have three forms:
+
+  - singular (e.g. `node`, `service`, `deployment`)
+
+  - plural (e.g. `nodes`, `services`, `deployments`)
+
+  - short (e.g. `no`, `svc`, `deploy`)
+
+- Some resources do not have a short name
+
+- `Endpoints` only have a plural form
+
+  (because even a single `Endpoints` resource is actually a list of endpoints)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Viewing details
+
+- We can use `kubectl get -o yaml` to see all available details
+
+- However, YAML output is often simultaneously too much and not enough
+
+- For instance, `kubectl get node node1 -o yaml` is:
+
+  - too much information (e.g.: list of images available on this node)
+
+  - not enough information (e.g.: doesn't show pods running on this node)
+
+  - difficult to read for a human operator
+
+- For a comprehensive overview, we can use `kubectl describe` instead
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## `kubectl describe`
+
+- `kubectl describe` needs a resource type and (optionally) a resource name
+
+- It is possible to provide a resource name *prefix*
+
+  (all matching objects will be displayed)
+
+- `kubectl describe` will retrieve some extra information about the resource
+
+.lab[
+
+- Look at the information available for `node1` with one of the following commands:
+  ```bash
+  kubectl describe node/node1
+  kubectl describe node node1
+  ```
+
+]
+
+(We should notice a bunch of control plane pods.)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Listing running containers
+
+- Containers are manipulated through *pods*
+
+- A pod is a group of containers:
+
+ - running together (on the same node)
+
+ - sharing resources (RAM, CPU; but also network, volumes)
+
+.lab[
+
+- List pods on our cluster:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+--
+
+*Where are the pods that we saw just a moment earlier?!?*
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Namespaces
+
+- Namespaces allow us to segregate resources
+
+.lab[
+
+- List the namespaces on our cluster with one of these commands:
+  ```bash
+  kubectl get namespaces
+  kubectl get namespace
+  kubectl get ns
+  ```
+
+]
+
+--
+
+*You know what ... This `kube-system` thing looks suspicious.*
+
+*In fact, I'm pretty sure it showed up earlier, when we did:*
+
+`kubectl describe node node1`
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Accessing namespaces
+
+- By default, `kubectl` uses the `default` namespace
+
+- We can see resources in all namespaces with `--all-namespaces`
+
+.lab[
+
+- List the pods in all namespaces:
+  ```bash
+  kubectl get pods --all-namespaces
+  ```
+
+- Since Kubernetes 1.14, we can also use `-A` as a shorter version:
+  ```bash
+  kubectl get pods -A
+  ```
+
+]
+
+*Here are our system pods!*
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## What are all these control plane pods?
+
+- `etcd` is our etcd server
+
+- `kube-apiserver` is the API server
+
+- `kube-controller-manager` and `kube-scheduler` are other control plane components
+
+- `coredns` provides DNS-based service discovery ([replacing kube-dns as of 1.11](https://kubernetes.io/blog/2018/07/10/coredns-ga-for-kubernetes-cluster-dns/))
+
+- `kube-proxy` is the (per-node) component managing port mappings and such
+
+- `weave` is the (per-node) component managing the network overlay
+
+- the `READY` column indicates the number of containers in each pod
+
+  (1 for most pods, but `weave` has 2, for instance)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Scoping another namespace
+
+- We can also look at a different namespace (other than `default`)
+
+.lab[
+
+- List only the pods in the `kube-system` namespace:
+  ```bash
+  kubectl get pods --namespace=kube-system
+  kubectl get pods -n kube-system
+  ```
+
+]
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Namespaces and other `kubectl` commands
+
+- We can use `-n`/`--namespace` with almost every `kubectl` command
+
+- Example:
+
+  - `kubectl create --namespace=X` to create something in namespace X
+
+- We can use `-A`/`--all-namespaces` with most commands that manipulate multiple objects
+
+- Examples:
+
+  - `kubectl delete` can delete resources across multiple namespaces
+
+  - `kubectl label` can add/remove/update labels across multiple namespaces
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## What about `kube-public`?
+
+.lab[
+
+- List the pods in the `kube-public` namespace:
+  ```bash
+  kubectl -n kube-public get pods
+  ```
+
+]
+
+Nothing!
+
+`kube-public` is created by kubeadm & [used for security bootstrapping](https://kubernetes.io/blog/2017/01/stronger-foundation-for-creating-and-managing-kubernetes-clusters).
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## Exploring `kube-public`
+
+- The only interesting object in `kube-public` is a ConfigMap named `cluster-info`
+
+.lab[
+
+- List ConfigMap objects:
+  ```bash
+  kubectl -n kube-public get configmaps
+  ```
+
+- Inspect `cluster-info`:
+  ```bash
+  kubectl -n kube-public get configmap cluster-info -o yaml
+  ```
+
+]
+
+Note the `selfLink` URI: `/api/v1/namespaces/kube-public/configmaps/cluster-info`
+
+We can use that!
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## Accessing `cluster-info`
+
+- Earlier, when trying to access the API server, we got a `Forbidden` message
+
+- But `cluster-info` is readable by everyone (even without authentication)
+
+.lab[
+
+- Retrieve `cluster-info`:
+  ```bash
+  curl -k https://10.96.0.1/api/v1/namespaces/kube-public/configmaps/cluster-info
+  ```
+
+]
+
+- We were able to access `cluster-info` (without auth)
+
+- It contains a `kubeconfig` file
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: extra-details
+
+## Retrieving `kubeconfig`
+
+- We can easily extract the `kubeconfig` file from this ConfigMap
+
+.lab[
+
+- Display the content of `kubeconfig`:
+  ```bash
+    curl -sk https://10.96.0.1/api/v1/namespaces/kube-public/configmaps/cluster-info \
+         | jq -r .data.kubeconfig
+  ```
+
+]
+
+- This file holds the canonical address of the API server, and the public key of the CA
+
+- This file *does not* hold client keys or tokens
+
+- This is not sensitive information, but allows us to establish trust
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Services
+
+- A *service* is a stable endpoint to connect to "something"
+
+  (In the initial proposal, they were called "portals")
+
+.lab[
+
+- List the services on our cluster with one of these commands:
+  ```bash
+  kubectl get services
+  kubectl get svc
+  ```
+
+]
+
+--
+
+There is already one service on our cluster: the Kubernetes API itself.
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## ClusterIP services
+
+- A `ClusterIP` service is internal, available from the cluster only
+
+- This is useful for introspection from within containers
+
+.lab[
+
+- Try to connect to the API:
+  ```bash
+  curl -k https://`10.96.0.1`
+  ```
+
+  - `-k` is used to skip certificate verification
+
+  - Make sure to replace 10.96.0.1 with the CLUSTER-IP shown by `kubectl get svc`
+
+]
+
+The command above should either time out, or show an authentication error. Why?
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Time out
+
+- Connections to ClusterIP services only work *from within the cluster*
+
+- If we are outside the cluster, the `curl` command will probably time out
+
+  (Because the IP address, e.g. 10.96.0.1, isn't routed properly outside the cluster)
+
+- This is the case with most "real" Kubernetes clusters
+
+- To try the connection from within the cluster, we can use [shpod](https://github.com/jpetazzo/shpod)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Authentication error
+
+This is what we should see when connecting from within the cluster:
+```json
+$ curl -k https://10.96.0.1
+{
+  "kind": "Status",
+  "apiVersion": "v1",
+  "metadata": {
+
+  },
+  "status": "Failure",
+  "message": "forbidden: User \"system:anonymous\" cannot get path \"/\"",
+  "reason": "Forbidden",
+  "details": {
+
+  },
+  "code": 403
+}
+```
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## Explanations
+
+- We can see `kind`, `apiVersion`, `metadata`
+
+- These are typical of a Kubernetes API reply
+
+- Because we *are* talking to the Kubernetes API
+
+- The Kubernetes API tells us "Forbidden"
+
+  (because it requires authentication)
+
+- The Kubernetes API is reachable from within the cluster
+
+  (many apps integrating with Kubernetes will use this)
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+## DNS integration
+
+- Each service also gets a DNS record
+
+- The Kubernetes DNS resolver is available *from within pods*
+
+  (and sometimes, from within nodes, depending on configuration)
+
+- Code running in pods can connect to services using their name
+
+  (e.g. https://kubernetes/...)
+
+???
+
+:EN:- Getting started with kubectl
+:FR:- Se familiariser avec kubectl
+
+.debug[[k8s/kubectlget.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlget.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-running-our-first-containers-on-kubernetes
+class: title
+
+ Running our first containers on Kubernetes
+
+.nav[
+[Previous part](#toc-first-contact-with-kubectl)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-revisiting-kubectl-logs)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Running our first containers on Kubernetes
+
+- First things first: we cannot run a container
+
+--
+
+- We are going to run a pod, and in that pod there will be a single container
+
+--
+
+- In that container in the pod, we are going to run a simple `ping` command
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+class: extra-details
+
+## If you're running Kubernetes 1.17 (or older)...
+
+- This material assumes that you're running a recent version of Kubernetes
+
+  (at least 1.19) <!-- ##VERSION## -->
+
+- You can check your version number with `kubectl version`
+
+  (look at the server part)
+
+- In Kubernetes 1.17 and older, `kubectl run` creates a Deployment
+
+- If you're running such an old version:
+
+  - it's obsolete and no longer maintained
+
+  - Kubernetes 1.17 is [EOL since January 2021][nonactive]
+
+  - **upgrade NOW!**
+
+[nonactive]: https://kubernetes.io/releases/patch-releases/#non-active-branch-history
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Starting a simple pod with `kubectl run`
+
+- `kubectl run` is convenient to start a single pod
+
+- We need to specify at least a *name* and the image we want to use
+
+- Optionally, we can specify the command to run in the pod
+
+.lab[
+
+- Let's ping the address of `localhost`, the loopback interface:
+  ```bash
+  kubectl run pingpong --image alpine ping 127.0.0.1
+  ```
+
+<!-- ```hide kubectl wait pod --selector=run=pingpong --for condition=ready``` -->
+
+]
+
+The output tells us that a Pod was created:
+```
+pod/pingpong created
+```
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Viewing container output
+
+- Let's use the `kubectl logs` command
+
+- It takes a Pod name as argument
+
+- Unless specified otherwise, it will only show logs of the first container in the pod
+
+  (Good thing there's only one in ours!)
+
+.lab[
+
+- View the result of our `ping` command:
+  ```bash
+  kubectl logs pingpong
+  ```
+
+]
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Streaming logs in real time
+
+- Just like `docker logs`, `kubectl logs` supports convenient options:
+
+  - `-f`/`--follow` to stream logs in real time (à la `tail -f`)
+
+  - `--tail` to indicate how many lines you want to see (from the end)
+
+  - `--since` to get logs only after a given timestamp
+
+.lab[
+
+- View the latest logs of our `ping` command:
+  ```bash
+  kubectl logs pingpong --tail 1 --follow
+  ```
+
+- Stop it with Ctrl-C
+
+<!--
+```wait seq=3```
+```keys ^C```
+-->
+
+]
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Scaling our application
+
+- `kubectl` gives us a simple command to scale a workload:
+
+  `kubectl scale TYPE NAME --replicas=HOWMANY`
+
+- Let's try it on our Pod, so that we have more Pods!
+
+.lab[
+
+- Try to scale the Pod:
+  ```bash
+  kubectl scale pod pingpong --replicas=3
+  ```
+
+]
+
+🤔 We get the following error, what does that mean?
+
+```
+Error from server (NotFound): the server could not find the requested resource
+```
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Scaling a Pod
+
+- We cannot "scale a Pod"
+
+  (that's not completely true; we could give it more CPU/RAM)
+
+- If we want more Pods, we need to create more Pods
+
+  (i.e. execute `kubectl run` multiple times)
+
+- There must be a better way!
+
+  (spoiler alert: yes, there is a better way!)
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+class: extra-details
+
+## `NotFound`
+
+- What's the meaning of that error?
+  ```
+  Error from server (NotFound): the server could not find the requested resource
+  ```
+
+- When we execute `kubectl scale THAT-RESOURCE --replicas=THAT-MANY`,
+  <br/>
+  it is like telling Kubernetes:
+
+  *go to THAT-RESOURCE and set the scaling button to position THAT-MANY*
+
+- Pods do not have a "scaling button"
+
+- Try to execute the `kubectl scale pod` command with `-v6`
+
+- We see a `PATCH` request to `/scale`: that's the "scaling button"
+
+  (technically it's called a *subresource* of the Pod)
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Creating more pods
+
+- We are going to create a ReplicaSet
+
+  (= set of replicas = set of identical pods)
+
+- In fact, we will create a Deployment, which itself will create a ReplicaSet
+
+- Why so many layers? We'll explain that shortly, don't worry!
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Creating a Deployment running `ping`
+
+- Let's create a Deployment instead of a single Pod
+
+.lab[
+
+- Create the Deployment; pay attention to the `--`:
+  ```bash
+  kubectl create deployment pingpong --image=alpine -- ping 127.0.0.1
+  ```
+
+]
+
+- The `--` is used to separate:
+
+  - "options/flags of `kubectl create`
+
+  - command to run in the container
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## What has been created?
+
+.lab[
+
+<!-- ```hide kubectl wait pod --selector=app=pingpong --for condition=ready ``` -->
+
+- Check the resources that were created:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+Note: `kubectl get all` is a lie. It doesn't show everything.
+
+(But it shows a lot of "usual suspects", i.e. commonly used resources.)
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## There's a lot going on here!
+
+```
+NAME                            READY   STATUS        RESTARTS   AGE
+pod/pingpong                    1/1     Running       0          4m17s
+pod/pingpong-6ccbc77f68-kmgfn   1/1     Running       0          11s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   3h45
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/pingpong   1/1     1            1           11s
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/pingpong-6ccbc77f68   1         1         1       11s
+```
+
+Our new Pod is not named `pingpong`, but `pingpong-xxxxxxxxxxx-yyyyy`.
+
+We have a Deployment named `pingpong`, and an extra ReplicaSet, too. What's going on?
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## From Deployment to Pod
+
+We have the following resources:
+
+- `deployment.apps/pingpong`
+
+  This is the Deployment that we just created.
+
+- `replicaset.apps/pingpong-xxxxxxxxxx`
+
+  This is a Replica Set created by this Deployment.
+
+- `pod/pingpong-xxxxxxxxxx-yyyyy`
+
+  This is a *pod* created by the Replica Set.
+
+Let's explain what these things are.
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Pod
+
+- Can have one or multiple containers
+
+- Runs on a single node
+
+  (Pod cannot "straddle" multiple nodes)
+
+- Pods cannot be moved
+
+  (e.g. in case of node outage)
+
+- Pods cannot be scaled horizontally
+
+  (except by manually creating more Pods)
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+class: extra-details
+
+## Pod details
+
+- A Pod is not a process; it's an environment for containers
+
+  - it cannot be "restarted"
+
+  - it cannot "crash"
+
+- The containers in a Pod can crash
+
+- They may or may not get restarted
+
+  (depending on Pod's restart policy)
+
+- If all containers exit successfully, the Pod ends in "Succeeded" phase
+
+- If some containers fail and don't get restarted, the Pod ends in "Failed" phase
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Replica Set
+
+- Set of identical (replicated) Pods
+
+- Defined by a pod template + number of desired replicas
+
+- If there are not enough Pods, the Replica Set creates more
+
+  (e.g. in case of node outage; or simply when scaling up)
+
+- If there are too many Pods, the Replica Set deletes some
+
+  (e.g. if a node was disconnected and comes back; or when scaling down)
+
+- We can scale up/down a Replica Set
+
+  - we update the manifest of the Replica Set
+
+  - as a consequence, the Replica Set controller creates/deletes Pods
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Deployment
+
+- Replica Sets control *identical* Pods
+
+- Deployments are used to roll out different Pods
+
+  (different image, command, environment variables, ...)
+
+- When we update a Deployment with a new Pod definition:
+
+  - a new Replica Set is created with the new Pod definition
+
+  - that new Replica Set is progressively scaled up
+
+  - meanwhile, the old Replica Set(s) is(are) scaled down
+
+- This is a *rolling update*, minimizing application downtime
+
+- When we scale up/down a Deployment, it scales up/down its Replica Set
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Can we scale now?
+
+- Let's try `kubectl scale` again, but on the Deployment!
+
+.lab[
+
+- Scale our `pingpong` deployment:
+  ```bash
+  kubectl scale deployment pingpong --replicas 3
+  ```
+
+- Note that we could also write it like this:
+  ```bash
+  kubectl scale deployment/pingpong --replicas 3
+  ```
+
+- Check that we now have multiple pods:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+class: extra-details
+
+## Scaling a Replica Set
+
+- What if we scale the Replica Set instead of the Deployment?
+
+- The Deployment would notice it right away and scale back to the initial level
+
+- The Replica Set makes sure that we have the right numbers of Pods
+
+- The Deployment makes sure that the Replica Set has the right size
+
+  (conceptually, it delegates the management of the Pods to the Replica Set)
+
+- This might seem weird (why this extra layer?) but will soon make sense
+
+  (when we will look at how rolling updates work!)
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Checking Deployment logs
+
+- `kubectl logs` needs a Pod name
+
+- But it can also work with a *type/name*
+
+  (e.g. `deployment/pingpong`)
+
+.lab[
+
+- View the result of our `ping` command:
+  ```bash
+  kubectl logs deploy/pingpong --tail 2
+  ```
+
+]
+
+- It shows us the logs of the first Pod of the Deployment
+
+- We'll see later how to get the logs of *all* the Pods!
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Resilience
+
+- The *deployment* `pingpong` watches its *replica set*
+
+- The *replica set* ensures that the right number of *pods* are running
+
+- What happens if pods disappear?
+
+.lab[
+
+- In a separate window, watch the list of pods:
+  ```bash
+  watch kubectl get pods
+  ```
+
+<!--
+```wait Every 2.0s```
+```tmux split-pane -v```
+-->
+
+- Destroy the pod currently shown by `kubectl logs`:
+  ```
+  kubectl delete pod pingpong-xxxxxxxxxx-yyyyy
+  ```
+
+<!--
+```tmux select-pane -t 0```
+```copy pingpong-[^-]*-.....```
+```tmux last-pane```
+```keys kubectl delete pod ```
+```paste```
+```key ^J```
+```check```
+-->
+
+]
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## What happened?
+
+- `kubectl delete pod` terminates the pod gracefully
+
+  (sending it the TERM signal and waiting for it to shutdown)
+
+- As soon as the pod is in "Terminating" state, the Replica Set replaces it
+
+- But we can still see the output of the "Terminating" pod in `kubectl logs`
+
+- Until 30 seconds later, when the grace period expires
+
+- The pod is then killed, and `kubectl logs` exits
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+## Deleting a standalone Pod
+
+- What happens if we delete a standalone Pod?
+ 
+  (like the first `pingpong` Pod that we created)
+
+.lab[
+
+- Delete the Pod:
+  ```bash
+  kubectl delete pod pingpong
+  ```
+
+<!--
+```key ^D```
+```key ^C```
+-->
+
+]
+
+- No replacement Pod gets created because there is no *controller* watching it
+
+- That's why we will rarely use standalone Pods in practice
+
+  (except for e.g. punctual debugging or executing a short supervised task)
+
+???
+
+:EN:- Running pods and deployments
+:FR:- Créer un pod et un déploiement
+
+.debug[[k8s/kubectl-run.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-run.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-revisiting-kubectl-logs
+class: title
+
+ Revisiting `kubectl logs`
+
+.nav[
+[Previous part](#toc-running-our-first-containers-on-kubernetes)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-exposing-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Revisiting `kubectl logs`
+
+- In this section, we assume that we have a Deployment with multiple Pods
+
+  (e.g. `pingpong` that we scaled to at least 3 pods)
+
+- We will highlights some of the limitations of `kubectl logs`
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+## Streaming logs of multiple pods
+
+- By default, `kubectl logs` shows us the output of a single Pod
+
+.lab[
+
+- Try to check the output of the Pods related to a Deployment:
+  ```bash
+  kubectl logs deploy/pingpong --tail 1 --follow
+  ```
+
+<!--
+```wait using pod/pingpong-```
+```keys ^C```
+-->
+
+]
+
+`kubectl logs` only shows us the logs of one of the Pods.
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+## Viewing logs of multiple pods
+
+- When we specify a deployment name, only one single pod's logs are shown
+
+- We can view the logs of multiple pods by specifying a *selector*
+
+- If we check the pods created by the deployment, they all have the label `app=pingpong`
+
+  (this is just a default label that gets added when using `kubectl create deployment`)
+
+.lab[
+
+- View the last line of log from all pods with the `app=pingpong` label:
+  ```bash
+  kubectl logs -l app=pingpong --tail 1
+  ```
+
+]
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+## Streaming logs of multiple pods
+
+- Can we stream the logs of all our `pingpong` pods?
+
+.lab[
+
+- Combine `-l` and `-f` flags:
+  ```bash
+  kubectl logs -l app=pingpong --tail 1 -f
+  ```
+
+<!--
+```wait seq=```
+```key ^C```
+-->
+
+]
+
+*Note: combining `-l` and `-f` is only possible since Kubernetes 1.14!*
+
+*Let's try to understand why ...*
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+class: extra-details
+
+## Streaming logs of many pods
+
+- Let's see what happens if we try to stream the logs for more than 5 pods
+
+.lab[
+
+- Scale up our deployment:
+  ```bash
+  kubectl scale deployment pingpong --replicas=8
+  ```
+
+- Stream the logs:
+  ```bash
+  kubectl logs -l app=pingpong --tail 1 -f
+  ```
+
+<!-- ```wait error:``` -->
+
+]
+
+We see a message like the following one:
+```
+error: you are attempting to follow 8 log streams,
+but maximum allowed concurency is 5,
+use --max-log-requests to increase the limit
+```
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+class: extra-details
+
+## Why can't we stream the logs of many pods?
+
+- `kubectl` opens one connection to the API server per pod
+
+- For each pod, the API server opens one extra connection to the corresponding kubelet
+
+- If there are 1000 pods in our deployment, that's 1000 inbound + 1000 outbound connections on the API server
+
+- This could easily put a lot of stress on the API server
+
+- Prior Kubernetes 1.14, it was decided to *not* allow multiple connections
+
+- From Kubernetes 1.14, it is allowed, but limited to 5 connections
+
+  (this can be changed with `--max-log-requests`)
+
+- For more details about the rationale, see
+  [PR #67573](https://github.com/kubernetes/kubernetes/pull/67573)
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+## Shortcomings of `kubectl logs`
+
+- We don't see which pod sent which log line
+
+- If pods are restarted / replaced, the log stream stops
+
+- If new pods are added, we don't see their logs
+
+- To stream the logs of multiple pods, we need to write a selector
+
+- There are external tools to address these shortcomings
+
+  (e.g.: [Stern](https://github.com/stern/stern))
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+
+class: extra-details
+
+## `kubectl logs -l ... --tail N`
+
+- If we run this with Kubernetes 1.12, the last command shows multiple lines
+
+- This is a regression when `--tail` is used together with `-l`/`--selector`
+
+- It always shows the last 10 lines of output for each container
+
+  (instead of the number of lines specified on the command line)
+
+- The problem was fixed in Kubernetes 1.13
+
+*See [#70554](https://github.com/kubernetes/kubernetes/issues/70554) for details.*
+
+???
+
+:EN:- Viewing logs with "kubectl logs"
+:FR:- Consulter les logs avec "kubectl logs"
+
+.debug[[k8s/kubectl-logs.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectl-logs.md)]
+---
+## 19,000 words
+
+They say, "a picture is worth one thousand words."
+
+The following 19 slides show what really happens when we run:
+
+```bash
+kubectl create deployment web --image=nginx
+```
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/01.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/02.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/03.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/04.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/05.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/06.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/07.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/08.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/09.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/10.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/11.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/12.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/13.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/14.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/15.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/16.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/17.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/18.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/19.svg)
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/deploymentslideshow.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-exposing-containers
+class: title
+
+ Exposing containers
+
+.nav[
+[Previous part](#toc-revisiting-kubectl-logs)
+|
+[Back to table of contents](#toc-part-4)
+|
+[Next part](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exposing containers
+
+- We can connect to our pods using their IP address
+
+- Then we need to figure out a lot of things:
+
+  - how do we look up the IP address of the pod(s)?
+
+  - how do we connect from outside the cluster?
+
+  - how do we load balance traffic?
+
+  - what if a pod fails?
+
+- Kubernetes has a resource type named *Service*
+
+- Services address all these questions!
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Running containers with open ports
+
+- Since `ping` doesn't have anything to connect to, we'll have to run something else
+
+- We are going to use `jpetazzo/color`, a tiny HTTP server written in Go
+
+- `jpetazzo/color` listens on port 80
+
+- It serves a page showing the pod's name
+
+  (this will be useful when checking load balancing behavior)
+
+- We could also use the `nginx` official image instead
+
+  (but we wouldn't be able to tell the backends from each other)
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Running our HTTP server
+
+- We will create a deployment with `kubectl create deployment`
+
+- This will create a Pod running our HTTP server
+
+.lab[
+
+- Create a deployment named `blue`:
+  ```bash
+  kubectl create deployment blue --image=jpetazzo/color
+  ```
+
+]
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Connecting to the HTTP server
+
+- Let's connect to the HTTP server directly
+
+  (just to make sure everything works fine; we'll add the Service later)
+
+.lab[
+
+- Get the IP address of the Pod:
+  ```bash
+  kubectl get pods -o wide
+  ```
+
+- Send an HTTP request to the Pod:
+  ```bash
+  curl http://`IP-ADDRESSS`
+  ```
+
+]
+
+You should see a response from the Pod.
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Running with a local cluster
+
+If you're running with a local cluster (Docker Desktop, KinD, minikube...),
+you might get a connection timeout (or a message like "no route to host")
+because the Pod isn't reachable directly from your local machine.
+
+In that case, you can test the connection to the Pod by running a shell
+*inside* the cluster:
+
+```bash
+kubectl run -it --rm my-test-pod --image=fedora
+```
+
+Then run `curl` in that Pod.
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## The Pod doesn't have a "stable identity"
+
+- The IP address that we used above isn't "stable"
+
+  (if the Pod gets deleted, the replacement Pod will have a different address)
+
+.lab[
+
+- Check the IP addresses of running Pods:
+  ```bash
+  watch kubectl get pods -o wide
+  ```
+
+- Delete the Pod:
+  ```bash
+  kubectl delete pod `blue-xxxxxxxx-yyyyy`
+  ```
+
+- Check that the replacement Pod has a different IP address
+
+]
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Services in a nutshell
+
+- Services give us a *stable endpoint* to connect to a pod or a group of pods
+
+- An easy way to create a service is to use `kubectl expose`
+
+- If we have a deployment named `my-little-deploy`, we can run:
+
+  `kubectl expose deployment my-little-deploy --port=80`
+
+  ... and this will create a service with the same name (`my-little-deploy`)
+
+- Services are automatically added to an internal DNS zone
+
+  (in the example above, our code can now connect to http://my-little-deploy/)
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Exposing our deployment
+
+- Let's create a Service for our Deployment
+
+.lab[
+
+- Expose the HTTP port of our server:
+  ```bash
+  kubectl expose deployment blue --port=80
+  ```
+
+- Look up which IP address was allocated:
+  ```bash
+  kubectl get service
+  ```
+
+]
+
+- By default, this created a `ClusterIP` service
+
+  (we'll discuss later the different types of services)
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Services are layer 4 constructs
+
+- Services can have IP addresses, but they are still *layer 4*
+
+  (i.e. a service is not just an IP address; it's an IP address + protocol + port)
+
+- As a result: you *have to* indicate the port number for your service
+    
+  (with some exceptions, like `ExternalName` or headless services, covered later)
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Testing our service
+
+- We will now send a few HTTP requests to our Pod
+
+.lab[
+
+- Let's obtain the IP address that was allocated for our service, *programmatically:*
+  ```bash
+  CLUSTER_IP=$(kubectl get svc blue -o go-template='{{ .spec.clusterIP }}')
+  ```
+
+<!--
+```hide kubectl wait deploy blue --for condition=available```
+```key ^D```
+```key ^C```
+-->
+
+- Send a few requests:
+  ```bash
+  for i in $(seq 10); do curl http://$CLUSTER_IP; done
+  ```
+
+]
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## A *stable* endpoint
+
+- Let's see what happens when the Pod has a problem
+
+.lab[
+
+- Keep sending requests to the Service address:
+  ```bash
+  while sleep 0.3; do curl http://$CLUSTER_IP; done
+  ```
+
+- Meanwhile, delete the Pod:
+  ```bash
+  kubectl delete pod `blue-xxxxxxxx-yyyyy`
+  ```
+
+]
+
+- There might be a short interruption when we delete the pod...
+
+- ...But requests will keep flowing after that (without requiring a manual intervention)
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Load balancing
+
+- The Service will also act as a load balancer
+
+  (if there are multiple Pods in the Deployment)
+
+.lab[
+
+- Scale up the Deployment:
+  ```bash
+  kubectl scale deployment blue --replicas=3
+  ```
+
+- Send a bunch of requests to the Service:
+  ```bash
+  for i in $(seq 20); do curl http://$CLUSTER_IP; done
+  ```
+
+]
+
+- Our requests are load balanced across the Pods!
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## DNS integration
+
+- Kubernetes provides an internal DNS resolver
+
+- The resolver maps service names to their internal addresses
+
+- By default, this only works *inside Pods* (not from the nodes themselves)
+
+.lab[
+
+- Get a shell in a Pod:
+  ```bash
+  kubectl run --rm -it --image=fedora test-dns-integration
+  ```
+
+- Try to resolve the `blue` Service from the Pod:
+  ```bash
+  curl blue
+  ```
+
+]
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Under the hood...
+
+- Check the content of `/etc/resolv.conf` inside a Pod
+
+- It will have `nameserver X.X.X.X` (e.g. 10.96.0.10)
+
+- Now check `kubectl get service kube-dns --namespace=kube-system`
+
+- ...It's the same address! 😉
+
+- The FQDN of a service is actually:
+
+  `<service-name>.<namespace>.svc.<cluster-domain>`
+
+- `<cluster-domain>` defaults to `cluster.local`
+
+- And the `search` includes `<namespace>.svc.<cluster-domain>`
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+## Advantages of services
+
+- We don't need to look up the IP address of the pod(s)
+
+  (we resolve the IP address of the service using DNS)
+
+- There are multiple service types; some of them allow external traffic
+
+  (e.g. `LoadBalancer` and `NodePort`)
+
+- Services provide load balancing
+
+  (for both internal and external traffic)
+
+- Service addresses are independent from pods' addresses
+
+  (when a pod fails, the service seamlessly sends traffic to its replacement)
+
+???
+
+:EN:- Accessing pods through services
+:EN:- Service discovery and load balancing
+
+:FR:- Exposer un service
+:FR:- Le DNS interne de Kubernetes et la *service discovery*
+
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]</textarea>
     <script src="remark.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">
