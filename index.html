@@ -9178,6 +9178,11 @@ $ kubectl get nodes
 NAME             STATUS     ROLES           AGE   VERSION
 1224bdebstd002   NotReady   control-plane   13s   v1.32.2
 $ 
+
+Still on the first VM, allow workload to run on the control plane
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+```
 ```
 
 ]
@@ -9204,12 +9209,9 @@ To get the exact command line look at the output on the first VM.
 
 .lab3[
 
-Finally on the first VM, allow workload to run on the control plane
-```bash
-kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-```
 
-Install the CNI
+
+Finally, install the CNI
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/custom-resources.yaml
