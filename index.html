@@ -9212,7 +9212,7 @@ kubeadm join xxxxxx --token xxxx --discovery-token-ca-cert-hash xxxx
 
 
 
-Finally, install the CNI
+Finally, on the first VM, install the CNI
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.29.2/manifests/custom-resources.yaml
