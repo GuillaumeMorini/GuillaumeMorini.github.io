@@ -51,9 +51,13 @@ Password: **Something**
 .debug[
 ```
  M slides/efrei.yml
+ M slides/k8s/buildshiprun-selfhosted.md
  M slides/k8s/concepts-k8s.md
+ M slides/k8s/daemonset.md
  M slides/k8s/kubectlget.md
+ M slides/k8s/rollout.md
  M slides/k8s/setup-overview.md
+ M slides/k8s/shippingimages.md
  M slides/workshop.css
 ?? slides/containers/dockercoins.md
 ?? slides/efrei_day_1.yml
@@ -226,6 +230,26 @@ name: toc-part-4
 
 - [Exposing containers](#toc-exposing-containers)
 
+
+.debug[(auto-generated TOC)]
+---
+name: toc-part-5
+
+## Part 5
+
+- [Namespaces](#toc-namespaces)
+- [Shipping images with a registry](#toc-shipping-images-with-a-registry)
+- [Running our application on Kubernetes](#toc-running-our-application-on-kubernetes)
+- [Accessing internal services](#toc-accessing-internal-services)
+- [Accessing the API with `kubectl proxy`](#toc-accessing-the-api-with-kubectl-proxy)
+- [Labels and selectors](#toc-labels-and-selectors)
+- [Rolling updates](#toc-rolling-updates)
+- [Managing stacks with Helm](#toc-managing-stacks-with-helm)
+- [Helm chart format](#toc-helm-chart-format)
+- [Helm and invalid values](#toc-helm-and-invalid-values)
+- [Helm secrets](#toc-helm-secrets)
+- [Kustomize](#toc-kustomize)
+- [Network policies](#toc-network-policies)
 
 .debug[(auto-generated TOC)]
 
@@ -10781,7 +10805,7 @@ class: title
 |
 [Back to table of contents](#toc-part-4)
 |
-[Next part](#toc-)
+[Next part](#toc-namespaces)
 ]
 
 .debug[(automatically generated title slide)]
@@ -11125,7 +11149,4856 @@ class: extra-details
 :FR:- Exposer un service
 :FR:- Le DNS interne de Kubernetes et la *service discovery*
 
-.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]</textarea>
+.debug[[k8s/kubectlexpose.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlexpose.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/blue-containers.jpg)]
+
+---
+
+name: toc-namespaces
+class: title
+
+ Namespaces
+
+.nav[
+[Previous part](#toc-exposing-containers)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-shipping-images-with-a-registry)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Namespaces
+
+- Resources like Pods, Deployments, Services... exist in *Namespaces*
+
+- So far, we (probably) have been using the `default` Namespace
+
+- We can create other Namespaces to organize our resources
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Use-cases
+
+- Example: a "dev" cluster where each developer has their own Namespace
+
+  (and they only have access to their own Namespace, not to other folks' Namespaces)
+
+- Example: a cluster with one `production` and one `staging` Namespace
+
+  (with similar applications running in each of them, but with different sizes)
+
+- Example: a "production" cluster with one Namespace per application
+
+  (or one Namespace per component of a bigger application)
+
+- Example: a "production" cluster with many instances of the same application
+
+  (e.g. SAAS application with one instance per customer)
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Pre-existing Namespaces
+
+- On a freshly deployed cluster, we typically have the following four Namespaces:
+
+  - `default` (initial Namespace for our applications; also holds the `kubernetes` Service)
+
+  - `kube-system` (for the control plane)
+
+  - `kube-public` (contains one ConfigMap for cluster discovery)
+
+  - `kube-node-lease` (in Kubernetes 1.14 and later; contains Lease objects)
+
+- Over time, we will almost certainly create more Namespaces!
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Creating a Namespace
+
+- Let's see two ways to create a Namespace!
+
+.lab[
+
+- First, with `kubectl create namespace`:
+  ```bash
+  kubectl create namespace blue
+  ```
+
+- Then, with a YAML snippet:
+  ```bash
+    kubectl apply -f- <<EOF
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: green
+    EOF
+  ```
+
+]
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Using namespaces
+
+- We can pass a `-n` or `--namespace` flag to most `kubectl` commands
+
+.lab[
+
+- Create a Deployment in the `blue` Namespace:
+  ```bash
+  kubectl create deployment purple --image jpetazzo/color --namespace blue
+  ```
+
+- Check the Pods that were just created:
+  ```bash
+  kubectl get pods --all-namespaces
+  kubectl get pods --all-namespaces --selector app=purple
+  ```
+
+]
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Switching the active Namespace
+
+- We can change the "active" Namespace
+
+- This is useful if we're going to work in a given Namespace for a while
+
+  - it is easier than passing `--namespace ...` all the time
+
+  - it helps to avoid mistakes
+    <br/>
+    (e.g.: `kubectl delete -f foo.yaml` whoops wrong Namespace!)
+
+- We're going to see ~~one~~ ~~two~~ three different methods to switch namespaces!
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Method 1 (kubens/kns)
+
+- To switch to the `blue` Namespace, run:
+  ```bash
+  kubens blue
+  ```
+
+- `kubens` is sometimes renamed or aliased to `kns`
+
+  (even less keystrokes!)
+
+- `kubens -` switches back to the previous Namespace
+
+- Pros: probably the easiest method out there
+
+- Cons: `kubens` is an extra tool that you need to install
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Method 2 (edit kubeconfig)
+
+- Edit `~/.kube/config`
+
+- There should be a `namespace:` field somewhere
+
+  - except if we haven't changed Namespace yet!
+
+  - in that case, change Namespace at least once using another method
+
+- We can just edit that file, and `kubectl` will use the new Namespace from now on
+
+- Pros: kind of easy; doesn't require extra tools
+
+- Cons: there can be multiple `namespace:` fields in that file; difficult to automate
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Method 3 (kubectl config)
+
+- To switch to the `blue` Namespace, run:
+  ```bash
+  kubectl config set-context --current --namespace blue
+  ```
+
+- This automatically edits the kubeconfig file
+
+- This is exactly what `kubens` does behind the scenes!
+
+- Pros: always works (as long as we have `kubectl`)
+
+- Cons: long and complicated to type
+
+  (but it's a good exercise for our fingers, maybe?)
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+class: extra-details
+
+## What are contexts?
+
+- Context = cluster + user + namespace
+
+- Useful to quickly switch between multiple clusters
+
+  (e.g. dev, prod, or different applications, different customers...)
+
+- Also useful to quickly switch between identities
+
+  (e.g. developer with "regular" access vs. cluster-admin)
+
+- Switch context with `kubectl config set-context` or `kubectx` / `kctx`
+
+- It is also possible to switch the kubeconfig file altogether
+
+  (by specifying `--kubeconfig` or setting the `KUBECONFIG` environment variable)
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+class: extra-details
+
+## What's in a context
+
+- NAME is an arbitrary string to identify the context
+
+- CLUSTER is a reference to a cluster
+
+  (i.e. API endpoint URL, and optional certificate)
+
+- AUTHINFO is a reference to the authentication information to use
+
+  (i.e. a TLS client certificate, token, or otherwise)
+
+- NAMESPACE is the namespace
+
+  (empty string = `default`)
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Namespaces, Services, and DNS
+
+- When a Service is created, a record is added to the Kubernetes DNS
+
+- For instance, for service `auth` in domain `staging`, this is typically:
+
+  `auth.staging.svc.cluster.local`
+
+- By default, Pods are configured to resolve names in their Namespace's domain
+
+- For instance, a Pod in Namespace `staging` will have the following "search list":
+
+  `search staging.svc.cluster.local svc.cluster.local cluster.local`
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Pods connecting to Services
+
+- Let's assume that we are in Namespace `staging`
+
+- ... and there is a Service named `auth`
+
+- ... and we have code running in a Pod in that same Namespace
+
+- Our code can:
+
+  - connect to Service `auth` in the same Namespace with `http://auth/`
+
+  - connect to Service `auth` in another Namespace (e.g. `prod`) with `http://auth.prod`
+
+  - ... or `http://auth.prod.svc` or `http://auth.prod.svc.cluster.local`
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Deploying multiple instances of a stack
+
+If all the containers in a given stack use DNS for service discovery,
+that stack can be deployed identically in multiple Namespaces.
+
+Each copy of the stack will communicate with the services belonging
+to the stack's Namespace.
+
+Example: we can deploy multiple copies of DockerCoins, one per
+Namespace, without changing a single line of code in DockerCoins,
+and even without changing a single line of code in our YAML manifests!
+
+This is similar to what can be achieved e.g. with Docker Compose
+(but with Docker Compose, each stack is deployed in a Docker "network"
+instead of a Kubernetes Namespace).
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Namespaces and isolation
+
+- Namespaces *do not* provide isolation
+
+- By default, Pods in e.g. `prod` and `staging` Namespaces can communicate
+
+- Actual isolation is implemented with *network policies*
+
+- Network policies are resources (like deployments, services, namespaces...)
+
+- Network policies specify which flows are allowed:
+
+  - between pods
+
+  - from pods to the outside world
+
+  - and vice-versa
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+##  `kubens` and `kubectx`
+
+- These tools are available from https://github.com/ahmetb/kubectx
+
+- They were initially simple shell scripts, and are now full-fledged Go programs
+
+- On our clusters, they are installed as `kns` and `kctx`
+
+  (for brevity and to avoid completion clashes between `kubectx` and `kubectl`)
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## `kube-ps1`
+
+- It's easy to lose track of our current cluster / context / namespace
+
+- `kube-ps1` makes it easy to track these, by showing them in our shell prompt
+
+- It is installed on our training clusters, and when using [shpod](https://github.com/jpetazzo/shpod)
+
+- It gives us a prompt looking like this one:
+  ```
+  [123.45.67.89] `(kubernetes-admin@kubernetes:default)` docker@node1 ~
+  ```
+  (The highlighted part is `context:namespace`, managed by `kube-ps1`)
+
+- Highly recommended if you work across multiple contexts or namespaces!
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+## Installing `kube-ps1`
+
+- It's a simple shell script available from https://github.com/jonmosco/kube-ps1
+
+- It needs to be [installed in our profile/rc files](https://github.com/jonmosco/kube-ps1#installing)
+
+  (instructions differ depending on platform, shell, etc.)
+
+- Once installed, it defines aliases called `kube_ps1`, `kubeon`, `kubeoff`
+
+  (to selectively enable/disable it when needed)
+
+- Pro-tip: install it on your machine during the next break!
+
+???
+
+:EN:- Organizing resources with Namespaces
+:FR:- Organiser les ressources avec des *namespaces*
+
+.debug[[k8s/namespaces.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/namespaces.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-shipping-images-with-a-registry
+class: title
+
+ Shipping images with a registry
+
+.nav[
+[Previous part](#toc-namespaces)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-running-our-application-on-kubernetes)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Shipping images with a registry
+
+- Initially, our app was running on a single node
+
+- We could *build* and *run* in the same place
+
+- Therefore, we did not need to *ship* anything
+
+- Now that we want to run on a cluster, things are different
+
+- The easiest way to ship container images is to use a registry
+
+.debug[[k8s/shippingimages.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/shippingimages.md)]
+---
+
+## How Docker registries work (a reminder)
+
+- What happens when we execute `docker run alpine` ?
+
+- If the Engine needs to pull the `alpine` image, it expands it into `library/alpine`
+
+- `library/alpine` is expanded into `index.docker.io/library/alpine`
+
+- The Engine communicates with `index.docker.io` to retrieve `library/alpine:latest`
+
+- To use something else than `index.docker.io`, we specify it in the image name
+
+- Examples:
+  ```bash
+  docker pull gcr.io/google-containers/alpine-with-bash:1.0
+
+  docker build -t registry.mycompany.io:5000/myimage:awesome .
+  docker push registry.mycompany.io:5000/myimage:awesome
+  ```
+
+.debug[[k8s/shippingimages.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/shippingimages.md)]
+---
+
+## Running DockerCoins on Kubernetes
+
+- Create one deployment for each component
+
+  (hasher, redis, rng, webui, worker)
+
+- Expose deployments that need to accept connections
+
+  (hasher, redis, rng, webui)
+
+- For redis, we can use the official redis image
+
+- For the 4 others, we need to build images and push them to some registry
+
+.debug[[k8s/shippingimages.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/shippingimages.md)]
+---
+
+## Building and shipping images
+
+- There are *many* options!
+
+- Manually:
+
+  - build locally (with `docker build` or otherwise)
+
+  - push to the registry
+
+- Automatically:
+
+  - build and test locally
+
+  - when ready, commit and push a code repository
+
+  - the code repository notifies an automated build system
+
+  - that system gets the code, builds it, pushes the image to the registry
+
+.debug[[k8s/shippingimages.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/shippingimages.md)]
+---
+
+## Which registry do we want to use?
+
+- There are SAAS products like Docker Hub, Quay ...
+
+- Each major cloud provider has an option as well
+
+  (ACR on Azure, ECR on AWS, GCR on Google Cloud...)
+
+- There are also commercial products to run our own registry
+
+  (Docker EE, Quay...)
+
+- And open source options, too!
+
+- When picking a registry, pay attention to its build system
+
+  (when it has one)
+
+
+:EN:- Shipping images to Kubernetes
+:FR:- Déployer des images sur notre cluster
+
+.debug[[k8s/shippingimages.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/shippingimages.md)]
+---
+## Self-hosting our registry
+
+*Note: this section shows how to run the Docker
+open source registry and use it to ship images
+on our cluster. While this method works fine,
+we recommend that you consider using one of the
+hosted, free automated build services instead.
+It will be much easier!*
+
+*If you need to run a registry on premises,
+this section gives you a starting point, but
+you will need to make a lot of changes so that
+the registry is secured, highly available, and
+so that your build pipeline is automated.*
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Using the open source registry
+
+- We need to run a `registry` container
+
+- It will store images and layers to the local filesystem
+  <br/>(but you can add a config file to use S3, Swift, etc.)
+
+- Docker *requires* TLS when communicating with the registry
+
+  - unless for registries on `127.0.0.0/8` (i.e. `localhost`)
+
+  - or with the Engine flag `--insecure-registry`
+
+- Our strategy: publish the registry container on a NodePort,
+  <br/>so that it's available through `127.0.0.1:xxxxx` on each node
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Deploying a self-hosted registry
+
+- We will deploy a registry container, and expose it with a NodePort
+
+.lab[
+
+- Create the registry service:
+  ```bash
+  kubectl create deployment registry --image=registry
+  ```
+
+- Expose it on a NodePort:
+  ```bash
+  kubectl expose deploy/registry --port=5000 --type=NodePort
+  ```
+
+]
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Connecting to our registry
+
+- We need to find out which port has been allocated
+
+.lab[
+
+- View the service details:
+  ```bash
+  kubectl describe svc/registry
+  ```
+
+- Get the port number programmatically:
+  ```bash
+  NODEPORT=$(kubectl get svc/registry -o json | jq .spec.ports[0].nodePort)
+  REGISTRY=127.0.0.1:$NODEPORT
+  ```
+
+]
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Testing our registry
+
+- A convenient Docker registry API route to remember is `/v2/_catalog`
+
+.lab[
+
+<!-- ```hide kubectl wait deploy/registry --for condition=available```-->
+
+- View the repositories currently held in our registry:
+  ```bash
+  curl $REGISTRY/v2/_catalog
+  ```
+
+]
+
+--
+
+We should see:
+```json
+{"repositories":[]}
+```
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Testing our local registry
+
+- We can retag a small image, and push it to the registry
+
+.lab[
+
+- Make sure we have the busybox image, and retag it:
+  ```bash
+  docker pull busybox
+  docker tag busybox $REGISTRY/busybox
+  ```
+
+- Push it:
+  ```bash
+  docker push $REGISTRY/busybox
+  ```
+
+]
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Checking again what's on our local registry
+
+- Let's use the same endpoint as before
+
+.lab[
+
+- Ensure that our busybox image is now in the local registry:
+  ```bash
+  curl $REGISTRY/v2/_catalog
+  ```
+
+]
+
+The curl command should now output:
+```json
+{"repositories":["busybox"]}
+```
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Building and pushing our images
+
+- We are going to use a convenient feature of Docker Compose
+
+.lab[
+
+- Go to the `stacks` directory:
+  ```bash
+  cd ~/TP-Docker
+  ```
+
+- Build and push the images:
+  ```bash
+  export REGISTRY
+  export TAG=v0.1
+  docker-compose build
+  docker-compose push
+  ```
+
+]
+
+Let's have a look at the `docker-compose.yml` file while this is building and pushing.
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+```yaml
+version: "3"
+
+services:
+  rng:
+    build: rng
+    image: ${REGISTRY-127.0.0.1:5000}/rng:${TAG-latest}
+    deploy:
+      mode: global
+  ...
+  redis:
+    image: redis
+  ...
+  worker:
+    build: worker
+    image: ${REGISTRY-127.0.0.1:5000}/worker:${TAG-latest}
+    ...
+    deploy:
+      replicas: 10
+```
+
+.warning[Just in case you were wondering ... Docker "services" are not Kubernetes "services".]
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+class: extra-details
+
+## Avoiding the `latest` tag
+
+.warning[Make sure that you've set the `TAG` variable properly!]
+
+- If you don't, the tag will default to `latest`
+
+- The problem with `latest`: nobody knows what it points to!
+
+  - the latest commit in the repo?
+
+  - the latest commit in some branch? (Which one?)
+
+  - the latest tag?
+
+  - some random version pushed by a random team member?
+
+- If you keep pushing the `latest` tag, how do you roll back?
+
+- Image tags should be meaningful, i.e. correspond to code branches, tags, or hashes
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Checking the content of the registry
+
+- All our images should now be in the registry
+
+.lab[
+
+- Re-run the same `curl` command as earlier:
+  ```bash
+  curl $REGISTRY/v2/_catalog
+  ```
+
+]
+
+*In these slides, all the commands to deploy
+the app will use a $REGISTRY environment
+variable, so that we can quickly switch from
+the self-hosted registry to pre-built images
+hosted on the Docker Hub. So make sure that
+this $REGISTRY variable is set correctly when
+running these commands!*
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/container-cranes.jpg)]
+
+---
+
+name: toc-running-our-application-on-kubernetes
+class: title
+
+ Running our application on Kubernetes
+
+.nav[
+[Previous part](#toc-shipping-images-with-a-registry)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-accessing-internal-services)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Running our application on Kubernetes
+
+- We can now deploy our code (as well as a redis instance)
+
+.lab[
+
+- Deploy `redis`:
+  ```bash
+  kubectl create deployment redis --image=redis
+  ```
+
+- Deploy everything else:
+  ```bash
+  kubectl create deployment hasher --image=dockercoins/hasher:v0.1
+  kubectl create deployment rng --image=dockercoins/rng:v0.1
+  kubectl create deployment webui --image=dockercoins/webui:v0.1
+  kubectl create deployment worker --image=dockercoins/worker:v0.1
+  ```
+
+]
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+class: extra-details
+
+## Deploying other images
+
+- If we wanted to deploy images from another registry ...
+
+- ... Or with a different tag ...
+
+- ... We could use the following snippet:
+
+```bash
+  REGISTRY=dockercoins
+  TAG=v0.1
+  for SERVICE in hasher rng webui worker; do
+    kubectl create deployment $SERVICE --image=$REGISTRY/$SERVICE:$TAG
+  done
+```
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+## Is this working?
+
+- After waiting for the deployment to complete, let's look at the logs!
+
+  (Hint: use `kubectl get deploy -w` to watch deployment events)
+
+.lab[
+
+<!-- ```hide
+kubectl wait deploy/rng --for condition=available
+kubectl wait deploy/worker --for condition=available
+``` -->
+
+- Look at some logs:
+  ```bash
+  kubectl logs deploy/rng
+  kubectl logs deploy/worker
+  ```
+
+]
+
+--
+
+🤔 `rng` is fine ... But not `worker`.
+
+--
+
+💡 Oh right! We forgot to `expose`.
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+## Connecting containers together
+
+- Three deployments need to be reachable by others: `hasher`, `redis`, `rng`
+
+- `worker` doesn't need to be exposed
+
+- `webui` will be dealt with later
+
+.lab[
+
+- Expose each deployment, specifying the right port:
+  ```bash
+  kubectl expose deployment redis --port 6379
+  kubectl expose deployment rng --port 80
+  kubectl expose deployment hasher --port 80
+  ```
+
+]
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+## Is this working yet?
+
+- The `worker` has an infinite loop, that retries 10 seconds after an error
+
+.lab[
+
+- Stream the worker's logs:
+  ```bash
+  kubectl logs deploy/worker --follow
+  ```
+
+  (Give it about 10 seconds to recover)
+
+<!--
+```wait units of work done, updating hash counter```
+```key ^C```
+-->
+
+]
+
+--
+
+We should now see the `worker`, well, working happily.
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+## Exposing services for external access
+
+- Now we would like to access the Web UI
+
+- We will expose it with a `NodePort`
+
+  (just like we did for the registry)
+
+.lab[
+
+- Create a `NodePort` service for the Web UI:
+  ```bash
+  kubectl expose deploy/webui --type=NodePort --port=80
+  ```
+
+- Check the port that was allocated:
+  ```bash
+  kubectl get svc
+  ```
+
+]
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+## Accessing the web UI
+
+- We can now connect to *any node*, on the allocated node port, to view the web UI
+
+.lab[
+
+- Open the web UI in your browser (http://node-ip-address:3xxxx/)
+
+<!-- ```open http://node1:3xxxx/``` -->
+
+]
+
+--
+
+Yes, this may take a little while to update. *(Narrator: it was DNS.)*
+
+--
+
+*Alright, we're back to where we started, when we were running on a single node!*
+
+???
+
+:EN:- Running our demo app on Kubernetes
+:FR:- Faire tourner l'application de démo sur Kubernetes
+
+.debug[[k8s/ourapponkube.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/ourapponkube.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/container-housing.jpg)]
+
+---
+
+name: toc-accessing-internal-services
+class: title
+
+ Accessing internal services
+
+.nav[
+[Previous part](#toc-running-our-application-on-kubernetes)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-accessing-the-api-with-kubectl-proxy)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Accessing internal services
+
+- When we are logged in on a cluster node, we can access internal services
+
+  (by virtue of the Kubernetes network model: all nodes can reach all pods and services)
+
+- When we are accessing a remote cluster, things are different
+
+  (generally, our local machine won't have access to the cluster's internal subnet)
+
+- How can we temporarily access a service without exposing it to everyone?
+
+--
+
+- `kubectl proxy`: gives us access to the API, which includes a proxy for HTTP resources
+
+- `kubectl port-forward`: allows forwarding of TCP ports to arbitrary pods, services, ...
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+## Suspension of disbelief
+
+The labs and demos in this section assume that we have set up `kubectl` on our
+local machine in order to access a remote cluster.
+
+We will therefore show how to access services and pods of the remote cluster,
+from our local machine.
+
+You can also run these commands directly on the cluster (if you haven't
+installed and set up `kubectl` locally).
+
+Running commands locally will be less useful
+(since you could access services and pods directly),
+but keep in mind that these commands will work anywhere as long as you have
+installed and set up `kubectl` to communicate with your cluster.
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+## `kubectl proxy` in theory
+
+- Running `kubectl proxy` gives us access to the entire Kubernetes API
+
+- The API includes routes to proxy HTTP traffic
+
+- These routes look like the following:
+
+  `/api/v1/namespaces/<namespace>/services/<service>/proxy`
+
+- We just add the URI to the end of the request, for instance:
+
+  `/api/v1/namespaces/<namespace>/services/<service>/proxy/index.html`
+
+- We can access `services` and `pods` this way
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+## `kubectl proxy` in practice
+
+- Let's access the `webui` service through `kubectl proxy`
+
+.lab[
+
+- Run an API proxy in the background:
+  ```bash
+  kubectl proxy &
+  ```
+
+- Access the `webui` service:
+  ```bash
+  curl localhost:8001/api/v1/namespaces/default/services/webui/proxy/index.html
+  ```
+
+- Terminate the proxy:
+  ```bash
+  kill %1
+  ```
+
+]
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+## `kubectl port-forward` in theory
+
+- What if we want to access a TCP service?
+
+- We can use `kubectl port-forward` instead
+
+- It will create a TCP relay to forward connections to a specific port
+
+  (of a pod, service, deployment...)
+
+- The syntax is:
+
+  `kubectl port-forward service/name_of_service local_port:remote_port`
+
+- If only one port number is specified, it is used for both local and remote ports
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+## `kubectl port-forward` in practice
+
+- Let's access our remote Redis server
+
+.lab[
+
+- Forward connections from local port 10000 to remote port 6379:
+  ```bash
+  kubectl port-forward svc/redis 10000:6379 &
+  ```
+
+- Connect to the Redis server:
+  ```bash
+  telnet localhost 10000
+  ```
+
+- Issue a few commands, e.g. `INFO server` then `QUIT`
+
+<!--
+```wait Connected to localhost```
+```keys INFO server```
+```key ^J```
+```keys QUIT```
+```key ^J```
+-->
+
+- Terminate the port forwarder:
+  ```bash
+  kill %1
+  ```
+
+]
+
+???
+
+:EN:- Securely accessing internal services
+:FR:- Accès sécurisé aux services internes
+
+:T: Accessing internal services from our local machine
+
+:Q: What's the advantage of "kubectl port-forward" compared to a NodePort?
+:A: It can forward arbitrary protocols
+:A: It doesn't require Kubernetes API credentials
+:A: It offers deterministic load balancing (instead of random)
+:A: ✔️It doesn't expose the service to the public
+
+:Q: What's the security concept behind "kubectl port-forward"?
+:A: ✔️We authenticate with the Kubernetes API, and it forwards connections on our behalf
+:A: It detects our source IP address, and only allows connections coming from it
+:A: It uses end-to-end mTLS (mutual TLS) to authenticate our connections
+:A: There is no security (as long as it's running, anyone can connect from anywhere)
+
+.debug[[k8s/accessinternal.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/accessinternal.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/containers-by-the-water.jpg)]
+
+---
+
+name: toc-accessing-the-api-with-kubectl-proxy
+class: title
+
+ Accessing the API with `kubectl proxy`
+
+.nav[
+[Previous part](#toc-accessing-internal-services)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-labels-and-selectors)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Accessing the API with `kubectl proxy`
+
+- The API requires us to authenticate.red[¹]
+
+- There are many authentication methods available, including:
+
+  - TLS client certificates
+    <br/>
+    (that's what we've used so far)
+
+  - HTTP basic password authentication
+    <br/>
+    (from a static file; not recommended)
+
+  - various token mechanisms
+    <br/>
+    (detailed in the [documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authentication-strategies))
+
+.red[¹]OK, we lied. If you don't authenticate, you are considered to
+be user `system:anonymous`, which doesn't have any access rights by default.
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## Accessing the API directly
+
+- Let's see what happens if we try to access the API directly with `curl`
+
+.lab[
+
+- Retrieve the ClusterIP allocated to the `kubernetes` service:
+  ```bash
+  kubectl get svc kubernetes
+  ```
+
+- Replace the IP below and try to connect with `curl`:
+  ```bash
+  curl -k https://`10.96.0.1`/
+  ```
+
+]
+
+The API will tell us that user `system:anonymous` cannot access this path.
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## Authenticating to the API
+
+If we wanted to talk to the API, we would need to:
+
+- extract our TLS key and certificate information from `~/.kube/config`
+
+  (the information is in PEM format, encoded in base64)
+
+- use that information to present our certificate when connecting
+
+  (for instance, with `openssl s_client -key ... -cert ... -connect ...`)
+
+- figure out exactly which credentials to use
+
+  (once we start juggling multiple clusters)
+
+- change that whole process if we're using another authentication method
+
+🤔 There has to be a better way!
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## Using `kubectl proxy` for authentication
+
+- `kubectl proxy` runs a proxy in the foreground
+
+- This proxy lets us access the Kubernetes API without authentication
+
+  (`kubectl proxy` adds our credentials on the fly to the requests)
+
+- This proxy lets us access the Kubernetes API over plain HTTP
+
+- This is a great tool to learn and experiment with the Kubernetes API
+
+- ... And for serious uses as well (suitable for one-shot scripts)
+
+- For unattended use, it's better to create a [service account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/)
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## Trying `kubectl proxy`
+
+- Let's start `kubectl proxy` and then do a simple request with `curl`!
+
+.lab[
+
+- Start `kubectl proxy` in the background:
+  ```bash
+  kubectl proxy &
+  ```
+
+- Access the API's default route:
+  ```bash
+  curl localhost:8001
+  ```
+
+<!--
+```wait /version```
+```key ^J```
+-->
+
+- Terminate the proxy:
+  ```bash
+  kill %1
+  ```
+
+]
+
+The output is a list of available API routes.
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## OpenAPI (fka Swagger)
+
+- The Kubernetes API serves an OpenAPI Specification
+
+  (OpenAPI was formerly known as Swagger)
+
+- OpenAPI has many advantages
+
+  (generate client library code, generate test code ...)
+
+- For us, this means we can explore the API with [Swagger UI](https://swagger.io/tools/swagger-ui/)
+
+  (for instance with the [Swagger UI add-on for Firefox](https://addons.mozilla.org/en-US/firefox/addon/swagger-ui-ff/))
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## `kubectl proxy` is intended for local use
+
+- By default, the proxy listens on port 8001
+
+  (But this can be changed, or we can tell `kubectl proxy` to pick a port)
+
+- By default, the proxy binds to `127.0.0.1`
+
+  (Making it unreachable from other machines, for security reasons)
+
+- By default, the proxy only accepts connections from:
+
+  `^localhost$,^127\.0\.0\.1$,^\[::1\]$`
+
+- This is great when running `kubectl proxy` locally
+
+- Not-so-great when you want to connect to the proxy from a remote machine
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+class: extra-details
+
+## Running `kubectl proxy` on a remote machine
+
+- If we wanted to connect to the proxy from another machine, we would need to:
+
+  - bind to `INADDR_ANY` instead of `127.0.0.1`
+
+  - accept connections from any address
+
+- This is achieved with:
+  ```
+  kubectl proxy --port=8888 --address=0.0.0.0 --accept-hosts=.*
+  ```
+
+.warning[Do not do this on a real cluster: it opens full unauthenticated access!]
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+class: extra-details
+
+## Security considerations
+
+- Running `kubectl proxy` openly is a huge security risk
+
+- It is slightly better to run the proxy where you need it
+
+  (and copy credentials, e.g. `~/.kube/config`, to that place)
+
+- It is even better to use a limited account with reduced permissions
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+
+## Good to know ...
+
+- `kubectl proxy` also gives access to all internal services
+
+- Specifically, services are exposed as such:
+  ```
+  /api/v1/namespaces/<namespace>/services/<service>/proxy
+  ```
+
+- We can use `kubectl proxy` to access an internal service in a pinch
+
+  (or, for non HTTP services, `kubectl port-forward`)
+
+- This is not very useful when running `kubectl` directly on the cluster
+
+  (since we could connect to the services directly anyway)
+
+- But it is very powerful as soon as you run `kubectl` from a remote machine
+
+.debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
+---
+## Daemon sets in practice
+
+- Daemon sets are great for cluster-wide, per-node processes:
+
+  - `kube-proxy`
+
+  - `weave` (our overlay network)
+
+  - monitoring agents
+
+  - hardware management tools (e.g. SCSI/FC HBA agents)
+
+  - etc.
+
+- They can also be restricted to run [only on some nodes](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/#running-pods-on-only-some-nodes)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Creating a daemon set
+
+<!-- ##VERSION## -->
+
+- Unfortunately, as of Kubernetes 1.32, the CLI cannot create daemon sets
+
+--
+
+- More precisely: it doesn't have a subcommand to create a daemon set
+
+--
+
+- But any kind of resource can always be created by providing a YAML description:
+  ```bash
+  kubectl apply -f foo.yaml
+  ```
+
+--
+
+- How do we create the YAML file for our daemon set?
+
+--
+
+  - option 1: [read the docs](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/#create-a-daemonset)
+
+--
+
+  - option 2: `vi` our way out of it
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Creating the YAML file for our daemon set
+
+- DaemonSets and Deployments should be *pretty similar*
+
+- They both define how to create Pods
+
+- Can we transform a Deployment into a DaemonSet? 🤔
+
+- Let's try!
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Generating a Deployment manifest
+
+- Let's use `kubectl create deployment -o yaml --dry-run=client`
+
+.lab[
+
+- Generate the YAML for a Deployment:
+  ```bash
+    kubectl create deployment test --image=test \
+            -o yaml --dry-run=client
+  ```
+  
+- Save it to a file:
+  ```bash
+    kubectl create deployment test --image=test \
+            -o yaml --dry-run=client \
+            > test.yaml
+  ```
+  
+]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Changing the `kind`
+
+- Edit the YAML manifest and replace `Deployment` with `DaemonSet`
+
+.lab[
+
+- Edit the YAML file and make the change
+
+<!--
+```bash vim test.yaml```
+```wait kind: Deployment```
+```keys /Deployment```
+```key ^J```
+```keys cwDaemonSet```
+```key ^[``` ]
+```keys :wq```
+```key ^J```
+-->
+
+- Or, alternatively:
+  ```bash
+  sed -i "s/kind: Deployment/kind: DaemonSet"
+  ```
+
+]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Creating the DaemonSet
+
+- Let's see if our DaemonSet manifest is valid!
+
+.lab[
+
+- Try to `kubectl apply` our new YAML:
+  ```bash
+  kubectl apply -f test.yaml
+  ```
+
+]
+
+--
+
+- Unfortunately, that doesn't work!
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Understanding the problem
+
+- The core of the error is:
+  ```
+  error validating data:
+  [ValidationError(DaemonSet.spec):
+  unknown field "replicas" in io.k8s.api.extensions.v1beta1.DaemonSetSpec,
+  ...
+  ```
+
+--
+
+- *Obviously,* it doesn't make sense to specify a number of replicas for a daemon set
+
+--
+
+- Workaround: fix the YAML and remove the `replicas` field
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Fixing the problem
+
+- Let's remove the `replicas` field and try again
+
+.lab[
+
+- Edit the `test.yaml` file and remove the `replicas:` line
+
+- Then try to create the DaemonSet again:
+  ```bash
+  kubectl apply -f test.yaml
+  ```
+
+]
+
+- This time it should work!
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Checking what we've done
+
+- Did we transform our `deployment` into a `daemonset`?
+
+.lab[
+
+- Look at the resources that we have now:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+--
+
+We have two resources called `test`:
+
+- the *deployment* that was existing before
+
+- the *daemon set* that we just created
+
+We also have one too many pods.
+<br/>
+(The pod corresponding to the *deployment* still exists.)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## `deploy/test` and `ds/test`
+
+- You can have different resource types with the same name
+
+  (i.e. a *deployment* and a *daemon set* both named `test`)
+
+- We still have the old `test` *deployment*
+
+  ```
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/test        1         1         1            1           18m
+  ```
+
+- But now we have the new `test` *daemon set* as well
+
+  ```
+NAME                DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE
+daemonset.apps/test  2        2        2      2           2          <none>         9s
+  ```
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Too many pods
+
+- If we check with `kubectl get pods`, we see:
+
+  - *one pod* for the deployment (named `test-xxxxxxxxxx-yyyyy`)
+
+  - *one pod per node* for the daemon set (named `test-zzzzz`)
+
+  ```
+  NAME                        READY     STATUS    RESTARTS   AGE
+  test-54f57d4d49-7pt82        1/1       Running   0          11m
+  test-b85tm                   1/1       Running   0          25s
+  test-hfbrr                   1/1       Running   0          25s
+  [...]
+  ```
+
+--
+
+The daemon set created one pod per node, except on the control plane node.
+
+The control plane node has [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) preventing pods from running there.
+
+(To schedule a pod on this node anyway, the pod will require appropriate [tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).)
+
+.footnote[(Off by one? We don't run these pods on the node hosting the control plane.)]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-labels-and-selectors
+class: title
+
+ Labels and selectors
+
+.nav[
+[Previous part](#toc-accessing-the-api-with-kubectl-proxy)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-rolling-updates)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+# Labels and selectors
+
+- The `test` *service* is load balancing requests to a set of pods
+
+- That set of pods is defined by the *selector* of the `test` service
+
+.lab[
+
+- Check the *selector* in the `test` service definition:
+  ```bash
+  kubectl describe service test
+  ```
+
+]
+
+- The selector is `app=test`
+
+- It means "all the pods having the label `app=test`"
+
+  (They can have additional labels as well, that's OK!)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Selector evaluation
+
+- We can use selectors with many `kubectl` commands
+
+- For instance, with `kubectl get`, `kubectl logs`, `kubectl delete` ... and more
+
+.lab[
+
+- Get the list of pods matching selector `app=test`:
+  ```bash
+  kubectl get pods -l app=test
+  kubectl get pods --selector app=test
+  ```
+
+]
+
+But ... why do these pods (in particular, the *new* ones) have this `app=test` label?
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Where do labels come from?
+
+- When we create a deployment with `kubectl create deployment test`,
+  <br/>this deployment gets the label `app=test`
+
+- The replica sets created by this deployment also get the label `app=test`
+
+- The pods created by these replica sets also get the label `app=test`
+
+- When we created the daemon set from the deployment, we re-used the same spec
+
+- Therefore, the pods created by the daemon set get the same labels
+
+.footnote[Note: when we use `kubectl run stuff`, the label is `run=stuff` instead.]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Updating load balancer configuration
+
+- We would like to remove a pod from the load balancer
+
+- What would happen if we removed that pod, with `kubectl delete pod ...`?
+
+--
+
+  It would be re-created immediately (by the replica set or the daemon set)
+
+--
+
+- What would happen if we removed the `app=test` label from that pod?
+
+--
+
+  It would *also* be re-created immediately
+
+--
+
+  Why?!?
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Selectors for replica sets and daemon sets
+
+- The "mission" of a replica set is:
+
+  "Make sure that there is the right number of pods matching this spec!"
+
+- The "mission" of a daemon set is:
+
+  "Make sure that there is a pod matching this spec on each node!"
+
+--
+
+- *In fact,* replica sets and daemon sets do not check pod specifications
+
+- They merely have a *selector*, and they look for pods matching that selector
+
+- Yes, we can fool them by manually creating pods with the "right" labels
+
+- Bottom line: if we remove our `app=test` label ...
+
+ ... The pod "disappears" for its parent, which re-creates another pod to replace it
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Isolation of replica sets and daemon sets
+
+- Since both the `test` daemon set and the `test` replica set use `app=test` ...
+
+  ... Why don't they "find" each other's pods?
+
+--
+
+- *Replica sets* have a more specific selector, visible with `kubectl describe`
+
+  (It looks like `app=test,pod-template-hash=abcd1234`)
+
+- *Daemon sets* also have a more specific selector, but it's invisible
+
+  (It looks like `app=test,controller-revision-hash=abcd1234`)
+
+- As a result, each controller only "sees" the pods it manages
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Removing a pod from the load balancer
+
+- Currently, the `test` service is defined by the `app=test` selector
+
+- The only way to remove a pod is to remove or change the `app` label
+
+- ... But that will cause another pod to be created instead!
+
+- What's the solution?
+
+--
+
+- We need to change the selector of the `test` service!
+
+- Let's add another label to that selector (e.g. `active=yes`) 
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Selectors with multiple labels
+
+- If a selector specifies multiple labels, they are understood as a logical *AND*
+
+  (in other words: the pods must match all the labels)
+
+- We cannot have a logical *OR*
+
+  (e.g. `app=api AND (release=prod OR release=preprod)`)
+
+- We can, however, apply as many extra labels as we want to our pods:
+
+  - use selector `app=api AND prod-or-preprod=yes`
+
+  - add `prod-or-preprod=yes` to both sets of pods
+
+- We will see later that in other places, we can use more advanced selectors
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## The plan
+
+1. Add the label `active=yes` to all our `test` pods
+
+2. Update the selector for the `test` service to also include `active=yes`
+
+3. Toggle traffic to a pod by manually adding/removing the `active` label
+
+4. Profit!
+
+*Note: if we swap steps 1 and 2, it will cause a short
+service disruption, because there will be a period of time
+during which the service selector won't match any pod.
+During that time, requests to the service will time out.
+By doing things in the order above, we guarantee that there won't
+be any interruption.*
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Adding labels to pods
+
+- We want to add the label `active=yes` to all pods that have `app=test`
+
+- We could edit each pod one by one with `kubectl edit` ...
+
+- ... Or we could use `kubectl label` to label them all
+
+- `kubectl label` can use selectors itself
+
+.lab[
+
+- Add `active=yes` to all pods that have `app=test`:
+  ```bash
+  kubectl label pods -l app=test active=yes
+  ```
+
+]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Updating the service selector
+
+- We need to edit the service specification
+
+- Reminder: in the service definition, we will see `app: test` in two places
+
+  - the label of the service itself (we don't need to touch that one)
+
+  - the selector of the service (that's the one we want to change)
+
+.lab[
+
+- Update the service to add `active: yes` to its selector:
+  ```bash
+  kubectl edit service test
+  ```
+
+<!--
+```wait Please edit the object below```
+```keys /app: test```
+```key ^J```
+```keys noactive: yes```
+```key ^[``` ]
+```keys :wq```
+```key ^J```
+-->
+
+]
+
+--
+
+... And then we get *the weirdest error ever.* Why?
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## When the YAML parser is being too smart
+
+- YAML parsers try to help us:
+
+  - `xyz` is the string `"xyz"`
+
+  - `42` is the integer `42`
+
+  - `yes` is the boolean value `true`
+
+- If we want the string `"42"` or the string `"yes"`, we have to quote them
+
+- So we have to use `active: "yes"`
+
+.footnote[For a good laugh: if we had used "ja", "oui", "si" ... as the value, it would have worked!]
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Updating the service selector, take 2
+
+.lab[
+
+- Update the YAML manifest of the service
+
+- Add `active: "yes"` to its selector
+
+<!--
+```wait Please edit the object below```
+```keys /yes```
+```key ^J```
+```keys cw"yes"```
+```key ^[``` ]
+```keys :wq```
+```key ^J```
+-->
+
+]
+
+This time it should work!
+
+If we did everything correctly, the web UI shouldn't show any change.
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Updating labels
+
+- We want to disable the pod that was created by the deployment
+
+- All we have to do, is remove the `active` label from that pod
+
+- To identify that pod, we can use its name
+
+- ... Or rely on the fact that it's the only one with a `pod-template-hash` label
+
+- Good to know:
+
+  - `kubectl label ... foo=` doesn't remove a label (it sets it to an empty string)
+
+  - to remove label `foo`, use `kubectl label ... foo-`
+
+  - to change an existing label, we would need to add `--overwrite`
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Removing a pod from the load balancer
+
+.lab[
+
+- In one window, check the logs of that pod:
+  ```bash
+  POD=$(kubectl get pod -l app=test,pod-template-hash -o name)
+  kubectl logs --tail 1 --follow $POD
+  ```
+  (We should see a steady stream of HTTP logs)
+
+<!--
+```wait HTTP/1.1```
+```tmux split-pane -v```
+-->
+
+- In another window, remove the label from the pod:
+  ```bash
+  kubectl label pod -l app=test,pod-template-hash active-
+  ```
+  (The stream of HTTP logs should stop immediately)
+
+<!--
+```key ^D```
+```key ^C```
+-->
+
+]
+
+There might be a slight change in the web UI (since we removed a bit
+of capacity from the `test` service). If we remove more pods,
+the effect should be more visible.
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Updating the daemon set
+
+- If we scale up our cluster by adding new nodes, the daemon set will create more pods
+
+- These pods won't have the `active=yes` label
+
+- If we want these pods to have that label, we need to edit the daemon set spec
+
+- We can do that with e.g. `kubectl edit daemonset test`
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## We've put resources in your resources
+
+- Reminder: a daemon set is a resource that creates more resources!
+
+- There is a difference between:
+
+  - the label(s) of a resource (in the `metadata` block in the beginning)
+
+  - the selector of a resource (in the `spec` block)
+
+  - the label(s) of the resource(s) created by the first resource (in the `template` block)
+
+- We would need to update the selector and the template
+
+  (metadata labels are not mandatory)
+
+- The template must match the selector
+
+  (i.e. the resource will refuse to create resources that it will not select)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Labels and debugging
+
+- When a pod is misbehaving, we can delete it: another one will be recreated
+
+- But we can also change its labels
+
+- It will be removed from the load balancer (it won't receive traffic anymore)
+
+- Another pod will be recreated immediately
+
+- But the problematic pod is still here, and we can inspect and debug it
+
+- We can even re-add it to the rotation if necessary
+
+  (Very useful to troubleshoot intermittent and elusive bugs)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+## Labels and advanced rollout control
+
+- Conversely, we can add pods matching a service's selector
+
+- These pods will then receive requests and serve traffic
+
+- Examples:
+
+  - one-shot pod with all debug flags enabled, to collect logs
+
+  - pods created automatically, but added to rotation in a second step
+    <br/>
+    (by setting their label accordingly)
+
+- This gives us building blocks for canary and blue/green deployments
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Advanced label selectors
+
+- As indicated earlier, service selectors are limited to a `AND`
+
+- But in many other places in the Kubernetes API, we can use complex selectors
+
+  (e.g. Deployment, ReplicaSet, DaemonSet, NetworkPolicy ...)
+
+- These allow extra operations; specifically:
+
+  - checking for presence (or absence) of a label
+
+  - checking if a label is (or is not) in a given set
+
+- Relevant documentation:
+
+  [Service spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#servicespec-v1-core),
+  [LabelSelector spec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#labelselector-v1-meta),
+  [label selector doc](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Example of advanced selector
+
+```yaml
+  theSelector:
+    matchLabels:
+      app: portal
+      component: api
+    matchExpressions:
+    - key: release
+      operator: In
+      values: [ production, preproduction ]
+    - key: signed-off-by
+      operator: Exists
+```
+
+This selector matches pods that meet *all* the indicated conditions.
+
+`operator` can be `In`, `NotIn`, `Exists`, `DoesNotExist`.
+
+A `nil` selector matches *nothing*, a `{}` selector matches *everything*.
+<br/>
+(Because that means "match all pods that meet at least zero condition".)
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Services and Endpoints
+
+- Each Service has a corresponding Endpoints resource
+
+  (see `kubectl get endpoints` or `kubectl get ep`)
+
+- That Endpoints resource is used by various controllers
+
+  (e.g. `kube-proxy` when setting up `iptables` rules for ClusterIP services)
+
+- These Endpoints are populated (and updated) with the Service selector
+
+- We can update the Endpoints manually, but our changes will get overwritten
+
+- ... Except if the Service selector is empty!
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: extra-details
+
+## Empty Service selector
+
+- If a service selector is empty, Endpoints don't get updated automatically
+
+  (but we can still set them manually)
+
+- This lets us create Services pointing to arbitrary destinations
+
+  (potentially outside the cluster; or things that are not in pods)
+
+- Another use-case: the `kubernetes` service in the `default` namespace
+
+  (its Endpoints are maintained automatically by the API server)
+
+???
+
+:EN:- Scaling with Daemon Sets
+:FR:- Utilisation de Daemon Sets
+
+.debug[[k8s/daemonset.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/daemonset.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/lots-of-containers.jpg)]
+
+---
+
+name: toc-rolling-updates
+class: title
+
+ Rolling updates
+
+.nav[
+[Previous part](#toc-labels-and-selectors)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-managing-stacks-with-helm)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Rolling updates
+
+- How should we update a running application?
+
+- Strategy 1: delete old version, then deploy new version
+
+  (not great, because it obviously provokes downtime!)
+
+- Strategy 2: deploy new version, then delete old version
+
+  (uses a lot of resources; also how do we shift traffic?)
+
+- Strategy 3: replace running pods one at a time
+
+  (sounds interesting; and good news, Kubernetes does it for us!)
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Rolling updates
+
+- With rolling updates, when a Deployment is updated, it happens progressively
+
+- The Deployment controls multiple Replica Sets
+
+- Each Replica Set is a group of identical Pods
+
+  (with the same image, arguments, parameters ...)
+
+- During the rolling update, we have at least two Replica Sets:
+
+  - the "new" set (corresponding to the "target" version)
+
+  - at least one "old" set
+
+- We can have multiple "old" sets
+
+  (if we start another update before the first one is done)
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Update strategy
+
+- Two parameters determine the pace of the rollout: `maxUnavailable` and `maxSurge`
+
+- They can be specified in absolute number of pods, or percentage of the `replicas` count
+
+- At any given time ...
+
+  - there will always be at least `replicas`-`maxUnavailable` pods available
+
+  - there will never be more than `replicas`+`maxSurge` pods in total
+
+  - there will therefore be up to `maxUnavailable`+`maxSurge` pods being updated
+
+- We have the possibility of rolling back to the previous version
+  <br/>(if the update fails or is unsatisfactory in any way)
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Checking current rollout parameters
+
+- Recall how we build custom reports with `kubectl` and `jq`:
+
+.lab[
+
+- Show the rollout plan for our deployments:
+  ```bash
+    kubectl get deploy -o json |
+            jq ".items[] | {name:.metadata.name} + .spec.strategy.rollingUpdate"
+  ```
+
+]
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Rolling updates in practice
+
+- As of Kubernetes 1.8, we can do rolling updates with:
+
+  `deployments`, `daemonsets`, `statefulsets`
+
+- Editing one of these resources will automatically result in a rolling update
+
+- Rolling updates can be monitored with the `kubectl rollout` subcommand
+
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Listing versions
+
+- We can list successive versions of a Deployment with `kubectl rollout history`
+
+.lab[
+
+- Look at our successive versions:
+  ```bash
+  kubectl rollout history deployment test
+  ```
+
+]
+
+We don't see *all* revisions.
+
+We might see something like 1, 4, 5.
+
+(Depending on how many "undos" we did before.)
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Explaining deployment revisions
+
+- These revisions correspond to our Replica Sets
+
+- This information is stored in the Replica Set annotations
+
+.lab[
+
+- Check the annotations for our replica sets:
+  ```bash
+  kubectl describe replicasets -l app=test | grep -A3 ^Annotations
+  ```
+
+]
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+class: extra-details
+
+## What about the missing revisions?
+
+- The missing revisions are stored in another annotation:
+
+  `deployment.kubernetes.io/revision-history`
+
+- These are not shown in `kubectl rollout history`
+
+- We could easily reconstruct the full list with a script
+
+  (if we wanted to!)
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+## Rolling back to an older version
+
+- `kubectl rollout undo` can work with a revision number
+
+.lab[
+
+- Roll back to the "known good" deployment version:
+  ```bash
+  kubectl rollout undo deployment test --to-revision=1
+  ```
+
+- Check the list of pods
+
+]
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+class: extra-details
+
+## Changing rollout parameters
+
+- We want to:
+
+  - revert to `v0.1`
+  - be conservative on availability 
+  - go slow on rollout speed (update only one pod at a time) 
+  - give some time to our pods to "warm up" before starting more
+
+The corresponding changes can be expressed in the following YAML snippet:
+
+.small[
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: test
+        image: test:v0.1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  minReadySeconds: 10
+```
+]
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+class: extra-details
+
+## Applying changes through a YAML patch
+
+- We could use `kubectl edit deployment test`
+
+- But we could also use `kubectl patch` with the exact YAML shown before
+
+.lab[
+
+.small[
+
+- Apply all our changes and wait for them to take effect:
+  ```bash
+  kubectl patch deployment test -p "
+    spec:
+      template:
+        spec:
+          containers:
+          - name: test
+            image: test:v0.1
+      strategy:
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 1
+      minReadySeconds: 10
+    "
+  kubectl rollout status deployment test
+  kubectl get deploy -o json test |
+          jq "{name:.metadata.name} + .spec.strategy.rollingUpdate"
+  ```
+  ] 
+
+]
+
+???
+
+:EN:- Rolling updates
+:EN:- Rolling back a bad deployment
+
+:FR:- Mettre à jour un déploiement
+:FR:- Concept de *rolling update* et *rollback*
+:FR:- Paramétrer la vitesse de déploiement
+
+.debug[[k8s/rollout.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/rollout.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/plastic-containers.JPG)]
+
+---
+
+name: toc-managing-stacks-with-helm
+class: title
+
+ Managing stacks with Helm
+
+.nav[
+[Previous part](#toc-rolling-updates)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-helm-chart-format)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Managing stacks with Helm
+
+- Helm is a (kind of!) package manager for Kubernetes
+
+- We can use it to:
+
+  - find existing packages (called "charts") created by other folks
+
+  - install these packages, configuring them for our particular setup
+
+  - package our own things (for distribution or for internal use)
+
+  - manage the lifecycle of these installs (rollback to previous version etc.)
+
+- It's a "CNCF graduate project", indicating a certain level of maturity
+
+  (more on that later)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## From `kubectl run` to YAML
+
+- We can create resources with one-line commands
+
+  (`kubectl run`, `kubectl create deployment`, `kubectl expose`...)
+
+- We can also create resources by loading YAML files
+
+  (with `kubectl apply -f`, `kubectl create -f`...)
+
+- There can be multiple resources in a single YAML files
+
+  (making them convenient to deploy entire stacks)
+
+- However, these YAML bundles often need to be customized
+
+  (e.g.: number of replicas, image version to use, features to enable...)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Beyond YAML
+
+- Very often, after putting together our first `app.yaml`, we end up with:
+
+  - `app-prod.yaml`
+
+  - `app-staging.yaml`
+
+  - `app-dev.yaml`
+
+  - instructions indicating to users "please tweak this and that in the YAML"
+
+- That's where using something like
+  [CUE](https://github.com/cue-labs/cue-by-example/tree/main/003_kubernetes_tutorial),
+  [Kustomize](https://kustomize.io/),
+  or [Helm](https://helm.sh/) can help!
+
+- Now we can do something like this:
+  ```bash
+  helm install app ... --set this.parameter=that.value
+  ```
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Other features of Helm
+
+- With Helm, we create "charts"
+
+- These charts can be used internally or distributed publicly
+
+- Public charts can be indexed through the [Artifact Hub](https://artifacthub.io/)
+
+- This gives us a way to find and install other folks' charts
+
+- Helm also gives us ways to manage the lifecycle of what we install:
+
+  - keep track of what we have installed
+
+  - upgrade versions, change parameters, roll back, uninstall
+
+- Furthermore, even if it's not "the" standard, it's definitely "a" standard!
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## CNCF graduation status
+
+- On April 30th 2020, Helm was the 10th project to *graduate* within the CNCF
+
+  (alongside Containerd, Prometheus, and Kubernetes itself)
+
+- This is an acknowledgement by the CNCF for projects that
+
+  *demonstrate thriving adoption, an open governance process,
+  <br/>
+  and a strong commitment to community, sustainability, and inclusivity.*
+
+- See [CNCF announcement](https://www.cncf.io/announcement/2020/04/30/cloud-native-computing-foundation-announces-helm-graduation/)
+  and [Helm announcement](https://helm.sh/blog/celebrating-helms-cncf-graduation/)
+
+- In other words: Helm is here to stay
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Helm concepts
+
+- `helm` is a CLI tool
+
+- It is used to find, install, upgrade *charts*
+
+- A chart is an archive containing templatized YAML bundles
+
+- Charts are versioned
+
+- Charts can be stored on private or public repositories
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Differences between charts and packages
+
+- A package (deb, rpm...) contains binaries, libraries, etc.
+
+- A chart contains YAML manifests
+
+  (the binaries, libraries, etc. are in the images referenced by the chart)
+
+- On most distributions, a package can only be installed once
+
+  (installing another version replaces the installed one)
+
+- A chart can be installed multiple times
+
+- Each installation is called a *release*
+
+- This allows to install e.g. 10 instances of MongoDB
+
+  (with potentially different versions and configurations)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+class: extra-details
+
+## Wait a minute ...
+
+*But, on my Debian system, I have Python 2 **and** Python 3.
+<br/>
+Also, I have multiple versions of the Postgres database engine!*
+
+Yes!
+
+But they have different package names:
+
+- `python2.7`, `python3.8`
+
+- `postgresql-10`, `postgresql-11`
+
+Good to know: the Postgres package in Debian includes
+provisions to deploy multiple Postgres servers on the
+same system, but it's an exception (and it's a lot of
+work done by the package maintainer, not by the `dpkg`
+or `apt` tools).
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Helm 2 vs Helm 3
+
+- Helm 3 was released [November 13, 2019](https://helm.sh/blog/helm-3-released/)
+
+- Charts remain compatible between Helm 2 and Helm 3
+
+- The CLI is very similar (with minor changes to some commands)
+
+- The main difference is that Helm 2 uses `tiller`, a server-side component
+
+- Helm 3 doesn't use `tiller` at all, making it simpler (yay!)
+
+- If you see references to `tiller` in a tutorial, documentation... that doc is obsolete!
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+class: extra-details
+
+## What was the problem with `tiller`?
+
+- With Helm 3:
+
+  - the `helm` CLI communicates directly with the Kubernetes API
+
+  - it creates resources (deployments, services...) with our credentials
+
+- With Helm 2:
+
+  - the `helm` CLI communicates with `tiller`, telling `tiller` what to do
+
+  - `tiller` then communicates with the Kubernetes API, using its own credentials
+
+- This indirect model caused significant permissions headaches
+
+- It also made it more complicated to embed Helm in other tools
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Installing Helm
+
+- If the `helm` CLI is not installed in your environment, install it
+
+.lab[
+
+- Check if `helm` is installed:
+  ```bash
+  helm
+  ```
+
+- If it's not installed, run the following command:
+  ```bash
+  curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 \
+  | bash
+  ```
+
+]
+
+(To install Helm 2, replace `get-helm-3` with `get`.)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Charts and repositories
+
+- A *repository* (or repo in short) is a collection of charts
+
+- It's just a bunch of files
+
+  (they can be hosted by a static HTTP server, or on a local directory)
+
+- We can add "repos" to Helm, giving them a nickname
+
+- The nickname is used when referring to charts on that repo
+
+  (for instance, if we try to install `hello/world`, that
+  means the chart `world` on the repo `hello`; and that repo
+  `hello` might be something like https://blahblah.hello.io/charts/)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## How to find charts
+
+- Go to the [Artifact Hub](https://artifacthub.io/packages/search?kind=0) (https://artifacthub.io)
+
+- Or use `helm search hub ...` from the CLI
+
+- Let's try to find a Helm chart for something called "OWASP Juice Shop"!
+
+  (it is a famous demo app used in security challenges)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Finding charts from the CLI
+
+- We can use `helm search hub <keyword>`
+
+.lab[
+
+- Look for the OWASP Juice Shop app:
+  ```bash
+  helm search hub owasp juice
+  ```
+
+- Since the URLs are truncated, try with the YAML output:
+  ```bash
+  helm search hub owasp juice -o yaml
+  ```
+
+]
+
+Then go to → https://artifacthub.io/packages/helm/seccurecodebox/juice-shop
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Finding charts on the web
+
+- We can also use the Artifact Hub search feature
+
+.lab[
+
+- Go to https://artifacthub.io/
+
+- In the search box on top, enter "owasp juice"
+
+- Click on the "juice-shop" result (not "multi-juicer" or "juicy-ctf")
+
+]
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Installing the chart
+
+- Click on the "Install" button, it will show instructions
+
+.lab[
+
+- First, add the repository for that chart:
+  ```bash
+  helm repo add juice https://charts.securecodebox.io
+  ```
+
+- Then, install the chart:
+  ```bash
+  helm install my-juice-shop juice/juice-shop
+  ```
+
+]
+
+Note: it is also possible to install directly a chart, with `--repo https://...`
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Charts and releases
+
+- "Installing a chart" means creating a *release*
+
+- In the previous example, the release was named "my-juice-shop"
+
+- We can also use `--generate-name` to ask Helm to generate a name for us
+
+.lab[
+
+- List the releases:
+  ```bash
+  helm list
+  ```
+
+- Check that we have a `my-juice-shop-...` Pod up and running:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Viewing resources of a release
+
+- This specific chart labels all its resources with a `release` label
+
+- We can use a selector to see these resources
+
+.lab[
+
+- List all the resources created by this release:
+  ```bash
+  kubectl get all --selector=app.kubernetes.io/instance=my-juice-shop
+  ```
+
+]
+
+Note: this label wasn't added automatically by Helm.
+<br/>
+It is defined in that chart. In other words, not all charts will provide this label.
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Configuring a release
+
+- By default, `juice/juice-shop` creates a service of type `ClusterIP`
+
+- We would like to change that to a `NodePort`
+
+- We could use `kubectl edit service my-juice-shop`, but ...
+
+  ... our changes would get overwritten next time we update that chart!
+
+- Instead, we are going to *set a value*
+
+- Values are parameters that the chart can use to change its behavior
+
+- Values have default values
+
+- Each chart is free to define its own values and their defaults
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Checking possible values
+
+- We can inspect a chart with `helm show` or `helm inspect`
+
+.lab[
+
+- Look at the README for the app:
+  ```bash
+  helm show readme juice/juice-shop
+  ```
+
+- Look at the values and their defaults:
+  ```bash
+  helm show values juice/juice-shop
+  ```
+
+]
+
+The `values` may or may not have useful comments.
+
+The `readme` may or may not have (accurate) explanations for the values.
+
+(If we're unlucky, there won't be any indication about how to use the values!)
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Setting values
+
+- Values can be set when installing a chart, or when upgrading it
+
+- We are going to update `my-juice-shop` to change the type of the service
+
+.lab[
+
+- Update `my-juice-shop`:
+  ```bash
+  helm upgrade my-juice-shop juice/juice-shop \
+       --set service.type=NodePort
+  ```
+
+]
+
+Note that we have to specify the chart that we use (`juice/my-juice-shop`),
+even if we just want to update some values.
+
+We can set multiple values. If we want to set many values, we can use `-f`/`--values` and pass a YAML file with all the values.
+
+All unspecified values will take the default values defined in the chart.
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+## Connecting to the Juice Shop
+
+- Let's check the app that we just installed
+
+.lab[
+
+- Check the node port allocated to the service:
+  ```bash
+  kubectl get service my-juice-shop
+  PORT=$(kubectl get service my-juice-shop -o jsonpath={..nodePort})
+  ```
+
+- Connect to it:
+  ```bash
+  curl localhost:$PORT/
+  ```
+
+]
+
+???
+
+:EN:- Helm concepts
+:EN:- Installing software with Helm
+:EN:- Finding charts on the Artifact Hub
+
+:FR:- Fonctionnement général de Helm
+:FR:- Installer des composants via Helm
+:FR:- Trouver des *charts* sur *Artifact Hub*
+
+:T: Getting started with Helm and its concepts
+
+:Q: Which comparison is the most adequate?
+:A: Helm is a firewall, charts are access lists
+:A: ✔️Helm is a package manager, charts are packages
+:A: Helm is an artefact repository, charts are artefacts
+:A: Helm is a CI/CD platform, charts are CI/CD pipelines
+
+:Q: What's required to distribute a Helm chart?
+:A: A Helm commercial license
+:A: A Docker registry
+:A: An account on the Helm Hub
+:A: ✔️An HTTP server
+
+.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-1.jpg)]
+
+---
+
+name: toc-helm-chart-format
+class: title
+
+ Helm chart format
+
+.nav[
+[Previous part](#toc-managing-stacks-with-helm)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-helm-and-invalid-values)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Helm chart format
+
+- What exactly is a chart?
+
+- What's in it?
+
+- What would be involved in creating a chart?
+
+  (we won't create a chart, but we'll see the required steps)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## What is a chart
+
+- A chart is a set of files
+
+- Some of these files are mandatory for the chart to be viable
+
+  (more on that later)
+
+- These files are typically packed in a tarball
+
+- These tarballs are stored in "repos"
+
+  (which can be static HTTP servers)
+
+- We can install from a repo, from a local tarball, or an unpacked tarball
+
+  (the latter option is preferred when developing a chart)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## What's in a chart
+
+- A chart must have at least:
+
+  - a `templates` directory, with YAML manifests for Kubernetes resources
+
+  - a `values.yaml` file, containing (tunable) parameters for the chart
+
+  - a `Chart.yaml` file, containing metadata (name, version, description ...)
+
+- Let's look at a simple chart for a basic demo app
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Adding the repo
+
+- If you haven't done it before, you need to add the repo for that chart
+
+.lab[
+
+- Add the repo that holds the chart for the OWASP Juice Shop:
+  ```bash
+  helm repo add juice https://charts.securecodebox.io
+  ```
+
+]
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Downloading a chart
+
+- We can use `helm pull` to download a chart from a repo
+
+.lab[
+
+- Download the tarball for `juice/juice-shop`:
+  ```bash
+  helm pull juice/juice-shop
+  ```
+  (This will create a file named `juice-shop-X.Y.Z.tgz`.)
+
+- Or, download + untar `juice/juice-shop`:
+  ```bash
+  helm pull juice/juice-shop --untar
+  ```
+  (This will create a directory named `juice-shop`.)
+
+]
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Looking at the chart's content
+
+- Let's look at the files and directories in the `juice-shop` chart
+
+.lab[
+
+- Display the tree structure of the chart we just downloaded:
+  ```bash
+  tree juice-shop
+  ```
+
+]
+
+We see the components mentioned above: `Chart.yaml`, `templates/`, `values.yaml`.
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Templates
+
+- The `templates/` directory contains YAML manifests for Kubernetes resources
+
+  (Deployments, Services, etc.)
+
+- These manifests can contain template tags
+
+  (using the standard Go template library)
+
+.lab[
+
+- Look at the template file for the Service resource:
+  ```bash
+  cat juice-shop/templates/service.yaml
+  ```
+
+]
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Analyzing the template file
+
+- Tags are identified by `{{ ... }}`
+
+- `{{ template "x.y" }}` expands a [named template](https://helm.sh/docs/chart_template_guide/named_templates/#declaring-and-using-templates-with-define-and-template)
+
+  (previously defined with `{{ define "x.y" }}...stuff...{{ end }}`)
+
+- The `.` in `{{ template "x.y" . }}` is the *context* for that named template
+
+  (so that the named template block can access variables from the local context)
+
+- `{{ .Release.xyz }}` refers to [built-in variables](https://helm.sh/docs/chart_template_guide/builtin_objects/) initialized by Helm
+
+  (indicating the chart name, version, whether we are installing or upgrading ...)
+
+- `{{ .Values.xyz }}` refers to tunable/settable [values](https://helm.sh/docs/chart_template_guide/values_files/)
+
+  (more on that in a minute)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Values
+
+- Each chart comes with a
+  [values file](https://helm.sh/docs/chart_template_guide/values_files/)
+
+- It's a YAML file containing a set of default parameters for the chart
+
+- The values can be accessed in templates with e.g. `{{ .Values.x.y }}`
+
+  (corresponding to field `y` in map `x` in the values file)
+
+- The values can be set or overridden when installing or ugprading a chart:
+
+  - with `--set x.y=z` (can be used multiple times to set multiple values)
+
+  - with `--values some-yaml-file.yaml` (set a bunch of values from a file)
+
+- Charts following best practices will have values following specific patterns
+
+  (e.g. having a `service` map allowing to set `service.type` etc.)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Other useful tags
+
+- `{{ if x }} y {{ end }}` allows to include `y` if `x` evaluates to `true`
+
+  (can be used for e.g. healthchecks, annotations, or even an entire resource)
+
+- `{{ range x }} y {{ end }}` iterates over `x`, evaluating `y` each time
+
+  (the elements of `x` are assigned to `.` in the range scope)
+
+- `{{- x }}`/`{{ x -}}` will remove whitespace on the left/right
+
+- The whole [Sprig](http://masterminds.github.io/sprig/) library, with additions:
+
+  `lower` `upper` `quote` `trim` `default` `b64enc` `b64dec` `sha256sum` `indent` `toYaml` ...
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Pipelines
+
+- `{{ quote blah }}` can also be expressed as `{{ blah | quote }}`
+
+- With multiple arguments, `{{ x y z }}` can be expressed as `{{ z | x y }}`)
+
+- Example: `{{ .Values.annotations | toYaml | indent 4 }}`
+
+  - transforms the map under `annotations` into a YAML string
+
+  - indents it with 4 spaces (to match the surrounding context)
+
+- Pipelines are not specific to Helm, but a feature of Go templates
+
+  (check the [Go text/template documentation](https://golang.org/pkg/text/template/) for more details and examples)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## README and NOTES.txt
+
+- At the top-level of the chart, it's a good idea to have a README
+
+- It will be viewable with e.g. `helm show readme juice/juice-shop`
+
+- In the `templates/` directory, we can also have a `NOTES.txt` file
+
+- When the template is installed (or upgraded), `NOTES.txt` is processed too
+
+  (i.e. its `{{ ... }}` tags are evaluated)
+
+- It gets displayed after the install or upgrade
+
+- It's a great place to generate messages to tell the user:
+
+  - how to connect to the release they just deployed
+
+  - any passwords or other thing that we generated for them
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Additional files
+
+- We can place arbitrary files in the chart (outside of the `templates/` directory)
+
+- They can be accessed in templates with `.Files`
+
+- They can be transformed into ConfigMaps or Secrets with `AsConfig` and `AsSecrets`
+
+  (see [this example](https://helm.sh/docs/chart_template_guide/accessing_files/#configmap-and-secrets-utility-functions) in the Helm docs)
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+## Hooks and tests
+
+- We can define *hooks* in our templates
+
+- Hooks are resources annotated with `"helm.sh/hook": NAME-OF-HOOK`
+
+- Hook names include `pre-install`, `post-install`, `test`, [and much more](https://helm.sh/docs/topics/charts_hooks/#the-available-hooks)
+
+- The resources defined in hooks are loaded at a specific time
+
+- Hook execution is *synchronous*
+
+  (if the resource is a Job or Pod, Helm will wait for its completion)
+
+- This can be use for database migrations, backups, notifications, smoke tests ...
+
+- Hooks named `test` are executed only when running `helm test RELEASE-NAME`
+
+???
+
+:EN:- Helm charts format
+:FR:- Le format des *Helm charts*
+
+.debug[[k8s/helm-chart-format.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-chart-format.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-helm-and-invalid-values
+class: title
+
+ Helm and invalid values
+
+.nav[
+[Previous part](#toc-helm-chart-format)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-helm-secrets)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Helm and invalid values
+
+- A lot of Helm charts let us specify an image tag like this:
+  ```bash
+  helm install ... --set image.tag=v1.0
+  ```
+
+- What happens if we make a small mistake, like this:
+  ```bash
+  helm install ... --set imagetag=v1.0
+  ```
+
+- Or even, like this:
+  ```bash
+  helm install ... --set image=v1.0
+  ```
+
+🤔
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Making mistakes
+
+- In the first case:
+
+  - we set `imagetag=v1.0` instead of `image.tag=v1.0`
+
+  - Helm will ignore that value (if it's not used anywhere in templates)
+
+  - the chart is deployed with the default value instead
+
+- In the second case:
+
+  - we set `image=v1.0` instead of `image.tag=v1.0`
+
+  - `image` will be a string instead of an object
+
+  - Helm will *probably* fail when trying to evaluate `image.tag`
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Preventing mistakes
+
+- To prevent the first mistake, we need to tell Helm:
+
+  *"let me know if any additional (unknown) value was set!"*
+
+- To prevent the second mistake, we need to tell Helm:
+
+  *"`image` should be an object, and `image.tag` should be a string!"*
+
+- We can do this with *values schema validation*
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Helm values schema validation
+
+- We can write a spec representing the possible values accepted by the chart
+
+- Helm will check the validity of the values before trying to install/upgrade
+
+- If it finds problems, it will stop immediately
+
+- The spec uses [JSON Schema](https://json-schema.org/):
+
+  *JSON Schema is a vocabulary that allows you to annotate and validate JSON documents.*
+
+- JSON Schema is designed for JSON, but can easily work with YAML too
+
+  (or any language with `map|dict|associativearray` and `list|array|sequence|tuple`)
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## In practice
+
+- We need to put the JSON Schema spec in a file called `values.schema.json`
+
+  (at the root of our chart; right next to `values.yaml` etc.)
+
+- The file is optional
+
+- We don't need to register or declare it in `Chart.yaml` or anywhere
+
+- Let's write a schema that will verify that ...
+
+  - `image.repository` is an official image (string without slashes or dots)
+
+  - `image.pullPolicy` can only be `Always`, `Never`, `IfNotPresent`
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## `values.schema.json`
+
+```json
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[a-z0-9-_]+$"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "pattern": "^(Always|Never|IfNotPresent)$"
+        }
+      } 
+    } 
+  } 
+}
+```
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Testing our schema
+
+- Let's try to install a couple releases with that schema!
+
+.lab[
+
+- Try an invalid `pullPolicy`:
+  ```bash
+  helm install broken --set image.pullPolicy=ShallNotPass
+  ```
+
+- Try an invalid value:
+  ```bash
+  helm install should-break --set ImAgeTAg=toto
+  ```
+
+]
+
+- The first one fails, but the second one still passes ...
+
+- Why?
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Bailing out on unkown properties
+
+- We told Helm what properties (values) were valid
+
+- We didn't say what to do about additional (unknown) properties!
+
+- We can fix that with `"additionalProperties": false`
+
+.lab[
+
+- Edit `values.schema.json` to add `"additionalProperties": false`
+  ```json
+    {
+      "$schema": "http://json-schema.org/schema#",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+      ...
+  ```
+
+]
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+## Testing with unknown properties
+
+.lab[
+
+- Try to pass an extra property:
+  ```bash
+  helm install should-break --set ImAgeTAg=toto
+  ```
+
+- Try to pass an extra nested property:
+  ```bash
+  helm install does-it-work --set image.hello=world
+  ```
+
+]
+
+The first command should break.
+
+The second will not.
+
+`"additionalProperties": false` needs to be specified at each level.
+
+???
+
+:EN:- Helm schema validation
+:FR:- Validation de schema Helm
+
+.debug[[k8s/helm-values-schema-validation.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-values-schema-validation.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
+
+---
+
+name: toc-helm-secrets
+class: title
+
+ Helm secrets
+
+.nav[
+[Previous part](#toc-helm-and-invalid-values)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-kustomize)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Helm secrets
+
+- Helm can do *rollbacks*:
+
+  - to previously installed charts
+
+  - to previous sets of values
+
+- How and where does it store the data needed to do that?
+
+- Let's investigate!
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Adding the repo
+
+- If you haven't done it before, you need to add the repo for that chart
+
+.lab[
+
+- Add the repo that holds the chart for the OWASP Juice Shop:
+  ```bash
+  helm repo add juice https://charts.securecodebox.io
+  ```
+
+]
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## We need a release
+
+- We need to install something with Helm
+
+- Let's use the `juice/juice-shop` chart as an example
+
+.lab[
+
+- Install a release called `orange` with the chart `juice/juice-shop`:
+  ```bash
+  helm upgrade orange juice/juice-shop --install
+  ```
+
+- Let's upgrade that release, and change a value:
+  ```bash
+  helm upgrade orange juice/juice-shop --set ingress.enabled=true
+  ```
+
+]
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Release history
+
+- Helm stores successive revisions of each release
+
+.lab[
+
+- View the history for that release:
+  ```bash
+  helm history orange
+  ```
+
+]
+
+Where does that come from?
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Investigate
+
+- Possible options:
+
+  - local filesystem (no, because history is visible from other machines)
+
+  - persistent volumes (no, Helm works even without them)
+
+  - ConfigMaps, Secrets?
+
+.lab[
+
+- Look for ConfigMaps and Secrets:
+  ```bash
+  kubectl get configmaps,secrets
+  ```
+
+]
+
+--
+
+We should see a number of secrets with TYPE `helm.sh/release.v1`.
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Unpacking a secret
+
+- Let's find out what is in these Helm secrets
+
+.lab[
+
+- Examine the secret corresponding to the second release of `orange`:
+  ```bash
+  kubectl describe secret sh.helm.release.v1.orange.v2
+  ```
+  (`v1` is the secret format; `v2` means revision 2 of the `orange` release)
+
+]
+
+There is a key named `release`.
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Unpacking the release data
+
+- Let's see what's in this `release` thing!
+
+.lab[
+
+- Dump the secret:
+  ```bash
+  kubectl get secret sh.helm.release.v1.orange.v2 \
+      -o go-template='{{ .data.release }}'
+  ```
+
+]
+
+Secrets are encoded in base64. We need to decode that!
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Decoding base64
+
+- We can pipe the output through `base64 -d` or use go-template's `base64decode`
+
+.lab[
+
+- Decode the secret:
+  ```bash
+  kubectl get secret sh.helm.release.v1.orange.v2 \
+      -o go-template='{{ .data.release | base64decode }}'
+  ```
+
+]
+
+--
+
+... Wait, this *still* looks like base64. What's going on?
+
+--
+
+Let's try one more round of decoding!
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Decoding harder
+
+- Just add one more base64 decode filter
+
+.lab[
+
+- Decode it twice:
+  ```bash
+  kubectl get secret sh.helm.release.v1.orange.v2 \
+      -o go-template='{{ .data.release | base64decode | base64decode }}'
+  ```
+
+]
+
+--
+
+... OK, that was *a lot* of binary data. What should we do with it?
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Guessing data type
+
+- We could use `file` to figure out the data type
+
+.lab[
+
+- Pipe the decoded release through `file -`:
+  ```bash
+  kubectl get secret sh.helm.release.v1.orange.v2 \
+      -o go-template='{{ .data.release | base64decode | base64decode }}' \
+      | file -
+  ```
+
+]
+
+--
+
+Gzipped data! It can be decoded with `gunzip -c`.
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Uncompressing the data
+
+- Let's uncompress the data and save it to a file
+
+.lab[
+
+- Rerun the previous command, but with `| gunzip -c > release-info` :
+  ```bash
+  kubectl get secret sh.helm.release.v1.orange.v2 \
+      -o go-template='{{ .data.release | base64decode | base64decode }}' \
+      | gunzip -c > release-info
+  ```
+
+- Look at `release-info`:
+  ```bash
+  cat release-info
+  ```
+
+]
+
+--
+
+It's a bundle of ~~YAML~~ JSON.
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Looking at the JSON
+
+If we inspect that JSON (e.g. with `jq keys release-info`), we see:
+
+- `chart` (contains the entire chart used for that release)
+- `config` (contains the values that we've set)
+- `info` (date of deployment, status messages)
+- `manifest` (YAML generated from the templates)
+- `name` (name of the release, so `orange`)
+- `namespace` (namespace where we deployed the release)
+- `version` (revision number within that release; starts at 1)
+
+The chart is in a structured format, but it's entirely captured in this JSON.
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+## Conclusions
+
+- Helm stores each release information in a Secret in the namespace of the release
+
+- The secret is JSON object (gzipped and encoded in base64)
+
+- It contains the manifests generated for that release
+
+- ... And everything needed to rebuild these manifests
+
+  (including the full source of the chart, and the values used)
+
+- This allows arbitrary rollbacks, as well as tweaking values even without having access to the source of the chart (or the chart repo) used for deployment
+
+???
+
+:EN:- Deep dive into Helm internals
+:FR:- Fonctionnement interne de Helm
+
+.debug[[k8s/helm-secrets.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-secrets.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
+
+---
+
+name: toc-kustomize
+class: title
+
+ Kustomize
+
+.nav[
+[Previous part](#toc-helm-secrets)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-network-policies)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Kustomize
+
+- Kustomize lets us transform Kubernetes resources:
+
+  *YAML + kustomize → new YAML*
+
+- Starting point = valid resource files
+
+  (i.e. something that we could load with `kubectl apply -f`)
+
+- Recipe = a *kustomization* file
+
+  (describing how to transform the resources)
+
+- Result = new resource files
+
+  (that we can load with `kubectl apply -f`)
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Pros and cons
+
+- Relatively easy to get started
+
+  (just get some existing YAML files)
+
+- Easy to leverage existing "upstream" YAML files
+
+  (or other *kustomizations*)
+
+- Somewhat integrated with `kubectl`
+
+  (but only "somewhat" because of version discrepancies)
+
+- Less complex than e.g. Helm, but also less powerful
+
+- No central index like the Artifact Hub (but is there a need for it?)
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Kustomize in a nutshell
+
+- Get some valid YAML (our "resources")
+
+- Write a *kustomization* (technically, a file named `kustomization.yaml`)
+
+  - reference our resources
+
+  - reference other kustomizations
+
+  - add some *patches*
+
+  - ...
+
+- Use that kustomization either with `kustomize build` or `kubectl apply -k`
+
+- Write new kustomizations referencing the first one to handle minor differences
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## A simple kustomization
+
+This features a Deployment, Service, and Ingress (in separate files),
+and a couple of patches (to change the number of replicas and the hostname
+used in the Ingress).
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patchesStrategicMerge:
+- scale-deployment.yaml
+- ingress-hostname.yaml
+resources:
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+```
+
+On the next slide, let's see a more complex example ...
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## A more complex Kustomization
+
+.small[
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonAnnotations:
+  mood: 😎
+commonLabels:
+  add-this-to-all-my-resources: please
+namePrefix: prod-
+patchesStrategicMerge:
+- prod-scaling.yaml
+- prod-healthchecks.yaml
+bases:
+- api/
+- frontend/
+- db/
+- github.com/example/app?ref=tag-or-branch
+resources:
+- ingress.yaml
+- permissions.yaml
+configMapGenerator:
+- name: appconfig
+  files:
+  - global.conf
+  - local.conf=prod.conf
+```
+]
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Glossary
+
+- A *base* is a kustomization that is referred to by other kustomizations
+
+- An *overlay* is a kustomization that refers to other kustomizations
+
+- A kustomization can be both a base and an overlay at the same time
+
+  (a kustomization can refer to another, which can refer to a third)
+
+- A *patch* describes how to alter an existing resource
+
+  (e.g. to change the image in a Deployment; or scaling parameters; etc.)
+
+- A *variant* is the final outcome of applying bases + overlays
+
+(See the [kustomize glossary][glossary] for more definitions!)
+
+[glossary]: https://kubectl.docs.kubernetes.io/references/kustomize/glossary/
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## What Kustomize *cannot* do
+
+- By design, there are a number of things that Kustomize won't do
+
+- For instance:
+
+  - using command-line arguments or environment variables to generate a variant
+
+  - overlays can only *add* resources, not *remove* them
+
+- See the full list of [eschewed features](https://kubectl.docs.kubernetes.io/faq/kustomize/eschewedfeatures/) for more details
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Kustomize workflows
+
+- The Kustomize documentation proposes two different workflows
+
+- *Bespoke configuration*
+
+   - base and overlays managed by the same team
+
+- *Off-the-shelf configuration* (OTS)
+
+  - base and overlays managed by different teams
+
+  - base is regularly updated by "upstream" (e.g. a vendor)
+
+  - our overlays and patches should (hopefully!) apply cleanly
+
+  - we may regularly update the base, or use a remote base
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Remote bases
+
+- Kustomize can also use bases that are remote git repositories
+
+- Examples:
+
+  github.com/jpetazzo/kubercoins (remote git repository)
+
+  github.com/jpetazzo/kubercoins?ref=kustomize (specific tag or branch)
+
+- Note that this only works for kustomizations, not individual resources
+
+  (the specified repository or directory must contain a `kustomization.yaml` file)
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+class: extra-details
+
+## Hashicorp go-getter
+
+- Some versions of Kustomize support additional forms for remote resources
+
+- Examples:
+
+  https://releases.hello.io/k/1.0.zip (remote archive)
+
+  https://releases.hello.io/k/1.0.zip//some-subdir (subdirectory in archive)
+
+- This relies on [hashicorp/go-getter](https://github.com/hashicorp/go-getter#url-format)
+
+- ... But it prevents Kustomize inclusion in `kubectl`
+
+- Avoid them!
+
+- See [kustomize#3578](https://github.com/kubernetes-sigs/kustomize/issues/3578) for details
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Managing `kustomization.yaml`
+
+- There are many ways to manage `kustomization.yaml` files, including:
+
+  - the `kustomize` CLI
+
+  - opening the file with our favorite text editor
+
+  - ~~web wizards like [Replicated Ship](https://www.replicated.com/ship/)~~ (deprecated)
+
+- Let's see these in action!
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Working with the `kustomize` CLI
+
+General workflow:
+
+1. `kustomize create` to generate an empty `kustomization.yaml` file
+
+2. `kustomize edit add resource` to add Kubernetes YAML files to it
+
+3. `kustomize edit add patch` to add patches to said resources
+
+4. `kustomize edit add ...` or `kustomize edit set ...` (many options!)
+
+5. `kustomize build | kubectl apply -f-` or `kubectl apply -k .`
+
+6. Repeat steps 4-5 as many times as necessary!
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Why work with the CLI?
+
+- Editing manually can introduce errors and typos
+
+- With the CLI, we don't need to remember the name of all the options and parameters
+
+  (just add `--help` after any command to see possible options!)
+
+- Make sure to install the completion and try e.g. `kustomize edit add [TAB][TAB]`
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## `kustomize create`
+
+.lab[
+
+- Change to a new directory:
+  ```bash
+  mkdir ~/kustomcoins
+  cd ~/kustomcoins
+  ```
+
+- Run `kustomize create` with the kustomcoins repository:
+  ```bash
+  kustomize create --resources https://github.com/jpetazzo/kubercoins
+  ```
+
+<!-- ```look at the files``` -->
+
+- Run `kustomize build | kubectl apply -f-`
+
+]
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## `kubectl` integration
+
+- Kustomize has been integrated in `kubectl` (since Kubernetes 1.14)
+
+  - `kubectl kustomize` is an equivalent to `kustomize build`
+
+  - commands that use `-f` can also use `-k` (`kubectl apply`/`delete`/...)
+
+- The `kustomize` tool is still needed if we want to use `create`, `edit`, ...
+
+- Kubernetes 1.14 to 1.20 uses Kustomize 2.0.3
+
+- Kubernetes 1.21 jumps to Kustomize 4.1.2
+
+- Future versions should track Kustomize updates more closely
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+class: extra-details
+
+## Differences between 2.0.3 and later
+
+- Kustomize 2.1 / 3.0 deprecates `bases` (they should be listed in `resources`)
+
+  (this means that "modern" `kustomize edit add resource` won't work with "old" `kubectl apply -k`)
+
+- Kustomize 2.1 introduces `replicas` and `envs`
+
+- Kustomize 3.1 introduces multipatches
+
+- Kustomize 3.2 introduce inline patches in `kustomization.yaml`
+
+- Kustomize 3.3 to 3.10 is mostly internal refactoring
+
+- Kustomize 4.0 drops go-getter again
+
+- Kustomize 4.1 allows patching kind and name
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Adding labels
+
+Labels can be added to all resources liks this:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+...
+commonLabels:
+  app.kubernetes.io/name: dockercoins
+```
+
+Or with the equivalent CLI command:
+
+```bash
+kustomize edit add label app.kubernetes.io/name:dockercoins
+```
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Use cases for labels
+
+- Example: clean up components that have been removed from the kustomization
+
+- Assuming that `commonLabels` have been set as shown on the previous slide:
+  ```bash
+    kubectl apply -k . --prune --selector app.kubernetes.io/name=dockercoins
+  ```
+
+- ... This command removes resources that have been removed from the kustomization
+
+- Technically, resources with:
+
+  - a `kubectl.kubernetes.io/last-applied-configuration` annotation
+
+  - labels matching the given selector
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Scaling
+
+Instead of using a patch, scaling can be done like this:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+...
+replicas:
+- name: worker
+  count: 5
+```
+
+or the CLI equivalent:
+
+```bash
+kustomize edit set replicas worker=5
+```
+
+It will automatically work with Deployments, ReplicaSets, StatefulSets.
+
+(For other resource types, fall back to a patch.)
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Updating images
+
+Instead of using patches, images can be changed like this:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+...
+images:
+- name: postgres
+  newName: harbor.enix.io/my-postgres
+- name: dockercoins/worker
+  newTag: v0.2
+- name: dockercoins/hasher
+  newName: registry.dockercoins.io/hasher
+  newTag: v0.2
+- name: alpine
+  digest: sha256:24a0c4b4a4c0eb97a1aabb8e29f18e917d05abfe1b7a7c07857230879ce7d3d3
+```
+
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Updating images with the CLI
+
+To add an entry in the `images:` section of the kustomization:
+
+```bash
+kustomize edit set image name=[newName][:newTag][@digest]
+```
+
+- `[]` denote optional parameters
+
+- `:` and `@` are the delimiters used to indicate a field
+
+Examples:
+```bash
+kustomize edit set image dockercoins/worker=ghcr.io/dockercoins/worker
+kustomize edit set image dockercoins/worker=ghcr.io/dockercoins/worker:v0.2
+kustomize edit set image dockercoins/worker=:v0.2
+```
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Updating images, pros and cons
+
+- Very convenient when the same image appears multiple times
+
+- Very convenient to define tags (or pin to hashes) outside of the main YAML
+
+- Doesn't support wildcard or generic substitutions:
+
+  - cannot "replace `dockercoins/*` with `ghcr.io/dockercoins/*`"
+
+  - cannot "tag all `dockercoins/*` with `v0.2`"
+
+- Only patches "well-known" image fields (won't work with CRDs referencing images)
+
+- Helm can deal with these scenarios, for instance:
+  ```yaml
+  image: {{ .Values.registry }}/worker:{{ .Values.version }}
+  ```
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Advanced resource patching
+
+The example below shows how to:
+
+- patch multiple resources with a selector (new in Kustomize 3.1)
+- use an inline patch instead of a separate patch file (new in Kustomize 3.2)
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+...
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: alpine
+  target:
+    kind: Deployment
+    labelSelector: "app"
+```
+
+(This replaces all images of Deployments matching the `app` selector with `alpine`.)
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Advanced resource patching, pros and cons
+
+- Very convenient to patch an arbitrary number of resources
+
+- Very convenient to patch any kind of resource, including CRDs
+
+- Doesn't support "fine-grained" patching (e.g. image registry or tag)
+
+- Once again, Helm can do it:
+  ```yaml
+  image: {{ .Values.registry }}/worker:{{ .Values.version }}
+  ```
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+## Differences with Helm
+
+- Helm charts generally require more upfront work
+
+  (while kustomize "bases" are standard Kubernetes YAML)
+
+- ... But Helm charts are also more powerful; their templating language can:
+
+  - conditionally include/exclude resources or blocks within resources
+
+  - generate values by concatenating, hashing, transforming parameters
+
+  - generate values or resources by iteration (`{{ range ... }}`)
+
+  - access the Kubernetes API during template evaluation
+
+  - [and much more](https://helm.sh/docs/chart_template_guide/)
+
+???
+
+:EN:- Packaging and running apps with Kustomize
+:FR:- *Packaging* d'applications avec Kustomize
+
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
+
+---
+
+name: toc-network-policies
+class: title
+
+ Network policies
+
+.nav[
+[Previous part](#toc-kustomize)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Network policies
+
+- Namespaces help us to *organize* resources
+
+- Namespaces do not provide isolation
+
+- By default, every pod can contact every other pod
+
+- By default, every service accepts traffic from anyone
+
+- If we want this to be different, we need *network policies*
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## What's a network policy?
+
+A network policy is defined by the following things.
+
+- A *pod selector* indicating which pods it applies to
+
+  e.g.: "all pods in namespace `blue` with the label `zone=internal`"
+
+- A list of *ingress rules* indicating which inbound traffic is allowed
+
+  e.g.: "TCP connections to ports 8000 and 8080 coming from pods with label `zone=dmz`,
+  and from the external subnet 4.42.6.0/24, except 4.42.6.5"
+
+- A list of *egress rules* indicating which outbound traffic is allowed
+
+A network policy can provide ingress rules, egress rules, or both.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## How do network policies apply?
+
+- A pod can be "selected" by any number of network policies
+
+- If a pod isn't selected by any network policy, then its traffic is unrestricted
+
+  (In other words: in the absence of network policies, all traffic is allowed)
+
+- If a pod is selected by at least one network policy, then all traffic is blocked ...
+
+  ... unless it is explicitly allowed by one of these network policies
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+class: extra-details
+
+## Traffic filtering is flow-oriented
+
+- Network policies deal with *connections*, not individual packets
+
+- Example: to allow HTTP (80/tcp) connections to pod A, you only need an ingress rule
+
+  (You do not need a matching egress rule to allow response traffic to go through)
+
+- This also applies for UDP traffic
+
+  (Allowing DNS traffic can be done with a single rule)
+
+- Network policy implementations use stateful connection tracking
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Pod-to-pod traffic
+
+- Connections from pod A to pod B have to be allowed by both pods:
+
+  - pod A has to be unrestricted, or allow the connection as an *egress* rule
+
+  - pod B has to be unrestricted, or allow the connection as an *ingress* rule
+
+- As a consequence: if a network policy restricts traffic going from/to a pod,
+  <br/>
+  the restriction cannot be overridden by a network policy selecting another pod
+
+- This prevents an entity managing network policies in namespace A
+  (but without permission to do so in namespace B)
+  from adding network policies giving them access to namespace B
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## The rationale for network policies
+
+- In network security, it is generally considered better to "deny all, then allow selectively"
+
+  (The other approach, "allow all, then block selectively" makes it too easy to leave holes)
+
+- As soon as one network policy selects a pod, the pod enters this "deny all" logic
+
+- Further network policies can open additional access
+
+- Good network policies should be scoped as precisely as possible
+
+- In particular: make sure that the selector is not too broad
+
+  (Otherwise, you end up affecting pods that were otherwise well secured)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Our first network policy
+
+This is our game plan:
+
+- run a web server in a pod
+
+- create a network policy to block all access to the web server
+
+- create another network policy to allow access only from specific pods
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Running our test web server
+
+.lab[
+
+- Let's use the `nginx` image:
+  ```bash
+  kubectl create deployment testweb --image=nginx
+  ```
+
+<!--
+```bash
+kubectl wait deployment testweb --for condition=available
+```
+-->
+
+- Find out the IP address of the pod with one of these two commands:
+  ```bash
+  kubectl get pods -o wide -l app=testweb
+  IP=$(kubectl get pods -l app=testweb -o json | jq -r .items[0].status.podIP)
+  ```
+
+- Check that we can connect to the server:
+  ```bash
+  curl $IP
+  ```
+]
+
+The `curl` command should show us the "Welcome to nginx!" page.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Adding a very restrictive network policy
+
+- The policy will select pods with the label `app=testweb`
+
+- It will specify an empty list of ingress rules (matching nothing)
+
+.lab[
+
+- Apply the policy in this YAML file:
+  ```bash
+    kubectl apply -f ~/container.training/k8s/netpol-deny-all-for-testweb.yaml
+  ```
+
+- Check if we can still access the server:
+  ```bash
+  curl $IP
+  ```
+
+<!--
+```wait curl```
+```key ^C```
+-->
+
+]
+
+The `curl` command should now time out.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Looking at the network policy
+
+This is the file that we applied:
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-all-for-testweb
+spec:
+  podSelector:
+    matchLabels:
+      app: testweb
+  ingress: []
+
+
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Allowing connections only from specific pods
+
+- We want to allow traffic from pods with the label `run=testcurl`
+
+- Reminder: this label is automatically applied when we do `kubectl run testcurl ...`
+
+.lab[
+
+- Apply another policy:
+  ```bash
+  kubectl apply -f ~/container.training/k8s/netpol-allow-testcurl-for-testweb.yaml
+  ```
+
+]
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Looking at the network policy
+
+This is the second file that we applied:
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-testcurl-for-testweb
+spec:
+  podSelector:
+    matchLabels:
+      app: testweb
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          run: testcurl
+
+
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Testing the network policy
+
+- Let's create pods with, and without, the required label
+
+.lab[
+
+- Try to connect to testweb from a pod with the `run=testcurl` label:
+  ```bash
+  kubectl run testcurl --rm -i --image=centos -- curl -m3 $IP
+  ```
+
+- Try to connect to testweb with a different label:
+  ```bash
+  kubectl run testkurl --rm -i --image=centos -- curl -m3 $IP
+  ```
+
+]
+
+The first command will work (and show the "Welcome to nginx!" page).
+
+The second command will fail and time out after 3 seconds.
+
+(The timeout is obtained with the `-m3` option.)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## An important warning
+
+- Some network plugins only have partial support for network policies
+
+- For instance, Weave added support for egress rules [in version 2.4](https://github.com/weaveworks/weave/pull/3313) (released in July 2018)
+
+- But only recently added support for ipBlock [in version 2.5](https://github.com/weaveworks/weave/pull/3367) (released in Nov 2018)
+
+- Unsupported features might be silently ignored
+
+  (Making you believe that you are secure, when you're not)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Network policies, pods, and services
+
+- Network policies apply to *pods*
+
+- A *service* can select multiple pods
+
+  (And load balance traffic across them)
+
+- It is possible that we can connect to some pods, but not some others
+
+  (Because of how network policies have been defined for these pods)
+
+- In that case, connections to the service will randomly pass or fail
+
+  (Depending on whether the connection was sent to a pod that we have access to or not)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Network policies and namespaces
+
+- A good strategy is to isolate a namespace, so that:
+
+  - all the pods in the namespace can communicate together
+
+  - other namespaces cannot access the pods
+
+  - external access has to be enabled explicitly
+
+- Let's see what this would look like for the DockerCoins app!
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Network policies for DockerCoins
+
+- We are going to apply two policies
+
+- The first policy will prevent traffic from other namespaces
+
+- The second policy will allow traffic to the `webui` pods
+
+- That's all we need for that app!
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Blocking traffic from other namespaces
+
+This policy selects all pods in the current namespace.
+
+It allows traffic only from pods in the current namespace.
+
+(An empty `podSelector` means "all pods.")
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-from-other-namespaces
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    - podSelector: {}
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Allowing traffic to `webui` pods
+
+This policy selects all pods with label `app=webui`.
+
+It allows traffic from any source.
+
+(An empty `from` field means "all sources.")
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-webui
+spec:
+  podSelector:
+    matchLabels:
+      app: webui
+  ingress:
+  - from: []
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Applying both network policies
+
+- Both network policies are declared in the file [k8s/netpol-dockercoins.yaml](https://github.com/jpetazzo/container.training/tree/master/k8s/netpol-dockercoins.yaml)
+
+.lab[
+
+- Apply the network policies:
+  ```bash
+  kubectl apply -f ~/container.training/k8s/netpol-dockercoins.yaml
+  ```
+
+- Check that we can still access the web UI from outside
+  <br/>
+  (and that the app is still working correctly!)
+
+- Check that we can't connect anymore to `rng` or `hasher` through their ClusterIP
+
+]
+
+Note: using `kubectl proxy` or `kubectl port-forward` allows us to connect
+regardless of existing network policies. This allows us to debug and
+troubleshoot easily, without having to poke holes in our firewall.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Cleaning up our network policies
+
+- The network policies that we have installed block all traffic to the default namespace
+
+- We should remove them, otherwise further demos and exercises will fail!
+
+.lab[
+
+- Remove all network policies:
+  ```bash
+  kubectl delete networkpolicies --all
+  ```
+
+]
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Protecting the control plane
+
+- Should we add network policies to block unauthorized access to the control plane?
+
+  (etcd, API server, etc.)
+
+--
+
+- At first, it seems like a good idea ...
+
+--
+
+- But it *shouldn't* be necessary:
+
+  - not all network plugins support network policies
+
+  - the control plane is secured by other methods (mutual TLS, mostly)
+
+  - the code running in our pods can reasonably expect to contact the API
+    <br/>
+    (and it can do so safely thanks to the API permission model)
+
+- If we block access to the control plane, we might disrupt legitimate code
+
+- ...Without necessarily improving security
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Tools and resources
+
+- [Cilium Network Policy Editor](https://editor.cilium.io/)
+
+- [Tufin Network Policy Viewer](https://orca.tufin.io/netpol/)
+
+- [`kubectl np-viewer`](https://github.com/runoncloud/kubectl-np-viewer) (kubectl plugin)
+
+- Two resources by [Ahmet Alp Balkan](https://ahmet.im/):
+
+  - a [very good talk about network policies](https://www.youtube.com/watch?list=PLj6h78yzYM2P-3-xqvmWaZbbI1sW-ulZb&v=3gGpMmYeEO8) at KubeCon North America 2017
+
+  - a repository of [ready-to-use recipes](https://github.com/ahmetb/kubernetes-network-policy-recipes) for network policies
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Documentation
+
+- As always, the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/) is a good starting point
+
+- The API documentation has a lot of detail about the format of various objects: <!-- ##VERSION## -->
+
+  - [NetworkPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicy-v1-networking-k8s-io)
+
+  - [NetworkPolicySpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyspec-v1-networking-k8s-io)
+
+  - [NetworkPolicyIngressRule](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyingressrule-v1-networking-k8s-io)
+
+  - etc.
+
+???
+
+:EN:- Isolating workloads with Network Policies
+:FR:- Isolation réseau avec les *network policies*
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]</textarea>
     <script src="remark.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">
