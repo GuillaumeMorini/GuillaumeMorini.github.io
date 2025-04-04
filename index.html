@@ -9,7 +9,7 @@
     <!--
     <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
       <h1 style="font-size: 3em;">Loading ...</h1>
-      The slides whould show up here. If they don't, it might be
+      The slides should show up here. If they don't, it might be
       because you are accessing this file directly from your filesystem.
       It needs to be served from a web server. You can try this:
       <pre>
@@ -55,6 +55,7 @@ Password: **Something**
  M slides/k8s/concepts-k8s.md
  M slides/k8s/daemonset.md
  M slides/k8s/kubectlget.md
+ M slides/k8s/ourapponkube.md
  M slides/k8s/rollout.md
  M slides/k8s/setup-overview.md
  M slides/k8s/shippingimages.md
@@ -242,6 +243,7 @@ name: toc-part-5
 - [Running our application on Kubernetes](#toc-running-our-application-on-kubernetes)
 - [Accessing internal services](#toc-accessing-internal-services)
 - [Accessing the API with `kubectl proxy`](#toc-accessing-the-api-with-kubectl-proxy)
+- [Daemon sets](#toc-daemon-sets)
 - [Labels and selectors](#toc-labels-and-selectors)
 - [Rolling updates](#toc-rolling-updates)
 - [Managing stacks with Helm](#toc-managing-stacks-with-helm)
@@ -11793,32 +11795,6 @@ The curl command should now output:
 .debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
 ---
 
-## Building and pushing our images
-
-- We are going to use a convenient feature of Docker Compose
-
-.lab[
-
-- Go to the `stacks` directory:
-  ```bash
-  cd ~/TP-Docker
-  ```
-
-- Build and push the images:
-  ```bash
-  export REGISTRY
-  export TAG=v0.1
-  docker-compose build
-  docker-compose push
-  ```
-
-]
-
-Let's have a look at the `docker-compose.yml` file while this is building and pushing.
-
-.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
----
-
 ```yaml
 version: "3"
 
@@ -11841,6 +11817,32 @@ services:
 ```
 
 .warning[Just in case you were wondering ... Docker "services" are not Kubernetes "services".]
+
+.debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
+---
+
+## Building and pushing our images
+
+- We are going to use a convenient feature of Docker Compose
+
+.lab[
+
+- Go to the `stacks` directory:
+  ```bash
+  cd ~/TP-Docker
+  ```
+
+- Build and push the images:
+  ```bash
+  export REGISTRY
+  export TAG=v0.1
+  docker-compose build
+  docker-compose push
+  ```
+
+]
+
+Let's have a look at the `docker-compose.yml` file while this is building and pushing.
 
 .debug[[k8s/buildshiprun-selfhosted.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/buildshiprun-selfhosted.md)]
 ---
@@ -11928,10 +11930,10 @@ class: title
 
 - Deploy everything else:
   ```bash
-  kubectl create deployment hasher --image=dockercoins/hasher:v0.1
-  kubectl create deployment rng --image=dockercoins/rng:v0.1
-  kubectl create deployment webui --image=dockercoins/webui:v0.1
-  kubectl create deployment worker --image=dockercoins/worker:v0.1
+  kubectl create deployment hasher --image=$REGISTRY/hasher:$TAG
+  kubectl create deployment rng --image=$REGISTRY/rng:$TAG
+  kubectl create deployment webui --image=$REGISTRY/webui:$TAG
+  kubectl create deployment worker --image=$REGISTRY/worker:$TAG
   ```
 
 ]
@@ -11950,8 +11952,6 @@ class: extra-details
 - ... We could use the following snippet:
 
 ```bash
-  REGISTRY=dockercoins
-  TAG=v0.1
   for SERVICE in hasher rng webui worker; do
     kubectl create deployment $SERVICE --image=$REGISTRY/$SERVICE:$TAG
   done
@@ -12291,7 +12291,7 @@ class: title
 |
 [Back to table of contents](#toc-part-5)
 |
-[Next part](#toc-labels-and-selectors)
+[Next part](#toc-daemon-sets)
 ]
 
 .debug[(automatically generated title slide)]
@@ -12513,7 +12513,30 @@ class: extra-details
 
 .debug[[k8s/kubectlproxy.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kubectlproxy.md)]
 ---
-## Daemon sets in practice
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-daemon-sets
+class: title
+
+ Daemon sets
+
+.nav[
+[Previous part](#toc-accessing-the-api-with-kubectl-proxy)
+|
+[Back to table of contents](#toc-part-5)
+|
+[Next part](#toc-labels-and-selectors)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Daemon sets
 
 - Daemon sets are great for cluster-wide, per-node processes:
 
@@ -12773,7 +12796,7 @@ The control plane node has [taints](https://kubernetes.io/docs/concepts/configur
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/distillery-containers.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/lots-of-containers.jpg)]
 
 ---
 
@@ -12783,7 +12806,7 @@ class: title
  Labels and selectors
 
 .nav[
-[Previous part](#toc-accessing-the-api-with-kubectl-proxy)
+[Previous part](#toc-daemon-sets)
 |
 [Back to table of contents](#toc-part-5)
 |
@@ -13329,7 +13352,7 @@ class: extra-details
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/lots-of-containers.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/plastic-containers.JPG)]
 
 ---
 
@@ -13598,7 +13621,7 @@ class: extra-details
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/plastic-containers.JPG)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-1.jpg)]
 
 ---
 
@@ -14117,7 +14140,7 @@ All unspecified values will take the default values defined in the chart.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-1.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
 
 ---
 
@@ -14414,7 +14437,7 @@ We see the components mentioned above: `Chart.yaml`, `templates/`, `values.yaml`
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
 
 ---
 
@@ -14639,7 +14662,7 @@ The second will not.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
 
 ---
 
@@ -14931,7 +14954,7 @@ The chart is in a structured format, but it's entirely captured in this JSON.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
 
 ---
 
@@ -15487,7 +15510,7 @@ patches:
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
 
 ---
 
