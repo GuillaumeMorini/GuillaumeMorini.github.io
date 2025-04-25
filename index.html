@@ -50,136 +50,136 @@ Password: **Something**
 
 .debug[
 ```
- M bin/add-logging.py
- M bin/chaosmonkey.sh
- D k8s/ingress.yaml
- D k8s/traefik.yaml
- M k8s/update-dashboard-yaml.sh
- M prepare-eks/10_create_cluster.sh
- M prepare-eks/20_create_users.sh
- M prepare-eks/30_create_or_update_policy.sh
- M prepare-eks/40_attach_policy.sh
- M prepare-eks/50_aws_auth.sh
- M prepare-eks/60_setup_rbac_and_ns.sh
- M prepare-eks/70_oidc.sh
- M prepare-eks/80_s3_bucket.sh
- M prepare-labs/cleanup.sh
- M prepare-labs/dns-cloudflare.sh
- M prepare-labs/dns-gandi.py
- M prepare-labs/dns-netlify.sh
- M prepare-labs/konk.sh
- M prepare-labs/labctl
- M prepare-labs/lib/docker-prompt
- M prepare-labs/lib/make-login-cards.py
- M prepare-labs/lib/wkhtmltopdf
- M prepare-labs/map-dns.sh
- M prepare-labs/setup-admin-clusters.sh
- D prepare-labs/tags
- M prepare-labs/terraform/list-locations/azure
- M prepare-labs/terraform/list-locations/civo
- M prepare-labs/terraform/list-locations/digitalocean
- M prepare-labs/terraform/list-locations/exoscale
- M prepare-labs/terraform/list-locations/googlecloud
- M prepare-labs/terraform/list-locations/linode
- M prepare-labs/terraform/list-locations/oraclecloud
- M prepare-labs/terraform/list-locations/scaleway
- D prepare-labs/terraform/many-kubernetes/one-kubernetes-config.tf
- D prepare-labs/terraform/many-kubernetes/one-kubernetes-provider.tf
- D prepare-labs/terraform/one-kubernetes/aws/common.tf
- D prepare-labs/terraform/one-kubernetes/aws/config.tf
- D prepare-labs/terraform/one-kubernetes/aws/variables.tf
- D prepare-labs/terraform/one-kubernetes/azure/common.tf
- D prepare-labs/terraform/one-kubernetes/azure/config.tf
- D prepare-labs/terraform/one-kubernetes/azure/variables.tf
- D prepare-labs/terraform/one-kubernetes/civo/common.tf
- D prepare-labs/terraform/one-kubernetes/civo/config.tf
- D prepare-labs/terraform/one-kubernetes/civo/variables.tf
- D prepare-labs/terraform/one-kubernetes/digitalocean/common.tf
- D prepare-labs/terraform/one-kubernetes/digitalocean/config.tf
- D prepare-labs/terraform/one-kubernetes/digitalocean/variables.tf
- D prepare-labs/terraform/one-kubernetes/exoscale/common.tf
- D prepare-labs/terraform/one-kubernetes/exoscale/config.tf
- D prepare-labs/terraform/one-kubernetes/exoscale/variables.tf
- D prepare-labs/terraform/one-kubernetes/googlecloud/common.tf
- D prepare-labs/terraform/one-kubernetes/googlecloud/config.tf
- D prepare-labs/terraform/one-kubernetes/googlecloud/variables.tf
- D prepare-labs/terraform/one-kubernetes/linode/common.tf
- D prepare-labs/terraform/one-kubernetes/linode/config.tf
- D prepare-labs/terraform/one-kubernetes/linode/variables.tf
- D prepare-labs/terraform/one-kubernetes/oci/common.tf
- D prepare-labs/terraform/one-kubernetes/oci/config.tf
- D prepare-labs/terraform/one-kubernetes/oci/variables.tf
- D prepare-labs/terraform/one-kubernetes/ovh/common.tf
- D prepare-labs/terraform/one-kubernetes/ovh/config.tf
- D prepare-labs/terraform/one-kubernetes/ovh/variables.tf
- D prepare-labs/terraform/one-kubernetes/scaleway/common.tf
- D prepare-labs/terraform/one-kubernetes/scaleway/config.tf
- D prepare-labs/terraform/one-kubernetes/scaleway/variables.tf
- D prepare-labs/terraform/one-kubernetes/vcluster/common.tf
- D prepare-labs/terraform/one-kubernetes/vcluster/config.tf
- D prepare-labs/terraform/one-kubernetes/vcluster/variables.tf
- D prepare-labs/terraform/virtual-machines/aws/common.tf
- D prepare-labs/terraform/virtual-machines/aws/config.tf
- D prepare-labs/terraform/virtual-machines/aws/variables.tf
- D prepare-labs/terraform/virtual-machines/azure/common.tf
- D prepare-labs/terraform/virtual-machines/azure/config.tf
- D prepare-labs/terraform/virtual-machines/azure/variables.tf
- D prepare-labs/terraform/virtual-machines/digitalocean/common.tf
- D prepare-labs/terraform/virtual-machines/digitalocean/config.tf
- D prepare-labs/terraform/virtual-machines/digitalocean/variables.tf
- D prepare-labs/terraform/virtual-machines/hetzner/common.tf
- D prepare-labs/terraform/virtual-machines/hetzner/config.tf
- D prepare-labs/terraform/virtual-machines/hetzner/variables.tf
- D prepare-labs/terraform/virtual-machines/linode/common.tf
- D prepare-labs/terraform/virtual-machines/linode/config.tf
- D prepare-labs/terraform/virtual-machines/linode/variables.tf
- D prepare-labs/terraform/virtual-machines/oci/common.tf
- D prepare-labs/terraform/virtual-machines/oci/config.tf
- D prepare-labs/terraform/virtual-machines/oci/variables.tf
- D prepare-labs/terraform/virtual-machines/openstack/common.tf
- D prepare-labs/terraform/virtual-machines/openstack/config.tf
- D prepare-labs/terraform/virtual-machines/openstack/variables.tf
- D prepare-labs/terraform/virtual-machines/scaleway/common.tf
- D prepare-labs/terraform/virtual-machines/scaleway/config.tf
- D prepare-labs/terraform/virtual-machines/scaleway/variables.tf
- M prepare-labs/test-all-one-kubernetes.sh
- M slides/appendcheck.py
- M slides/autopilot/autotest.py
- M slides/autopilot/gotoslide.js
- M slides/autopilot/server.js
- M slides/autopilot/tmux-style.sh
- M slides/count-slides.py
- M slides/efrei.yml
- M slides/images/bridge1.png
- M slides/images/bridge2.png
- M slides/images/bridge3.png
- M slides/index.py
- M slides/k8s/buildshiprun-selfhosted.md
- M slides/k8s/concepts-k8s.md
- M slides/k8s/daemonset.md
- M slides/k8s/kubectlget.md
- M slides/k8s/netpol.md
- M slides/k8s/ourapponkube.md
- M slides/k8s/rollout.md
- M slides/k8s/setup-overview.md
- M slides/k8s/shippingimages.md
- T slides/logistics.md
- M slides/markmaker.py
- M slides/slidechecker.js
- M slides/workshop.css
- D stacks/dockercoins
- M webhooks/admission/flask/webhook.py
-?? slides/TODO.md
-?? slides/containers/dockercoins.md
-?? slides/efrei_day_1.yml
-?? slides/efrei_day_2.yml
-?? slides/efrei_day_3.yml
-?? slides/efrei_day_4.yml
-?? slides/images/congrats.gif
-?? slides/images/floor_is_yours.jpg
-?? slides/images/netpol-app-2.png
-?? slides/images/netpol-app.png
-?? slides/k8s/netpol-tp.md
+M  bin/add-logging.py
+M  bin/chaosmonkey.sh
+D  k8s/ingress.yaml
+D  k8s/traefik.yaml
+M  k8s/update-dashboard-yaml.sh
+M  prepare-eks/10_create_cluster.sh
+M  prepare-eks/20_create_users.sh
+M  prepare-eks/30_create_or_update_policy.sh
+M  prepare-eks/40_attach_policy.sh
+M  prepare-eks/50_aws_auth.sh
+M  prepare-eks/60_setup_rbac_and_ns.sh
+M  prepare-eks/70_oidc.sh
+M  prepare-eks/80_s3_bucket.sh
+M  prepare-labs/cleanup.sh
+M  prepare-labs/dns-cloudflare.sh
+M  prepare-labs/dns-gandi.py
+M  prepare-labs/dns-netlify.sh
+M  prepare-labs/konk.sh
+M  prepare-labs/labctl
+M  prepare-labs/lib/docker-prompt
+M  prepare-labs/lib/make-login-cards.py
+M  prepare-labs/lib/wkhtmltopdf
+M  prepare-labs/map-dns.sh
+M  prepare-labs/setup-admin-clusters.sh
+D  prepare-labs/tags
+M  prepare-labs/terraform/list-locations/azure
+M  prepare-labs/terraform/list-locations/civo
+M  prepare-labs/terraform/list-locations/digitalocean
+M  prepare-labs/terraform/list-locations/exoscale
+M  prepare-labs/terraform/list-locations/googlecloud
+M  prepare-labs/terraform/list-locations/linode
+M  prepare-labs/terraform/list-locations/oraclecloud
+M  prepare-labs/terraform/list-locations/scaleway
+D  prepare-labs/terraform/many-kubernetes/one-kubernetes-config.tf
+D  prepare-labs/terraform/many-kubernetes/one-kubernetes-provider.tf
+D  prepare-labs/terraform/one-kubernetes/aws/common.tf
+D  prepare-labs/terraform/one-kubernetes/aws/config.tf
+D  prepare-labs/terraform/one-kubernetes/aws/variables.tf
+D  prepare-labs/terraform/one-kubernetes/azure/common.tf
+D  prepare-labs/terraform/one-kubernetes/azure/config.tf
+D  prepare-labs/terraform/one-kubernetes/azure/variables.tf
+D  prepare-labs/terraform/one-kubernetes/civo/common.tf
+D  prepare-labs/terraform/one-kubernetes/civo/config.tf
+D  prepare-labs/terraform/one-kubernetes/civo/variables.tf
+D  prepare-labs/terraform/one-kubernetes/digitalocean/common.tf
+D  prepare-labs/terraform/one-kubernetes/digitalocean/config.tf
+D  prepare-labs/terraform/one-kubernetes/digitalocean/variables.tf
+D  prepare-labs/terraform/one-kubernetes/exoscale/common.tf
+D  prepare-labs/terraform/one-kubernetes/exoscale/config.tf
+D  prepare-labs/terraform/one-kubernetes/exoscale/variables.tf
+D  prepare-labs/terraform/one-kubernetes/googlecloud/common.tf
+D  prepare-labs/terraform/one-kubernetes/googlecloud/config.tf
+D  prepare-labs/terraform/one-kubernetes/googlecloud/variables.tf
+D  prepare-labs/terraform/one-kubernetes/linode/common.tf
+D  prepare-labs/terraform/one-kubernetes/linode/config.tf
+D  prepare-labs/terraform/one-kubernetes/linode/variables.tf
+D  prepare-labs/terraform/one-kubernetes/oci/common.tf
+D  prepare-labs/terraform/one-kubernetes/oci/config.tf
+D  prepare-labs/terraform/one-kubernetes/oci/variables.tf
+D  prepare-labs/terraform/one-kubernetes/ovh/common.tf
+D  prepare-labs/terraform/one-kubernetes/ovh/config.tf
+D  prepare-labs/terraform/one-kubernetes/ovh/variables.tf
+D  prepare-labs/terraform/one-kubernetes/scaleway/common.tf
+D  prepare-labs/terraform/one-kubernetes/scaleway/config.tf
+D  prepare-labs/terraform/one-kubernetes/scaleway/variables.tf
+D  prepare-labs/terraform/one-kubernetes/vcluster/common.tf
+D  prepare-labs/terraform/one-kubernetes/vcluster/config.tf
+D  prepare-labs/terraform/one-kubernetes/vcluster/variables.tf
+D  prepare-labs/terraform/virtual-machines/aws/common.tf
+D  prepare-labs/terraform/virtual-machines/aws/config.tf
+D  prepare-labs/terraform/virtual-machines/aws/variables.tf
+D  prepare-labs/terraform/virtual-machines/azure/common.tf
+D  prepare-labs/terraform/virtual-machines/azure/config.tf
+D  prepare-labs/terraform/virtual-machines/azure/variables.tf
+D  prepare-labs/terraform/virtual-machines/digitalocean/common.tf
+D  prepare-labs/terraform/virtual-machines/digitalocean/config.tf
+D  prepare-labs/terraform/virtual-machines/digitalocean/variables.tf
+D  prepare-labs/terraform/virtual-machines/hetzner/common.tf
+D  prepare-labs/terraform/virtual-machines/hetzner/config.tf
+D  prepare-labs/terraform/virtual-machines/hetzner/variables.tf
+D  prepare-labs/terraform/virtual-machines/linode/common.tf
+D  prepare-labs/terraform/virtual-machines/linode/config.tf
+D  prepare-labs/terraform/virtual-machines/linode/variables.tf
+D  prepare-labs/terraform/virtual-machines/oci/common.tf
+D  prepare-labs/terraform/virtual-machines/oci/config.tf
+D  prepare-labs/terraform/virtual-machines/oci/variables.tf
+D  prepare-labs/terraform/virtual-machines/openstack/common.tf
+D  prepare-labs/terraform/virtual-machines/openstack/config.tf
+D  prepare-labs/terraform/virtual-machines/openstack/variables.tf
+D  prepare-labs/terraform/virtual-machines/scaleway/common.tf
+D  prepare-labs/terraform/virtual-machines/scaleway/config.tf
+D  prepare-labs/terraform/virtual-machines/scaleway/variables.tf
+M  prepare-labs/test-all-one-kubernetes.sh
+A  slides/TODO.md
+M  slides/appendcheck.py
+M  slides/autopilot/autotest.py
+M  slides/autopilot/gotoslide.js
+M  slides/autopilot/server.js
+M  slides/autopilot/tmux-style.sh
+A  slides/containers/dockercoins.md
+M  slides/count-slides.py
+M  slides/efrei.yml
+A  slides/efrei_day_1.yml
+A  slides/efrei_day_2.yml
+A  slides/efrei_day_3.yml
+A  slides/efrei_day_4.yml
+M  slides/images/bridge1.png
+M  slides/images/bridge2.png
+M  slides/images/bridge3.png
+A  slides/images/congrats.gif
+A  slides/images/floor_is_yours.jpg
+A  slides/images/netpol-app-2.png
+A  slides/images/netpol-app.png
+M  slides/index.py
+M  slides/k8s/buildshiprun-selfhosted.md
+M  slides/k8s/concepts-k8s.md
+M  slides/k8s/daemonset.md
+M  slides/k8s/kubectlget.md
+A  slides/k8s/netpol-tp.md
+M  slides/k8s/netpol.md
+M  slides/k8s/ourapponkube.md
+M  slides/k8s/rollout.md
+M  slides/k8s/setup-overview.md
+M  slides/k8s/shippingimages.md
+T  slides/logistics.md
+M  slides/markmaker.py
+M  slides/slidechecker.js
+M  slides/workshop.css
+D  stacks/dockercoins
+M  webhooks/admission/flask/webhook.py
 
 ```
 
@@ -352,18 +352,21 @@ name: toc-part-5
 ## Part 5
 
 - [Namespaces](#toc-namespaces)
+
 - [Shipping images with a registry](#toc-shipping-images-with-a-registry)
+
 - [Running our application on Kubernetes](#toc-running-our-application-on-kubernetes)
+
 - [Accessing internal services](#toc-accessing-internal-services)
+
 - [Accessing the API with `kubectl proxy`](#toc-accessing-the-api-with-kubectl-proxy)
+
 - [Daemon sets](#toc-daemon-sets)
+
 - [Labels and selectors](#toc-labels-and-selectors)
+
 - [Rolling updates](#toc-rolling-updates)
-- [Managing stacks with Helm](#toc-managing-stacks-with-helm)
-- [Helm chart format](#toc-helm-chart-format)
-- [Helm and invalid values](#toc-helm-and-invalid-values)
-- [Helm secrets](#toc-helm-secrets)
-- [Kustomize](#toc-kustomize)
+
 
 .debug[(auto-generated TOC)]
 ---
@@ -374,6 +377,23 @@ name: toc-part-6
 - [Network policies](#toc-network-policies)
 
 - [TP k8s : Network policies](#toc-tp-ks--network-policies)
+
+
+.debug[(auto-generated TOC)]
+---
+name: toc-part-7
+
+## Part 7
+
+- [Managing stacks with Helm](#toc-managing-stacks-with-helm)
+
+- [Helm chart format](#toc-helm-chart-format)
+
+- [Helm and invalid values](#toc-helm-and-invalid-values)
+
+- [Helm secrets](#toc-helm-secrets)
+
+- [Kustomize](#toc-kustomize)
 
 
 .debug[(auto-generated TOC)]
@@ -13489,7 +13509,7 @@ class: title
 |
 [Back to table of contents](#toc-part-5)
 |
-[Next part](#toc-managing-stacks-with-helm)
+[Next part](#toc-network-policies)
 ]
 
 .debug[(automatically generated title slide)]
@@ -13748,15 +13768,539 @@ class: pic
 
 ---
 
+name: toc-network-policies
+class: title
+
+ Network policies
+
+.nav[
+[Previous part](#toc-rolling-updates)
+|
+[Back to table of contents](#toc-part-6)
+|
+[Next part](#toc-tp-ks--network-policies)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Network policies
+
+- Namespaces help us to *organize* resources
+
+- Namespaces do not provide isolation
+
+- By default, every pod can contact every other pod
+
+- By default, every service accepts traffic from anyone
+
+- If we want this to be different, we need *network policies*
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## What's a network policy?
+
+A network policy is defined by the following things.
+
+- A *pod selector* indicating which pods it applies to
+
+  e.g.: "all pods in namespace `blue` with the label `zone=internal`"
+
+- A list of *ingress rules* indicating which inbound traffic is allowed
+
+  e.g.: "TCP connections to ports 8000 and 8080 coming from pods with label `zone=dmz`,
+  and from the external subnet 4.42.6.0/24, except 4.42.6.5"
+
+- A list of *egress rules* indicating which outbound traffic is allowed
+
+A network policy can provide ingress rules, egress rules, or both.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## How do network policies apply?
+
+- A pod can be "selected" by any number of network policies
+
+- If a pod isn't selected by any network policy, then its traffic is unrestricted
+
+  (In other words: in the absence of network policies, all traffic is allowed)
+
+- If a pod is selected by at least one network policy, then all traffic is blocked ...
+
+  ... unless it is explicitly allowed by one of these network policies
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+class: extra-details
+
+## Traffic filtering is flow-oriented
+
+- Network policies deal with *connections*, not individual packets
+
+- Example: to allow HTTP (80/tcp) connections to pod A, you only need an ingress rule
+
+  (You do not need a matching egress rule to allow response traffic to go through)
+
+- This also applies for UDP traffic
+
+  (Allowing DNS traffic can be done with a single rule)
+
+- Network policy implementations use stateful connection tracking
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Pod-to-pod traffic
+
+- Connections from pod A to pod B have to be allowed by both pods:
+
+  - pod A has to be unrestricted, or allow the connection as an *egress* rule
+
+  - pod B has to be unrestricted, or allow the connection as an *ingress* rule
+
+- As a consequence: if a network policy restricts traffic going from/to a pod,
+  <br/>
+  the restriction cannot be overridden by a network policy selecting another pod
+
+- This prevents an entity managing network policies in namespace A
+  (but without permission to do so in namespace B)
+  from adding network policies giving them access to namespace B
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## The rationale for network policies
+
+- In network security, it is generally considered better to "deny all, then allow selectively"
+
+  (The other approach, "allow all, then block selectively" makes it too easy to leave holes)
+
+- As soon as one network policy selects a pod, the pod enters this "deny all" logic
+
+- Further network policies can open additional access
+
+- Good network policies should be scoped as precisely as possible
+
+- In particular: make sure that the selector is not too broad
+
+  (Otherwise, you end up affecting pods that were otherwise well secured)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Our first network policy
+
+This is our game plan:
+
+- run a web server in a pod
+
+- create a network policy to block all access to the web server
+
+- create another network policy to allow access only from specific pods
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Running our test web server
+
+.lab[
+
+- Let's use the `nginx` image:
+  ```bash
+  kubectl create deployment testweb --image=nginx
+  ```
+
+<!--
+```bash
+kubectl wait deployment testweb --for condition=available
+```
+-->
+
+- Find out the IP address of the pod with one of these two commands:
+  ```bash
+  kubectl get pods -o wide -l app=testweb
+  IP=$(kubectl get pods -l app=testweb -o json | jq -r .items[0].status.podIP)
+  ```
+
+- Check that we can connect to the server:
+  ```bash
+  curl $IP
+  ```
+]
+
+The `curl` command should show us the "Welcome to nginx!" page.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Adding a very restrictive network policy
+
+- The policy will select pods with the label `app=testweb`
+
+- It will specify an empty list of ingress rules (matching nothing)
+
+.lab[
+
+- Apply the policy in this YAML file:
+  ```bash
+    kubectl apply -f netpol-deny-all-for-testweb.yaml
+  ```
+
+- Check if we can still access the server:
+  ```bash
+  curl $IP
+  ```
+
+<!--
+```wait curl```
+```key ^C```
+-->
+
+]
+
+The `curl` command should now time out.
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Looking at the network policy
+
+This is the file that we applied:
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-all-for-testweb
+spec:
+  podSelector:
+    matchLabels:
+      app: testweb
+  ingress: []
+
+
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Allowing connections only from specific pods
+
+- We want to allow traffic from pods with the label `run=testcurl`
+
+- Reminder: this label is automatically applied when we do `kubectl run testcurl ...`
+
+.lab[
+
+- Apply another policy:
+  ```bash
+  kubectl apply -f netpol-allow-testcurl-for-testweb.yaml
+  ```
+
+]
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Looking at the network policy
+
+This is the second file that we applied:
+
+```yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-testcurl-for-testweb
+spec:
+  podSelector:
+    matchLabels:
+      app: testweb
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          run: testcurl
+
+
+```
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Testing the network policy
+
+- Let's create pods with, and without, the required label
+
+.lab[
+
+- Try to connect to testweb from a pod with the `run=testcurl` label:
+  ```bash
+  kubectl run testcurl --rm -i --image=centos -- curl -m3 $IP
+  ```
+
+- Try to connect to testweb with a different label:
+  ```bash
+  kubectl run testkurl --rm -i --image=centos -- curl -m3 $IP
+  ```
+
+]
+
+The first command will work (and show the "Welcome to nginx!" page).
+
+The second command will fail and time out after 3 seconds.
+
+(The timeout is obtained with the `-m3` option.)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## An important warning
+
+- Some network plugins only have partial support for network policies
+
+- For instance, Weave added support for egress rules [in version 2.4](https://github.com/weaveworks/weave/pull/3313) (released in July 2018)
+
+- But only recently added support for ipBlock [in version 2.5](https://github.com/weaveworks/weave/pull/3367) (released in Nov 2018)
+
+- Unsupported features might be silently ignored
+
+  (Making you believe that you are secure, when you're not)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Network policies, pods, and services
+
+- Network policies apply to *pods*
+
+- A *service* can select multiple pods
+
+  (And load balance traffic across them)
+
+- It is possible that we can connect to some pods, but not some others
+
+  (Because of how network policies have been defined for these pods)
+
+- In that case, connections to the service will randomly pass or fail
+
+  (Depending on whether the connection was sent to a pod that we have access to or not)
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Network policies and namespaces
+
+- A good strategy is to isolate a namespace, so that:
+
+  - all the pods in the namespace can communicate together
+
+  - other namespaces cannot access the pods
+
+  - external access has to be enabled explicitly
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Protecting the control plane
+
+- Should we add network policies to block unauthorized access to the control plane?
+
+  (etcd, API server, etc.)
+
+--
+
+- At first, it seems like a good idea ...
+
+--
+
+- But it *shouldn't* be necessary:
+
+  - not all network plugins support network policies
+
+  - the control plane is secured by other methods (mutual TLS, mostly)
+
+  - the code running in our pods can reasonably expect to contact the API
+    <br/>
+    (and it can do so safely thanks to the API permission model)
+
+- If we block access to the control plane, we might disrupt legitimate code
+
+- ...Without necessarily improving security
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Tools and resources
+
+- [Cilium Network Policy Editor](https://editor.cilium.io/)
+
+- [Tufin Network Policy Viewer](https://orca.tufin.io/netpol/)
+
+- [`kubectl np-viewer`](https://github.com/runoncloud/kubectl-np-viewer) (kubectl plugin)
+
+- Two resources by [Ahmet Alp Balkan](https://ahmet.im/):
+
+  - a [very good talk about network policies](https://www.youtube.com/watch?list=PLj6h78yzYM2P-3-xqvmWaZbbI1sW-ulZb&v=3gGpMmYeEO8) at KubeCon North America 2017
+
+  - a repository of [ready-to-use recipes](https://github.com/ahmetb/kubernetes-network-policy-recipes) for network policies
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+## Documentation
+
+- As always, the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/) is a good starting point
+
+- The API documentation has a lot of detail about the format of various objects: <!-- ##VERSION## -->
+
+  - [NetworkPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicy-v1-networking-k8s-io)
+
+  - [NetworkPolicySpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyspec-v1-networking-k8s-io)
+
+  - [NetworkPolicyIngressRule](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyingressrule-v1-networking-k8s-io)
+
+  - etc.
+
+???
+
+:EN:- Isolating workloads with Network Policies
+:FR:- Isolation réseau avec les *network policies*
+
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-tp-ks--network-policies
+class: title
+
+ TP k8s : Network policies
+
+.nav[
+[Previous part](#toc-network-policies)
+|
+[Back to table of contents](#toc-part-6)
+|
+[Next part](#toc-managing-stacks-with-helm)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# TP k8s : Network policies
+
+- We will connect to the Kubernetes master VM
+
+- We will clone the TP repository
+
+.lab[
+
+- Clone the repository on your VM:
+  ```bash
+  git clone https://github.com/GuillaumeMorini/TP-Kubernetes
+  ```
+
+]
+
+- This repository has the applications to deploy but no network policies.
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## What's this application?
+
+
+- The demo for this part of the workshop is a distributed application with multiple components. 
+
+- Version 1 of the app has a legacy backend service, which is fronted by a facade. There's a client application which talks to the facade to use backend services.
+
+- Version 2 of the app introduces a payment service. The service isn't directly accessible - only via a queue. Backend services can publish request messages to the queue, and the payments service can process them and publish response messages to the queue.
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+class: pic
+
+![Diagram showing the applications](images/netpol-app.png)
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+class: pic
+
+![Diagram showing the applications v2](images/netpol-app-2.png)
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Why using Network policies
+
+--
+
+- The app has been badly configured though, so every service is trying to use every other service. 
+- We'll use network policies enforced by Calico to make sure traffic flows where it should.
+
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Goal of the TP
+
+- Deploy the app v1 using kubectl commands
+
+- Write 4 network policies to filter the traffic
+
+- Deploy the app v2 using kubectl commands
+
+- Write 3 network policies to filter the traffic specific to this v2
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## What I ask
+
+- Work by group on this TP
+
+- Provide a detailed report of all the steps of this TP
+
+- One report per group (be sure to put the 2 or 3 names on the report)
+
+- Use PDF format for the report
+
+- Send me the report through Teams private message or through email
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Up to you
+
+
+![The floor is yours](images/floor_is_yours.jpg)
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
+
+---
+
 name: toc-managing-stacks-with-helm
 class: title
 
  Managing stacks with Helm
 
 .nav[
-[Previous part](#toc-rolling-updates)
+[Previous part](#toc-tp-ks--network-policies)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
 [Next part](#toc-helm-chart-format)
 ]
@@ -14263,7 +14807,7 @@ All unspecified values will take the default values defined in the chart.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/train-of-containers-2.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
 
 ---
 
@@ -14275,7 +14819,7 @@ class: title
 .nav[
 [Previous part](#toc-managing-stacks-with-helm)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
 [Next part](#toc-helm-and-invalid-values)
 ]
@@ -14560,7 +15104,7 @@ We see the components mentioned above: `Chart.yaml`, `templates/`, `values.yaml`
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/two-containers-on-a-truck.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
 
 ---
 
@@ -14572,7 +15116,7 @@ class: title
 .nav[
 [Previous part](#toc-helm-chart-format)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
 [Next part](#toc-helm-secrets)
 ]
@@ -14785,7 +15329,7 @@ The second will not.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/wall-of-containers.jpeg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
 
 ---
 
@@ -14797,7 +15341,7 @@ class: title
 .nav[
 [Previous part](#toc-helm-and-invalid-values)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
 [Next part](#toc-kustomize)
 ]
@@ -15077,7 +15621,7 @@ The chart is in a structured format, but it's entirely captured in this JSON.
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/catene-de-conteneurs.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/ShippingContainerSFBay.jpg)]
 
 ---
 
@@ -15089,9 +15633,9 @@ class: title
 .nav[
 [Previous part](#toc-helm-secrets)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
-[Next part](#toc-network-policies)
+[Next part](#toc-)
 ]
 
 .debug[(automatically generated title slide)]
@@ -15628,531 +16172,7 @@ patches:
 :EN:- Packaging and running apps with Kustomize
 :FR:- *Packaging* d'applications avec Kustomize
 
-.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
----
-
-class: pic
-
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
-
----
-
-name: toc-network-policies
-class: title
-
- Network policies
-
-.nav[
-[Previous part](#toc-kustomize)
-|
-[Back to table of contents](#toc-part-6)
-|
-[Next part](#toc-tp-ks--network-policies)
-]
-
-.debug[(automatically generated title slide)]
-
----
-# Network policies
-
-- Namespaces help us to *organize* resources
-
-- Namespaces do not provide isolation
-
-- By default, every pod can contact every other pod
-
-- By default, every service accepts traffic from anyone
-
-- If we want this to be different, we need *network policies*
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## What's a network policy?
-
-A network policy is defined by the following things.
-
-- A *pod selector* indicating which pods it applies to
-
-  e.g.: "all pods in namespace `blue` with the label `zone=internal`"
-
-- A list of *ingress rules* indicating which inbound traffic is allowed
-
-  e.g.: "TCP connections to ports 8000 and 8080 coming from pods with label `zone=dmz`,
-  and from the external subnet 4.42.6.0/24, except 4.42.6.5"
-
-- A list of *egress rules* indicating which outbound traffic is allowed
-
-A network policy can provide ingress rules, egress rules, or both.
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## How do network policies apply?
-
-- A pod can be "selected" by any number of network policies
-
-- If a pod isn't selected by any network policy, then its traffic is unrestricted
-
-  (In other words: in the absence of network policies, all traffic is allowed)
-
-- If a pod is selected by at least one network policy, then all traffic is blocked ...
-
-  ... unless it is explicitly allowed by one of these network policies
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-class: extra-details
-
-## Traffic filtering is flow-oriented
-
-- Network policies deal with *connections*, not individual packets
-
-- Example: to allow HTTP (80/tcp) connections to pod A, you only need an ingress rule
-
-  (You do not need a matching egress rule to allow response traffic to go through)
-
-- This also applies for UDP traffic
-
-  (Allowing DNS traffic can be done with a single rule)
-
-- Network policy implementations use stateful connection tracking
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Pod-to-pod traffic
-
-- Connections from pod A to pod B have to be allowed by both pods:
-
-  - pod A has to be unrestricted, or allow the connection as an *egress* rule
-
-  - pod B has to be unrestricted, or allow the connection as an *ingress* rule
-
-- As a consequence: if a network policy restricts traffic going from/to a pod,
-  <br/>
-  the restriction cannot be overridden by a network policy selecting another pod
-
-- This prevents an entity managing network policies in namespace A
-  (but without permission to do so in namespace B)
-  from adding network policies giving them access to namespace B
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## The rationale for network policies
-
-- In network security, it is generally considered better to "deny all, then allow selectively"
-
-  (The other approach, "allow all, then block selectively" makes it too easy to leave holes)
-
-- As soon as one network policy selects a pod, the pod enters this "deny all" logic
-
-- Further network policies can open additional access
-
-- Good network policies should be scoped as precisely as possible
-
-- In particular: make sure that the selector is not too broad
-
-  (Otherwise, you end up affecting pods that were otherwise well secured)
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Our first network policy
-
-This is our game plan:
-
-- run a web server in a pod
-
-- create a network policy to block all access to the web server
-
-- create another network policy to allow access only from specific pods
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Running our test web server
-
-.lab[
-
-- Let's use the `nginx` image:
-  ```bash
-  kubectl create deployment testweb --image=nginx
-  ```
-
-<!--
-```bash
-kubectl wait deployment testweb --for condition=available
-```
--->
-
-- Find out the IP address of the pod with one of these two commands:
-  ```bash
-  kubectl get pods -o wide -l app=testweb
-  IP=$(kubectl get pods -l app=testweb -o json | jq -r .items[0].status.podIP)
-  ```
-
-- Check that we can connect to the server:
-  ```bash
-  curl $IP
-  ```
-]
-
-The `curl` command should show us the "Welcome to nginx!" page.
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Adding a very restrictive network policy
-
-- The policy will select pods with the label `app=testweb`
-
-- It will specify an empty list of ingress rules (matching nothing)
-
-.lab[
-
-- Apply the policy in this YAML file:
-  ```bash
-    kubectl apply -f netpol-deny-all-for-testweb.yaml
-  ```
-
-- Check if we can still access the server:
-  ```bash
-  curl $IP
-  ```
-
-<!--
-```wait curl```
-```key ^C```
--->
-
-]
-
-The `curl` command should now time out.
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Looking at the network policy
-
-This is the file that we applied:
-
-```yaml
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: deny-all-for-testweb
-spec:
-  podSelector:
-    matchLabels:
-      app: testweb
-  ingress: []
-
-
-```
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Allowing connections only from specific pods
-
-- We want to allow traffic from pods with the label `run=testcurl`
-
-- Reminder: this label is automatically applied when we do `kubectl run testcurl ...`
-
-.lab[
-
-- Apply another policy:
-  ```bash
-  kubectl apply -f netpol-allow-testcurl-for-testweb.yaml
-  ```
-
-]
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Looking at the network policy
-
-This is the second file that we applied:
-
-```yaml
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: allow-testcurl-for-testweb
-spec:
-  podSelector:
-    matchLabels:
-      app: testweb
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          run: testcurl
-
-
-```
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Testing the network policy
-
-- Let's create pods with, and without, the required label
-
-.lab[
-
-- Try to connect to testweb from a pod with the `run=testcurl` label:
-  ```bash
-  kubectl run testcurl --rm -i --image=centos -- curl -m3 $IP
-  ```
-
-- Try to connect to testweb with a different label:
-  ```bash
-  kubectl run testkurl --rm -i --image=centos -- curl -m3 $IP
-  ```
-
-]
-
-The first command will work (and show the "Welcome to nginx!" page).
-
-The second command will fail and time out after 3 seconds.
-
-(The timeout is obtained with the `-m3` option.)
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## An important warning
-
-- Some network plugins only have partial support for network policies
-
-- For instance, Weave added support for egress rules [in version 2.4](https://github.com/weaveworks/weave/pull/3313) (released in July 2018)
-
-- But only recently added support for ipBlock [in version 2.5](https://github.com/weaveworks/weave/pull/3367) (released in Nov 2018)
-
-- Unsupported features might be silently ignored
-
-  (Making you believe that you are secure, when you're not)
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Network policies, pods, and services
-
-- Network policies apply to *pods*
-
-- A *service* can select multiple pods
-
-  (And load balance traffic across them)
-
-- It is possible that we can connect to some pods, but not some others
-
-  (Because of how network policies have been defined for these pods)
-
-- In that case, connections to the service will randomly pass or fail
-
-  (Depending on whether the connection was sent to a pod that we have access to or not)
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Network policies and namespaces
-
-- A good strategy is to isolate a namespace, so that:
-
-  - all the pods in the namespace can communicate together
-
-  - other namespaces cannot access the pods
-
-  - external access has to be enabled explicitly
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Protecting the control plane
-
-- Should we add network policies to block unauthorized access to the control plane?
-
-  (etcd, API server, etc.)
-
---
-
-- At first, it seems like a good idea ...
-
---
-
-- But it *shouldn't* be necessary:
-
-  - not all network plugins support network policies
-
-  - the control plane is secured by other methods (mutual TLS, mostly)
-
-  - the code running in our pods can reasonably expect to contact the API
-    <br/>
-    (and it can do so safely thanks to the API permission model)
-
-- If we block access to the control plane, we might disrupt legitimate code
-
-- ...Without necessarily improving security
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Tools and resources
-
-- [Cilium Network Policy Editor](https://editor.cilium.io/)
-
-- [Tufin Network Policy Viewer](https://orca.tufin.io/netpol/)
-
-- [`kubectl np-viewer`](https://github.com/runoncloud/kubectl-np-viewer) (kubectl plugin)
-
-- Two resources by [Ahmet Alp Balkan](https://ahmet.im/):
-
-  - a [very good talk about network policies](https://www.youtube.com/watch?list=PLj6h78yzYM2P-3-xqvmWaZbbI1sW-ulZb&v=3gGpMmYeEO8) at KubeCon North America 2017
-
-  - a repository of [ready-to-use recipes](https://github.com/ahmetb/kubernetes-network-policy-recipes) for network policies
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Documentation
-
-- As always, the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-networking/network-policies/) is a good starting point
-
-- The API documentation has a lot of detail about the format of various objects: <!-- ##VERSION## -->
-
-  - [NetworkPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicy-v1-networking-k8s-io)
-
-  - [NetworkPolicySpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyspec-v1-networking-k8s-io)
-
-  - [NetworkPolicyIngressRule](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#networkpolicyingressrule-v1-networking-k8s-io)
-
-  - etc.
-
-???
-
-:EN:- Isolating workloads with Network Policies
-:FR:- Isolation réseau avec les *network policies*
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-class: pic
-
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/ShippingContainerSFBay.jpg)]
-
----
-
-name: toc-tp-ks--network-policies
-class: title
-
- TP k8s : Network policies
-
-.nav[
-[Previous part](#toc-network-policies)
-|
-[Back to table of contents](#toc-part-6)
-|
-[Next part](#toc-)
-]
-
-.debug[(automatically generated title slide)]
-
----
-# TP k8s : Network policies
-
-- We will connect to the Kubernetes master VM
-
-- We will clone the TP repository
-
-.lab[
-
-- Clone the repository on your VM:
-  ```bash
-  git clone https://github.com/GuillaumeMorini/TP-Kubernetes
-  ```
-
-]
-
-- This repository has the applications to deploy but no network policies.
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-## What's this application?
-
-
-- The demo for this part of the workshop is a distributed application with multiple components. 
-
-- Version 1 of the app has a legacy backend service, which is fronted by a facade. There's a client application which talks to the facade to use backend services.
-
-- Version 2 of the app introduces a payment service. The service isn't directly accessible - only via a queue. Backend services can publish request messages to the queue, and the payments service can process them and publish response messages to the queue.
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-class: pic
-
-![Diagram showing the applications](images/netpol-app.png)
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-class: pic
-
-![Diagram showing the applications v2](images/netpol-app-2.png)
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-## Why using Network policies
-
---
-
-- The app has been badly configured though, so every service is trying to use every other service. 
-- We'll use network policies enforced by Calico to make sure traffic flows where it should.
-
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-## Goal of the TP
-
-- Deploy the app v1 using kubectl commands
-
-- Write 4 network policies to filter the traffic
-
-- Deploy the app v2 using kubectl commands
-
-- Write 3 network policies to filter the traffic specific to this v2
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-## What I ask
-
-- Work by group on this TP
-
-- Provide a detailed report of all the steps of this TP
-
-- One report per group (be sure to put the 2 or 3 names on the report)
-
-- Use PDF format for the report
-
-- Send me the report through Teams private message or through email
-
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
----
-
-## Up to you
-
-
-![The floor is yours](images/floor_is_yours.jpg)
-.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]</textarea>
+.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]</textarea>
     <script src="remark.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">
