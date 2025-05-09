@@ -50,140 +50,16 @@ Password: **Something**
 
 .debug[
 ```
-M  bin/add-logging.py
-M  bin/chaosmonkey.sh
-D  k8s/ingress.yaml
-D  k8s/traefik.yaml
-M  k8s/update-dashboard-yaml.sh
-M  prepare-eks/10_create_cluster.sh
-M  prepare-eks/20_create_users.sh
-M  prepare-eks/30_create_or_update_policy.sh
-M  prepare-eks/40_attach_policy.sh
-M  prepare-eks/50_aws_auth.sh
-M  prepare-eks/60_setup_rbac_and_ns.sh
-M  prepare-eks/70_oidc.sh
-M  prepare-eks/80_s3_bucket.sh
-M  prepare-labs/cleanup.sh
-M  prepare-labs/dns-cloudflare.sh
-M  prepare-labs/dns-gandi.py
-M  prepare-labs/dns-netlify.sh
-M  prepare-labs/konk.sh
-M  prepare-labs/labctl
-M  prepare-labs/lib/docker-prompt
-M  prepare-labs/lib/make-login-cards.py
-M  prepare-labs/lib/wkhtmltopdf
-M  prepare-labs/map-dns.sh
-M  prepare-labs/setup-admin-clusters.sh
-D  prepare-labs/tags
-M  prepare-labs/terraform/list-locations/azure
-M  prepare-labs/terraform/list-locations/civo
-M  prepare-labs/terraform/list-locations/digitalocean
-M  prepare-labs/terraform/list-locations/exoscale
-M  prepare-labs/terraform/list-locations/googlecloud
-M  prepare-labs/terraform/list-locations/linode
-M  prepare-labs/terraform/list-locations/oraclecloud
-M  prepare-labs/terraform/list-locations/scaleway
-D  prepare-labs/terraform/many-kubernetes/one-kubernetes-config.tf
-D  prepare-labs/terraform/many-kubernetes/one-kubernetes-provider.tf
-D  prepare-labs/terraform/one-kubernetes/aws/common.tf
-D  prepare-labs/terraform/one-kubernetes/aws/config.tf
-D  prepare-labs/terraform/one-kubernetes/aws/variables.tf
-D  prepare-labs/terraform/one-kubernetes/azure/common.tf
-D  prepare-labs/terraform/one-kubernetes/azure/config.tf
-D  prepare-labs/terraform/one-kubernetes/azure/variables.tf
-D  prepare-labs/terraform/one-kubernetes/civo/common.tf
-D  prepare-labs/terraform/one-kubernetes/civo/config.tf
-D  prepare-labs/terraform/one-kubernetes/civo/variables.tf
-D  prepare-labs/terraform/one-kubernetes/digitalocean/common.tf
-D  prepare-labs/terraform/one-kubernetes/digitalocean/config.tf
-D  prepare-labs/terraform/one-kubernetes/digitalocean/variables.tf
-D  prepare-labs/terraform/one-kubernetes/exoscale/common.tf
-D  prepare-labs/terraform/one-kubernetes/exoscale/config.tf
-D  prepare-labs/terraform/one-kubernetes/exoscale/variables.tf
-D  prepare-labs/terraform/one-kubernetes/googlecloud/common.tf
-D  prepare-labs/terraform/one-kubernetes/googlecloud/config.tf
-D  prepare-labs/terraform/one-kubernetes/googlecloud/variables.tf
-D  prepare-labs/terraform/one-kubernetes/linode/common.tf
-D  prepare-labs/terraform/one-kubernetes/linode/config.tf
-D  prepare-labs/terraform/one-kubernetes/linode/variables.tf
-D  prepare-labs/terraform/one-kubernetes/oci/common.tf
-D  prepare-labs/terraform/one-kubernetes/oci/config.tf
-D  prepare-labs/terraform/one-kubernetes/oci/variables.tf
-D  prepare-labs/terraform/one-kubernetes/ovh/common.tf
-D  prepare-labs/terraform/one-kubernetes/ovh/config.tf
-D  prepare-labs/terraform/one-kubernetes/ovh/variables.tf
-D  prepare-labs/terraform/one-kubernetes/scaleway/common.tf
-D  prepare-labs/terraform/one-kubernetes/scaleway/config.tf
-D  prepare-labs/terraform/one-kubernetes/scaleway/variables.tf
-D  prepare-labs/terraform/one-kubernetes/vcluster/common.tf
-D  prepare-labs/terraform/one-kubernetes/vcluster/config.tf
-D  prepare-labs/terraform/one-kubernetes/vcluster/variables.tf
-D  prepare-labs/terraform/virtual-machines/aws/common.tf
-D  prepare-labs/terraform/virtual-machines/aws/config.tf
-D  prepare-labs/terraform/virtual-machines/aws/variables.tf
-D  prepare-labs/terraform/virtual-machines/azure/common.tf
-D  prepare-labs/terraform/virtual-machines/azure/config.tf
-D  prepare-labs/terraform/virtual-machines/azure/variables.tf
-D  prepare-labs/terraform/virtual-machines/digitalocean/common.tf
-D  prepare-labs/terraform/virtual-machines/digitalocean/config.tf
-D  prepare-labs/terraform/virtual-machines/digitalocean/variables.tf
-D  prepare-labs/terraform/virtual-machines/hetzner/common.tf
-D  prepare-labs/terraform/virtual-machines/hetzner/config.tf
-D  prepare-labs/terraform/virtual-machines/hetzner/variables.tf
-D  prepare-labs/terraform/virtual-machines/linode/common.tf
-D  prepare-labs/terraform/virtual-machines/linode/config.tf
-D  prepare-labs/terraform/virtual-machines/linode/variables.tf
-D  prepare-labs/terraform/virtual-machines/oci/common.tf
-D  prepare-labs/terraform/virtual-machines/oci/config.tf
-D  prepare-labs/terraform/virtual-machines/oci/variables.tf
-D  prepare-labs/terraform/virtual-machines/openstack/common.tf
-D  prepare-labs/terraform/virtual-machines/openstack/config.tf
-D  prepare-labs/terraform/virtual-machines/openstack/variables.tf
-D  prepare-labs/terraform/virtual-machines/scaleway/common.tf
-D  prepare-labs/terraform/virtual-machines/scaleway/config.tf
-D  prepare-labs/terraform/virtual-machines/scaleway/variables.tf
-M  prepare-labs/test-all-one-kubernetes.sh
-A  slides/TODO.md
-M  slides/appendcheck.py
-M  slides/autopilot/autotest.py
-M  slides/autopilot/gotoslide.js
-M  slides/autopilot/server.js
-M  slides/autopilot/tmux-style.sh
-A  slides/containers/dockercoins.md
-M  slides/count-slides.py
-M  slides/efrei.yml
-A  slides/efrei_day_1.yml
-A  slides/efrei_day_2.yml
-A  slides/efrei_day_3.yml
-A  slides/efrei_day_4.yml
-M  slides/images/bridge1.png
-M  slides/images/bridge2.png
-M  slides/images/bridge3.png
-A  slides/images/congrats.gif
-A  slides/images/floor_is_yours.jpg
-A  slides/images/netpol-app-2.png
-A  slides/images/netpol-app.png
-M  slides/index.py
-M  slides/k8s/buildshiprun-selfhosted.md
-M  slides/k8s/concepts-k8s.md
-M  slides/k8s/daemonset.md
-M  slides/k8s/kubectlget.md
-A  slides/k8s/netpol-tp.md
-M  slides/k8s/netpol.md
-M  slides/k8s/ourapponkube.md
-M  slides/k8s/rollout.md
-M  slides/k8s/setup-overview.md
-M  slides/k8s/shippingimages.md
-T  slides/logistics.md
-M  slides/markmaker.py
-M  slides/slidechecker.js
-M  slides/workshop.css
-D  stacks/dockercoins
-M  webhooks/admission/flask/webhook.py
+ M slides/TODO.md
+ M slides/efrei.yml
+ M slides/k8s/helm-create-basic-chart.md
+ M slides/k8s/helm-create-better-chart.md
+ M slides/k8s/helm-intro.md
+ M slides/k8s/kustomize.md
 
 ```
 
-These slides have been built from commit: 906b2b2
+These slides have been built from commit: c527460
 
 
 [shared/title.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/title.md)]
@@ -392,6 +268,12 @@ name: toc-part-7
 - [Helm and invalid values](#toc-helm-and-invalid-values)
 
 - [Helm secrets](#toc-helm-secrets)
+
+- [Creating a basic chart](#toc-creating-a-basic-chart)
+
+- [Creating better Helm charts](#toc-creating-better-helm-charts)
+
+- [Charts using other charts](#toc-charts-using-other-charts)
 
 - [Kustomize](#toc-kustomize)
 
@@ -14396,26 +14278,6 @@ class: title
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
 
-## CNCF graduation status
-
-- On April 30th 2020, Helm was the 10th project to *graduate* within the CNCF
-
-  (alongside Containerd, Prometheus, and Kubernetes itself)
-
-- This is an acknowledgement by the CNCF for projects that
-
-  *demonstrate thriving adoption, an open governance process,
-  <br/>
-  and a strong commitment to community, sustainability, and inclusivity.*
-
-- See [CNCF announcement](https://www.cncf.io/announcement/2020/04/30/cloud-native-computing-foundation-announces-helm-graduation/)
-  and [Helm announcement](https://helm.sh/blog/celebrating-helms-cncf-graduation/)
-
-- In other words: Helm is here to stay
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
 ## Helm concepts
 
 - `helm` is a CLI tool
@@ -14479,46 +14341,6 @@ or `apt` tools).
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
 
-## Helm 2 vs Helm 3
-
-- Helm 3 was released [November 13, 2019](https://helm.sh/blog/helm-3-released/)
-
-- Charts remain compatible between Helm 2 and Helm 3
-
-- The CLI is very similar (with minor changes to some commands)
-
-- The main difference is that Helm 2 uses `tiller`, a server-side component
-
-- Helm 3 doesn't use `tiller` at all, making it simpler (yay!)
-
-- If you see references to `tiller` in a tutorial, documentation... that doc is obsolete!
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
-class: extra-details
-
-## What was the problem with `tiller`?
-
-- With Helm 3:
-
-  - the `helm` CLI communicates directly with the Kubernetes API
-
-  - it creates resources (deployments, services...) with our credentials
-
-- With Helm 2:
-
-  - the `helm` CLI communicates with `tiller`, telling `tiller` what to do
-
-  - `tiller` then communicates with the Kubernetes API, using its own credentials
-
-- This indirect model caused significant permissions headaches
-
-- It also made it more complicated to embed Helm in other tools
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
 ## Installing Helm
 
 - If the `helm` CLI is not installed in your environment, install it
@@ -14537,8 +14359,6 @@ class: extra-details
   ```
 
 ]
-
-(To install Helm 2, replace `get-helm-3` with `get`.)
 
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
@@ -15343,7 +15163,7 @@ class: title
 |
 [Back to table of contents](#toc-part-7)
 |
-[Next part](#toc-kustomize)
+[Next part](#toc-creating-a-basic-chart)
 ]
 
 .debug[(automatically generated title slide)]
@@ -15625,13 +15445,1345 @@ class: pic
 
 ---
 
+name: toc-creating-a-basic-chart
+class: title
+
+ Creating a basic chart
+
+.nav[
+[Previous part](#toc-helm-secrets)
+|
+[Back to table of contents](#toc-part-7)
+|
+[Next part](#toc-creating-better-helm-charts)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Creating a basic chart
+
+- We are going to show a way to create a *very simplified* chart
+
+- In a real chart, *lots of things* would be templatized
+
+  (Resource names, service types, number of replicas...)
+
+.lab[
+
+- Create a sample chart:
+  ```bash
+  helm create dockercoins
+  ```
+
+- Move away the sample templates and create an empty template directory:
+  ```bash
+  mv dockercoins/templates dockercoins/default-templates
+  mkdir dockercoins/templates
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Adding the manifests of our app
+
+- There is a convenient `dockercoins.yml` in the repo
+
+.lab[
+
+- Copy the YAML file to the `templates` subdirectory in the chart:
+  ```bash
+  curl -Lo dockercoins/templates/dockercoins.yaml https://raw.githubusercontent.com/GuillaumeMorini/orchestration-workshop/refs/heads/main/k8s/dockercoins.yaml  ```
+
+]
+
+- Note: it is probably easier to have multiple YAML files
+
+  (rather than a single, big file with all the manifests)
+
+- But that works too!
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Testing our Helm chart
+
+- Our Helm chart is now ready
+
+  (as surprising as it might seem!)
+
+.lab[
+
+- Let's try to install the chart:
+  ```
+  helm install helmcoins dockercoins
+  ```
+  (`helmcoins` is the name of the release; `dockercoins` is the local path of the chart)
+
+]
+
+--
+
+- If the application is already deployed, this will fail:
+```
+Error: rendered manifests contain a resource that already exists.
+Unable to continue with install: existing resource conflict:
+kind: Service, namespace: default, name: hasher
+```
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Switching to another namespace
+
+- If there is already a copy of dockercoins in the current namespace:
+
+  - we can switch with `kubens` or `kubectl config set-context`
+
+  - we can also tell Helm to use a different namespace
+
+.lab[
+
+- Create a new namespace:
+  ```bash
+  kubectl create namespace helmcoins
+  ```
+
+- Deploy our chart in that namespace:
+  ```bash
+  helm install helmcoins dockercoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Helm releases are namespaced
+
+- Let's try to see the release that we just deployed
+
+.lab[
+
+- List Helm releases:
+  ```bash
+  helm list
+  ```
+
+]
+
+Our release doesn't show up!
+
+We have to specify its namespace (or switch to that namespace).
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Specifying the namespace
+
+- Try again, with the correct namespace
+
+.lab[
+
+- List Helm releases in `helmcoins`:
+  ```bash
+  helm list --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Checking our new copy of DockerCoins
+
+- We can check the worker logs, or the web UI
+
+.lab[
+
+- Retrieve the NodePort number of the web UI:
+  ```bash
+  kubectl get service webui --namespace=helmcoins
+  ```
+
+- Open it in a web browser
+
+- Look at the worker logs:
+  ```bash
+  kubectl logs deploy/worker --tail=10 --follow --namespace=helmcoins
+  ```
+
+]
+
+Note: it might take a minute or two for the worker to start.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Discussion, shortcomings
+
+- Helm (and Kubernetes) best practices recommend to add a number of annotations
+
+  (e.g. `app.kubernetes.io/name`, `helm.sh/chart`, `app.kubernetes.io/instance` ...)
+
+- Our basic chart doesn't have any of these
+
+- Our basic chart doesn't use any template tag
+
+- Does it make sense to use Helm in that case?
+
+- *Yes,* because Helm will:
+
+  - track the resources created by the chart
+
+  - save successive revisions, allowing us to rollback
+
+[Helm docs](https://helm.sh/docs/topics/chart_best_practices/labels/)
+and [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+have details about recommended annotations and labels.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Cleaning up
+
+- Let's remove that chart before moving on
+
+.lab[
+
+- Delete the release (don't forget to specify the namespace):
+  ```bash
+  helm delete helmcoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Tips when writing charts
+
+- It is not necessary to `helm install`/`upgrade` to test a chart
+
+- If we just want to look at the generated YAML, use `helm template`:
+  ```bash
+  helm template ./my-chart
+  helm template release-name ./my-chart
+  ```
+
+- Of course, we can use `--set` and `--values` too
+
+- Note that this won't fully validate the YAML!
+
+  (e.g. if there is `apiVersion: klingon` it won't complain)
+
+- This can be used when trying things out
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Exploring the templating system
+
+Try to put something like this in a file in the `templates` directory:
+
+```yaml
+hello: {{ .Values.service.port }}
+comment: {{/* something completely.invalid !!!  */}}
+type: {{ .Values.service | typeOf | printf }}
+### print complex value
+{{ .Values.service | toYaml }}
+### indent it
+indented:
+{{ .Values.service | toYaml | indent 2 }}
+```
+
+Then run `helm template`.
+
+The result is not a valid YAML manifest, but this is a great debugging tool!
+
+???
+
+:EN:- Writing a basic Helm chart for the whole app
+:FR:- Écriture d'un *chart* Helm simplifié
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-creating-better-helm-charts
+class: title
+
+ Creating better Helm charts
+
+.nav[
+[Previous part](#toc-creating-a-basic-chart)
+|
+[Back to table of contents](#toc-part-7)
+|
+[Next part](#toc-charts-using-other-charts)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Creating better Helm charts
+
+- We are going to create a chart with the helper `helm create`
+
+- This will give us a chart implementing lots of Helm best practices
+
+  (labels, annotations, structure of the `values.yaml` file ...)
+
+- We will use that chart as a generic Helm chart
+
+- We will use it to deploy DockerCoins
+
+- Each component of DockerCoins will have its own *release*
+
+- In other words, we will "install" that Helm chart multiple times
+
+  (one time per component of DockerCoins)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Creating a generic chart
+
+- Rather than starting from scratch, we will use `helm create`
+
+- This will give us a basic chart that we will customize
+
+.lab[
+
+- Create a basic chart:
+  ```bash
+  cd ~
+  helm create helmcoins
+  ```
+
+]
+
+This creates a basic chart in the directory `helmcoins`.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## What's in the basic chart?
+
+- The basic chart will create a Deployment and a Service
+
+- Optionally, it will also include an Ingress
+
+- If we don't pass any values, it will deploy the `nginx` image
+
+- We can override many things in that chart
+
+- Let's try to deploy DockerCoins components with that chart!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Writing `values.yaml` for our components
+
+- We need to write one `values.yaml` file for each component
+
+  (hasher, redis, rng, webui, worker)
+
+- We will start with the `values.yaml` of the chart, and remove what we don't need
+
+- We will create 5 files:
+
+  hasher.yaml, redis.yaml, rng.yaml, webui.yaml, worker.yaml
+
+- In each file, we want to have:
+  ```yaml
+    image:
+      repository: IMAGE-REPOSITORY-NAME
+      tag: IMAGE-TAG
+  ```
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Getting started
+
+- For component X, we want to use the image dockercoins/X:v0.1
+
+  (for instance, for rng, we want to use the image dockercoins/rng:v0.1)
+
+- Exception: for redis, we want to use the official image redis:latest
+
+.lab[
+
+- Write YAML files for the 5 components, with the following model:
+  ```yaml
+    image:
+      repository: `IMAGE-REPOSITORY-NAME` (e.g. dockercoins/worker)
+      tag: `IMAGE-TAG` (e.g. v0.1)
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deploying DockerCoins components
+
+- For convenience, let's work in a separate namespace
+
+.lab[
+
+- Create a new namespace (if it doesn't already exist):
+  ```bash
+  kubectl create namespace helmcoins
+  ```
+
+- Switch to that namespace:
+  ```bash
+  kns helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deploying the chart
+
+- To install a chart, we can use the following command:
+  ```bash
+  helm install COMPONENT-NAME CHART-DIRECTORY
+  ```
+
+- We can also use the following command, which is *idempotent*:
+  ```bash
+  helm upgrade COMPONENT-NAME CHART-DIRECTORY --install
+  ```
+
+.lab[
+
+- Install the 5 components of DockerCoins:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins --install --values=$COMPONENT.yaml
+    done
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+class: extra-details
+
+## "Idempotent"
+
+- Idempotent = that can be applied multiple times without changing the result
+
+  (the word is commonly used in maths and computer science)
+
+- In this context, this means:
+
+  - if the action (installing the chart) wasn't done, do it
+
+  - if the action was already done, don't do anything
+
+- Ideally, when such an action fails, it can be retried safely
+
+  (as opposed to, e.g., installing a new release each time we run it)
+
+- Other example: `kubectl apply -f some-file.yaml`
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Checking what we've done
+
+- Let's see if DockerCoins is working!
+
+.lab[
+
+- Check the logs of the worker:
+  ```bash
+  kubectl logs -l app=worker
+  ```
+
+- Look at the resources that were created:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+There are *many* issues to fix!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Can't pull image
+
+- It looks like our images can't be found
+
+.lab[
+
+- Use `kubectl describe` on any of the pods in error
+
+]
+
+- We're trying to pull `rng:1.16.0` instead of `rng:v0.1`!
+
+- Where does that `1.16.0` tag come from?
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Inspecting our template
+
+- Let's look at the `templates/` directory
+
+  (and try to find the one generating the Deployment resource)
+
+.lab[
+
+- Show the structure of the `helmcoins` chart that Helm generated:
+  ```bash
+  tree helmcoins
+  ```
+
+- Check the file `helmcoins/templates/deployment.yaml`
+
+- Look for the `image:` parameter
+
+]
+
+*The image tag references `{{ .Chart.AppVersion }}`. Where does that come from?*
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## The `.Chart` variable
+
+- `.Chart` is a map corresponding to the values in `Chart.yaml`
+
+- Let's look for `AppVersion` there!
+
+.lab[
+
+- Check the file `helmcoins/Chart.yaml`
+
+- Look for the `appVersion:` parameter
+
+]
+
+(Yes, the case is different between the template and the Chart file.)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Using the correct tags
+
+- If we change `AppVersion` to `v0.1`, it will change for *all* deployments
+
+  (including redis)
+
+- Instead, let's change the *template* to use `{{ .Values.image.tag }}`
+
+  (to match what we've specified in our values YAML files)
+
+.lab[
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- Replace `{{ .Chart.AppVersion }}` with `{{ .Values.image.tag }}`
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Upgrading to use the new template
+
+- Technically, we just made a new version of the *chart*
+
+- To use the new template, we need to *upgrade* the release to use that chart
+
+.lab[
+
+- Upgrade all components:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins
+    done
+  ```
+
+- Check how our pods are doing:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+We should see all pods "Running". But ... not all of them are READY.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Troubleshooting readiness
+
+- `hasher`, `rng`, `webui` should show up as `1/1 READY`
+
+- But `redis` and `worker` should show up as `0/1 READY`
+
+- Why?
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Troubleshooting pods
+
+- The easiest way to troubleshoot pods is to look at *events*
+
+- We can look at all the events on the cluster (with `kubectl get events`)
+
+- Or we can use `kubectl describe` on the objects that have problems
+
+  (`kubectl describe` will retrieve the events related to the object)
+
+.lab[
+
+- Check the events for the redis pods:
+  ```bash
+  kubectl describe pod -l app.kubernetes.io/name=redis
+  ```
+
+]
+
+It's failing both its liveness and readiness probes!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Healthchecks
+
+- The default chart defines healthchecks doing HTTP requests on port 80
+
+- That won't work for redis and worker
+
+  (redis is not HTTP, and not on port 80; worker doesn't even listen)
+
+--
+
+- We could remove or comment out the healthchecks
+
+- We could also make them conditional
+
+- This sounds more interesting, let's do that!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Conditionals
+
+- We need to enclose the healthcheck block with:
+
+  `{{ if false }}` at the beginning (we can change the condition later)
+
+  `{{ end }}` at the end
+
+.lab[
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- Add `{{ if false }}` on the line before `livenessProbe`
+
+- Add `{{ end }}` after the `readinessProbe` section
+
+  (see next slide for details)
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+This is what the new YAML should look like (added lines in yellow):
+
+```yaml
+        ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+        `{{ if false }}`
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        `{{ end }}`
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+```
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Testing the new chart
+
+- We need to upgrade all the services again to use the new chart
+
+.lab[
+
+- Upgrade all components:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins
+    done
+  ```
+
+- Check how our pods are doing:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+Everything should now be running!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## What's next?
+
+- Is this working now?
+
+.lab[
+
+- Let's check the logs of the worker:
+  ```bash
+  stern worker
+  ```
+
+]
+
+This error might look familiar ... The worker can't resolve `redis`.
+
+Typically, that error means that the `redis` service doesn't exist.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Checking services
+
+- What about the services created by our chart?
+
+.lab[
+
+- Check the list of services:
+  ```bash
+  kubectl get services
+  ```
+
+]
+
+They are named `COMPONENT-helmcoins` instead of just `COMPONENT`.
+
+We need to change that!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Where do the service names come from?
+
+- Look at the YAML template used for the services
+
+- It should be using `{{ include "helmcoins.fullname" }}`
+
+- `include` indicates a *template block* defined somewhere else
+
+.lab[
+
+- Find where that `fullname` thing is defined:
+  ```bash
+  grep define.*fullname helmcoins/templates/*
+  ```
+
+]
+
+It should be in `_helpers.tpl`.
+
+We can look at the definition, but it's fairly complex ...
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Changing service names
+
+- Instead of that `{{ include }}` tag, let's use the name of the release
+
+- The name of the release is available as `{{ .Release.Name }}`
+
+.lab[
+
+- Edit `helmcoins/templates/service.yaml`
+
+- Replace the service name with `{{ .Release.Name }}`
+
+- Upgrade all the releases to use the new chart
+
+- Confirm that the services now have the right names
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Is it working now?
+
+- If we look at the worker logs, it appears that the worker is still stuck
+
+- What could be happening?
+
+--
+
+- The redis service is not on port 80!
+
+- Let's see how the port number is set
+
+- We need to look at both the *deployment* template and the *service* template
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Service template
+
+- In the service template, we have the following section:
+  ```yaml
+    ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  ```
+
+- `port` is the port on which the service is "listening"
+
+  (i.e. to which our code needs to connect)
+
+- `targetPort` is the port on which the pods are listening
+
+- The `name` is not important (it's OK if it's `http` even for non-HTTP traffic)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Setting the redis port
+
+- Let's add a `service.port` value to the redis release
+
+.lab[
+
+- Edit `redis.yaml` to add:
+  ```yaml
+    service:
+      port: 6379
+  ```
+
+- Apply the new values file:
+  ```bash
+  helm upgrade redis helmcoins --values=redis.yaml
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deployment template
+
+- If we look at the deployment template, we see this section:
+  ```yaml
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+  ```
+
+- The container port is hard-coded to 80
+
+- We'll change it to use the port number specified in the values
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Changing the deployment template
+
+.lab[  
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- The line with `containerPort` should be:
+  ```yaml
+  containerPort: {{ .Values.service.port }}
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Apply changes
+
+- Re-run the for loop to execute `helm upgrade` one more time
+
+- Check the worker logs
+
+- This time, it should be working!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Extra steps
+
+- We don't need to create a service for the worker
+
+- We can put the whole service block in a conditional
+
+  (this will require additional changes in other files referencing the service)
+
+- We can set the webui to be a NodePort service
+
+- We can change the number of workers with `replicaCount`
+
+- And much more!
+
+???
+
+:EN:- Writing better Helm charts for app components
+:FR:- Écriture de *charts* composant par composant
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/blue-containers.jpg)]
+
+---
+
+name: toc-charts-using-other-charts
+class: title
+
+ Charts using other charts
+
+.nav[
+[Previous part](#toc-creating-better-helm-charts)
+|
+[Back to table of contents](#toc-part-7)
+|
+[Next part](#toc-kustomize)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Charts using other charts
+
+- Helm charts can have *dependencies* on other charts
+
+- These dependencies will help us to share or reuse components
+
+  (so that we write and maintain less manifests, less templates, less code!)
+
+- As an example, we will use a community chart for Redis
+
+- This will help people who write charts, and people who use them
+
+- ... And potentially remove a lot of code! ✌️
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Redis in DockerCoins
+
+- In the DockerCoins demo app, we have 5 components:
+
+  - 2 internal webservices
+  - 1 worker
+  - 1 public web UI
+  - 1 Redis data store
+
+- Every component is running some custom code, except Redis
+
+- Every component is using a custom image, except Redis
+
+  (which is using the official `redis` image)
+
+- Could we use a standard chart for Redis?
+
+- Yes! Dependencies to the rescue!
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Adding our dependency
+
+- First, we will add the dependency to the `Chart.yaml` file
+
+- Then, we will ask Helm to download that dependency
+
+- We will also *lock* the dependency
+
+  (lock it to a specific version, to ensure reproducibility)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Declaring the dependency
+
+- First, let's edit `Chart.yaml`
+
+.lab[
+
+- In `Chart.yaml`, fill the `dependencies` section:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: 11.0.5
+        repository: https://charts.bitnami.com/bitnami
+        condition: redis.enabled
+  ```
+
+]
+
+Where do that `repository` and `version` come from?
+
+We're assuming here that we did our research,
+or that our resident Helm expert advised us to
+use Bitnami's Redis chart.
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Conditions
+
+- The `condition` field gives us a way to enable/disable the dependency:
+  ```yaml
+  conditions: redis.enabled
+  ```
+
+- Here, we can disable Redis with the Helm flag `--set redis.enabled=false`
+
+  (or set that value in a `values.yaml` file)
+
+- Of course, this is mostly useful for *optional* dependencies
+
+  (otherwise, the app ends up being broken since it'll miss a component)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Lock & Load!
+
+- After adding the dependency, we ask Helm to pin an download it
+
+.lab[
+
+- Ask Helm:
+  ```bash
+  helm dependency update
+  ```
+
+  (Or `helm dep up`)
+
+]
+
+- This wil create `Chart.lock` and fetch the dependency
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## What's `Chart.lock`?
+
+- This is a common pattern with dependencies
+
+  (see also: `Gemfile.lock`, `package.json.lock`, and many others)
+
+- This lets us define loose dependencies in `Chart.yaml`
+
+  (e.g. "version 11.whatever, but below 12")
+
+- But have the exact version used in `Chart.lock`
+
+- This ensures reproducible deployments
+
+- `Chart.lock` can (should!) be added to our source tree
+
+- `Chart.lock` can (should!) regularly be updated
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Loose dependencies
+
+- Here is an example of loose version requirement:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: ">=11, <12"
+        repository: https://charts.bitnami.com/bitnami
+  ```
+
+- This makes sure that we have the most recent version in the 11.x train
+
+- ... But without upgrading to version 12.x
+
+  (because it might be incompatible)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## `build` vs `update`
+
+- Helm actually offers two commands to manage dependencies:
+
+  `helm dependency build` = fetch dependencies listed in `Chart.lock`
+
+  `helm dependency update` = update `Chart.lock` (and run `build`)
+
+- When the dependency gets updated, we can/should:
+
+  - `helm dep up` (update `Chart.lock` and fetch new chart)
+
+  - test!
+
+  - if everything is fine, `git add Chart.lock` and commit
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Where are my dependencies?
+
+- Dependencies are downloaded to the `charts/` subdirectory
+
+- When they're downloaded, they stay in compressed format (`.tgz`)
+
+- Should we commit them to our code repository?
+
+- Pros:
+
+  - more resilient to internet/mirror failures/decomissioning
+
+- Cons:
+
+  - can add a lot of weight to the repo if charts are big or change often
+
+  - this can be solved by extra tools like git-lfs
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Dependency tuning
+
+- DockerCoins expects the `redis` Service to be named `redis`
+
+- Our Redis chart uses a different Service name by default
+
+- Service name is `{{ template "redis.fullname" . }}-master`
+
+- `redis.fullname` looks like this:
+  ```
+    {{- define "redis.fullname" -}}
+    {{- if .Values.fullnameOverride -}}
+    {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+    [...]
+    {{- end }}
+    {{- end }}
+  ```
+
+- How do we fix this?
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Setting dependency variables
+
+- If we set `fullnameOverride` to `redis`:
+
+  - the `{{ template ... }}` block will output `redis`
+
+  - the Service name will be `redis-master`
+
+- A parent chart can set values for its dependencies
+
+- For example, in the parent's `values.yaml`:
+
+  ```yaml
+    redis:                    # Name of the dependency
+      fullnameOverride: redis # Value passed to redis
+      cluster:                # Other values passed to redis
+        enabled: false
+  ```
+
+- User can also set variables with `--set=` or with `--values=`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Passing templates
+
+- We can even pass template `{{ include "template.name" }}`, but warning:
+
+   - need to be evaluated with the `tpl` function, on the child side
+
+   - evaluated in the context of the child, with no access to parent variables
+
+<!-- FIXME this probably deserves an example, but I can't imagine one right now 😅 -->
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Getting rid of the `-master`
+
+- Even if we set that `fullnameOverride`, the Service name will be `redis-master`
+
+- To remove the `-master` suffix, we need to edit the chart itself
+
+- To edit the Redis chart, we need to *embed* it in our own chart
+
+- We need to:
+
+  - decompress the chart
+
+  - adjust `Chart.yaml` accordingly
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Embedding a dependency
+
+.lab[
+
+- Decompress the chart:
+  ```yaml
+  cd charts
+  tar zxf redis-*.tgz
+  cd ..
+  ```
+
+- Edit `Chart.yaml` and update the `dependencies` section:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: '*' # No need to constraint version, from local files
+  ```
+
+- Run `helm dep update`
+
+]
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Updating the dependency
+
+- Now we can edit the Service name
+
+  (it should be in `charts/redis/templates/redis-master-svc.yaml`)
+
+- Then try to deploy the whole chart!
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Embedding a dependency multiple times
+
+- What if we need multiple copies of the same subchart?
+
+  (for instance, if we need two completely different Redis servers)
+
+- We can declare a dependency multiple times, and specify an `alias`:
+  ```yaml
+  dependencies:
+    - name: redis
+      version: '*'
+      alias: querycache
+    - name: redis
+      version: '*'
+      alias: celeryqueue
+  ```
+
+- `.Chart.Name` will be set to the `alias`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Determining if we're in a subchart
+
+- `.Chart.IsRoot` indicates if we're in the top-level chart or in a sub-chart
+
+- Useful in charts that are designed to be used standalone or as dependencies
+
+- Example: generic chart
+
+  - when used standalone (`.Chart.IsRoot` is `true`), use `.Release.Name`
+
+  - when used as a subchart e.g. with multiple aliases, use `.Chart.Name`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Compatibility with Helm 2
+
+- Chart `apiVersion: v1` is the only version supported by Helm 2
+
+- Chart v1 is also supported by Helm 3
+
+- Use v1 if you want to be compatible with Helm 2
+
+- Instead of `Chart.yaml`, dependencies are defined in `requirements.yaml`
+
+  (and we should commit `requirements.lock` instead of `Chart.lock`)
+
+???
+
+:EN:- Depending on other charts
+:EN:- Charts within charts
+
+:FR:- Dépendances entre charts
+:FR:- Un chart peut en cacher un autre
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/chinook-helicopter-container.jpg)]
+
+---
+
 name: toc-kustomize
 class: title
 
  Kustomize
 
 .nav[
-[Previous part](#toc-helm-secrets)
+[Previous part](#toc-charts-using-other-charts)
 |
 [Back to table of contents](#toc-part-7)
 |
@@ -15836,29 +16988,6 @@ configMapGenerator:
 .debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
 ---
 
-class: extra-details
-
-## Hashicorp go-getter
-
-- Some versions of Kustomize support additional forms for remote resources
-
-- Examples:
-
-  https://releases.hello.io/k/1.0.zip (remote archive)
-
-  https://releases.hello.io/k/1.0.zip//some-subdir (subdirectory in archive)
-
-- This relies on [hashicorp/go-getter](https://github.com/hashicorp/go-getter#url-format)
-
-- ... But it prevents Kustomize inclusion in `kubectl`
-
-- Avoid them!
-
-- See [kustomize#3578](https://github.com/kubernetes-sigs/kustomize/issues/3578) for details
-
-.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
----
-
 ## Managing `kustomization.yaml`
 
 - There are many ways to manage `kustomization.yaml` files, including:
@@ -15866,8 +16995,6 @@ class: extra-details
   - the `kustomize` CLI
 
   - opening the file with our favorite text editor
-
-  - ~~web wizards like [Replicated Ship](https://www.replicated.com/ship/)~~ (deprecated)
 
 - Let's see these in action!
 
@@ -15940,34 +17067,6 @@ General workflow:
 
 - The `kustomize` tool is still needed if we want to use `create`, `edit`, ...
 
-- Kubernetes 1.14 to 1.20 uses Kustomize 2.0.3
-
-- Kubernetes 1.21 jumps to Kustomize 4.1.2
-
-- Future versions should track Kustomize updates more closely
-
-.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
----
-
-class: extra-details
-
-## Differences between 2.0.3 and later
-
-- Kustomize 2.1 / 3.0 deprecates `bases` (they should be listed in `resources`)
-
-  (this means that "modern" `kustomize edit add resource` won't work with "old" `kubectl apply -k`)
-
-- Kustomize 2.1 introduces `replicas` and `envs`
-
-- Kustomize 3.1 introduces multipatches
-
-- Kustomize 3.2 introduce inline patches in `kustomization.yaml`
-
-- Kustomize 3.3 to 3.10 is mostly internal refactoring
-
-- Kustomize 4.0 drops go-getter again
-
-- Kustomize 4.1 allows patching kind and name
 
 .debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
 ---
