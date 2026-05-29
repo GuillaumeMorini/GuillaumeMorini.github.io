@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ARAS85  Orchestration et containers </title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="workshop.css">
-  </head>
-  <body>
-    <!--
+
+<head>
+  <title>ARAS85  Orchestration et containers </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="workshop.css">
+</head>
+
+<body>
+  <!--
     <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
       <h1 style="font-size: 3em;">Loading ...</h1>
       The slides should show up here. If they don't, it might be
       because you are accessing this file directly from your filesystem.
       It needs to be served from a web server. You can try this:
       <pre>
-        docker-compose up -d
+        docker compose up -d
         open http://localhost:8888/workshop.html # on MacOS
         xdg-open http://localhost:8888/workshop.html # on Linux
       </pre>
@@ -21,7 +23,7 @@
       go full screen (e.g. by hitting "f").
     </div>
     -->
-    <textarea id="source">class: title, in-person
+  <textarea id="source">class: title, in-person
 
 ARAS85 <br/>Orchestration et containers<br/><br /><br />
 
@@ -389,516 +391,524 @@ Password: **Something**
  M prepare-machine/README.md
  M prom/Dockerfile
  M prom/prometheus.yml
- M slides/Dockerfile
- M slides/README.md
- M slides/TODO
- M slides/_redirects
- M slides/appendcheck.py
- M slides/autopilot/package-lock.json
- M slides/autopilot/package.json
- M slides/autopilot/remote.js
- M slides/autopilot/requirements.txt
- M slides/containers/Advanced_Dockerfiles.md
- M slides/containers/Ambassadors.md
- M slides/containers/Application_Configuration.md
- M slides/containers/Background_Containers.md
- M slides/containers/Building_Images_Interactively.md
- M slides/containers/Building_Images_With_Dockerfiles.md
- M slides/containers/Buildkit.md
- M slides/containers/Cmd_And_Entrypoint.md
- M slides/containers/Compose_For_Dev_Stacks.md
- M slides/containers/Connecting_Containers_With_Links.md
- M slides/containers/Container_Engines.md
- M slides/containers/Container_Network_Model.md
- M slides/containers/Container_Networking_Basics.md
- M slides/containers/Containers_From_Scratch.md
- M slides/containers/Copy_On_Write.md
- M slides/containers/Copying_Files_During_Build.md
- M slides/containers/Docker_History.md
- M slides/containers/Docker_Machine.md
- M slides/containers/Docker_Overview.md
- M slides/containers/Dockerfile_Tips.md
- M slides/containers/Ecosystem.md
- M slides/containers/Exercise_Composefile.md
- M slides/containers/Exercise_Dockerfile_Advanced.md
- M slides/containers/Exercise_Dockerfile_Basic.md
- M slides/containers/First_Containers.md
- M slides/containers/Getting_Inside.md
- M slides/containers/Init_Systems.md
- M slides/containers/Initial_Images.md
- M slides/containers/Installing_Docker.md
- M slides/containers/Labels.md
- M slides/containers/Local_Development_Workflow.md
- M slides/containers/Logging.md
- M slides/containers/Multi_Stage_Builds.md
- M slides/containers/Namespaces_Cgroups.md
- M slides/containers/Naming_And_Inspecting.md
- M slides/containers/Network_Drivers.md
- M slides/containers/Orchestration_Overview.md
- M slides/containers/Pods_Anatomy.md
- M slides/containers/Publishing_To_Docker_Hub.md
- M slides/containers/Resource_Limits.md
- M slides/containers/Start_And_Attach.md
- M slides/containers/Training_Environment.md
- M slides/containers/Windows_Containers.md
- M slides/containers/Working_With_Volumes.md
- M slides/containers/intro.md
- M slides/containers/links.md
- M slides/count-slides.py
- M slides/docker-compose.yaml
- M slides/efrei.yml
- M slides/exercises/appconfig-brief.md
- M slides/exercises/appconfig-details.md
- M slides/exercises/dmuc-brief.md
- M slides/exercises/dmuc-details.md
- M slides/exercises/healthchecks-brief.md
- M slides/exercises/healthchecks-details.md
- M slides/exercises/helm-generic-chart-brief.md
- M slides/exercises/helm-generic-chart-details.md
- M slides/exercises/helm-umbrella-chart-brief.md
- M slides/exercises/helm-umbrella-chart-details.md
- M slides/exercises/ingress-controller-brief.md
- M slides/exercises/ingress-controller-details.md
- M slides/exercises/ingress-secret-policy-brief.md
- M slides/exercises/ingress-secret-policy-details.md
- M slides/exercises/k8sfundamentals-brief.md
- M slides/exercises/k8sfundamentals-details.md
- M slides/exercises/kyverno-ingress-domain-name-brief.md
- M slides/exercises/kyverno-ingress-domain-name-details.md
- M slides/exercises/localcluster-brief.md
- M slides/exercises/localcluster-details.md
- M slides/exercises/netpol-brief.md
- M slides/exercises/netpol-details.md
- M slides/exercises/polykuberbac-brief.md
- M slides/exercises/polykuberbac-details.md
- M slides/exercises/rbac-brief.md
- M slides/exercises/rbac-details.md
- M slides/exercises/remotecluster-brief.md
- M slides/exercises/remotecluster-details.md
- M slides/exercises/reqlim-brief.md
- M slides/exercises/reqlim-details.md
- M slides/exercises/sealed-secrets-brief.md
- M slides/exercises/sealed-secrets-details.md
- M slides/exercises/tf-nodepools-brief.md
- M slides/exercises/tf-nodepools-details.md
- M slides/exercises/yaml-brief.md
- M slides/exercises/yaml-details.md
- M slides/images/aj-containers.jpeg
- M slides/images/ambassador-diagram.odg
- M slides/images/ambassador-diagram.png
- M slides/images/api-request-lifecycle.png
- M slides/images/argocd_architecture.png
- M slides/images/argocdlogo.png
- M slides/images/bell-curve.jpg
- M slides/images/binpacking-1d-1.gif
- M slides/images/binpacking-1d-2.gif
- M slides/images/binpacking-2d.gif
- M slides/images/binpacking-3d.gif
- M slides/images/blackbelt.png
- M slides/images/canary-cage.jpg
- M slides/images/ci-cd-with-docker.png
- M slides/images/cisco.png
- M slides/images/cisco2.png
- M slides/images/composeapp.png
- M slides/images/composeup.gif
- M slides/images/conductor.jpg
- M slides/images/container-background.jpg
- M slides/images/container-layers.jpg
- M slides/images/containers-as-lightweight-vms.png
- M slides/images/control-planes/advanced-control-plane-split-events.svg
- M slides/images/control-planes/advanced-control-plane.svg
- M slides/images/control-planes/managed-kubernetes.svg
- M slides/images/control-planes/non-dedicated-stacked-nodes.svg
- M slides/images/control-planes/single-control-and-workers.svg
- M slides/images/control-planes/single-node-dev.svg
- M slides/images/control-planes/stacked-control-plane.svg
- M slides/images/delay-hasher.png
- M slides/images/delay-rng.png
- M slides/images/demo.jpg
- M slides/images/docker-ce-ee-lifecycle.png
- M slides/images/docker-con-15-logo.svg
- M slides/images/docker-ecosystem-2015.png
- M slides/images/docker-engine-architecture.svg
- M slides/images/docker-networking-default-bridge-linux.drawio
- M slides/images/docker-networking-default-bridge-linux.png
- M slides/images/docker-networking-networks-linux.drawio
- M slides/images/docker-networking-networks-linux.png
- M slides/images/docker-networking-networks-macwin.drawio
- M slides/images/docker-networking-networks-macwin.png
- M slides/images/docker-service-create.svg
- M slides/images/dockercoins-2015.png
- M slides/images/dockercoins-diagram.png
- M slides/images/dockercoins-diagram.xml
- M slides/images/dockercoins-multi-node.png
- M slides/images/dockercoins-single-node.png
- M slides/images/dockercoins.png
- M slides/images/dockerd-and-containerd.png
- M slides/images/dragons.jpg
- M slides/images/efrei.png
- M slides/images/end.jpg
- M slides/images/entrypoint.jpg
- M slides/images/equations.png
- M slides/images/extra-details.png
- M slides/images/fu-face.jpg
- M slides/images/getting-inside.png
- M slides/images/google_cloud.png
- M slides/images/grafana-add-graph.png
- M slides/images/grafana-add-source.png
- M slides/images/heroku-first-homepage.png
- M slides/images/hpa-v2-pa-latency.png
- M slides/images/hpa-v2-pa-pods.png
- M slides/images/ingress-lb.png
- M slides/images/ingress-routing-mesh.png
- M slides/images/k8s-arch1.png
- M slides/images/k8s-arch2.png
- M slides/images/k8s-arch3-thanks-weave.png
- M slides/images/k8s-arch4-thanks-luxas.png
- M slides/images/k8s-net-0-overview.svg
- M slides/images/k8s-net-1-pod-to-pod.svg
- M slides/images/k8s-net-2-pod-to-svc.svg
- M slides/images/k8s-net-3-netpol.svg
- M slides/images/k8s-net-4-overview.svg
- M slides/images/keyboard.png
- M slides/images/kibana.png
- M slides/images/kubectl-create-deployment-slideshow/01.svg
- M slides/images/kubectl-create-deployment-slideshow/02.svg
- M slides/images/kubectl-create-deployment-slideshow/03.svg
- M slides/images/kubectl-create-deployment-slideshow/04.svg
- M slides/images/kubectl-create-deployment-slideshow/05.svg
- M slides/images/kubectl-create-deployment-slideshow/06.svg
- M slides/images/kubectl-create-deployment-slideshow/07.svg
- M slides/images/kubectl-create-deployment-slideshow/08.svg
- M slides/images/kubectl-create-deployment-slideshow/09.svg
- M slides/images/kubectl-create-deployment-slideshow/10.svg
- M slides/images/kubectl-create-deployment-slideshow/11.svg
- M slides/images/kubectl-create-deployment-slideshow/12.svg
- M slides/images/kubectl-create-deployment-slideshow/13.svg
- M slides/images/kubectl-create-deployment-slideshow/14.svg
- M slides/images/kubectl-create-deployment-slideshow/15.svg
- M slides/images/kubectl-create-deployment-slideshow/16.svg
- M slides/images/kubectl-create-deployment-slideshow/17.svg
- M slides/images/kubectl-create-deployment-slideshow/18.svg
- M slides/images/kubectl-create-deployment-slideshow/19.svg
- M slides/images/kubernetes-services/11-CIP-by-addr.png
- M slides/images/kubernetes-services/12-CIP-by-name.png
- M slides/images/kubernetes-services/13-CIP-both.png
- M slides/images/kubernetes-services/14-CIP-headless.png
- M slides/images/kubernetes-services/31-LB-no-service.png
- M slides/images/kubernetes-services/32-LB-plus-cip.png
- M slides/images/kubernetes-services/33-LB-plus-lb.png
- M slides/images/kubernetes-services/34-LB-internal-traffic.png
- M slides/images/kubernetes-services/35-LB-pending.png
- M slides/images/kubernetes-services/36-LB-ccm.png
- M slides/images/kubernetes-services/37-LB-externalip.png
- M slides/images/kubernetes-services/38-LB-external-traffic.png
- M slides/images/kubernetes-services/39-LB-all-traffic.png
- M slides/images/kubernetes-services/41-NP-why.png
- M slides/images/kubernetes-services/42-NP-how-1.png
- M slides/images/kubernetes-services/43-NP-how-2.png
- M slides/images/kubernetes-services/44-NP-how-3.png
- M slides/images/kubernetes-services/45-NP-how-4.png
- M slides/images/kubernetes-services/46-NP-how-5.png
- M slides/images/kubernetes-services/47-NP-only.png
- M slides/images/kubernetes-services/61-ING.png
- M slides/images/kubernetes-services/62-ING-path.png
- M slides/images/kubernetes-services/63-ING-policy.png
- M slides/images/kubernetes-services/64-ING-nolocal.png
- M slides/images/kubernetes-services/README.md
- M slides/images/kubernetes-services/kubernetes-services.drawio
- M slides/images/kubernetes_pods.drawio
- M slides/images/kubernetes_pods.svg
- M slides/images/mario-red-shell.png
- M slides/images/psa.jpeg
- M slides/images/pwd-icons.png
- M slides/images/qrcode_docs.google.com.png
- M slides/images/registry-frontends.png
- M slides/images/service-discovery.png
- M slides/images/sharing-layers.jpg
- M slides/images/shipping-indsutry-results.png
- M slides/images/shipping-industry-problem.png
- M slides/images/shipping-industry-solution.png
- M slides/images/shipping-matrix-from-hell.png
- M slides/images/shipping-matrix-solved.png
- M slides/images/shipping-software-problem.png
- M slides/images/shipping-software-solution.png
- M slides/images/slack-qr-code.png
- M slides/images/startrek-federation.jpg
- M slides/images/swarm-mode.svg
- M slides/images/swarm.png
- M slides/images/tangram.gif
- M slides/images/tesla.jpg
- M slides/images/tetris-1.png
- M slides/images/tetris-2.gif
- M slides/images/tetris-3.png
- M slides/images/title-advanced-dockerfiles.jpg
- M slides/images/title-ambassador.jpg
- M slides/images/title-background-containers.jpg
- M slides/images/title-building-docker-images-with-a-dockerfile.jpg
- M slides/images/title-connecting-containers-with-links.gif
- M slides/images/title-container-networking-basics.jpg
- M slides/images/title-copying-files-during-build.jpg
- M slides/images/title-installing-docker.jpg
- M slides/images/title-local-development-workflow-with-docker.jpg
- M slides/images/title-naming-and-inspecting-containers.jpg
- M slides/images/title-our-first-containers.jpg
- M slides/images/title-our-training-environment.jpg
- M slides/images/title-the-container-network-model.jpg
- M slides/images/title-understanding-docker-images.png
- M slides/images/title-working-with-volumes.jpg
- M slides/images/traffic-graph.png
- M slides/images/trainingwheels-error.png
- M slides/images/trainingwheels-ok.png
- M slides/images/trollface.png
- M slides/images/vmware.png
- M slides/images/warning.png
- M slides/images/webapp-in-blue.png
- M slides/images/webapp-in-red.png
- M slides/images/welcome-to-nginx.png
- M slides/images/windows-containers.jpg
- M slides/images/you-get-a-cluster.jpg
- M slides/images/you-get-five-vms.jpg
- M slides/index.css
- M slides/index.py
- M slides/index.yaml
- M slides/interstitials.txt
- M slides/intro-fullday.yml
- M slides/intro-selfpaced.yml
- M slides/intro-twodays.yml
- M slides/k8s/access-eks-cluster.md
- M slides/k8s/accessinternal.md
- M slides/k8s/admission.md
- M slides/k8s/aggregation-layer.md
- M slides/k8s/apilb.md
- M slides/k8s/apiserver-deepdive.md
- M slides/k8s/architecture.md
- M slides/k8s/argocd.md
- M slides/k8s/authn-authz.md
- M slides/k8s/aws-eks.md
- M slides/k8s/batch-jobs.md
- M slides/k8s/bento-cnpg.md
- M slides/k8s/bento-hpa.md
- M slides/k8s/bento-intro.md
- M slides/k8s/bento-rmq.md
- M slides/k8s/bootstrap.md
- M slides/k8s/build-with-docker.md
- M slides/k8s/build-with-kaniko.md
- M slides/k8s/buildshiprun-dockerhub.md
- M slides/k8s/buildshiprun-selfhosted.md
- M slides/k8s/cainjector.md
- M slides/k8s/cert-manager.md
- M slides/k8s/cloud-controller-manager.md
- M slides/k8s/cluster-autoscaler.md
- M slides/k8s/cluster-backup.md
- M slides/k8s/cluster-sizing.md
- M slides/k8s/cluster-upgrade.md
- M slides/k8s/cni-internals.md
- M slides/k8s/cni.md
- M slides/k8s/concepts-k8s.md
- M slides/k8s/configuration.md
- M slides/k8s/consul.md
- M slides/k8s/control-plane-auth.md
- M slides/k8s/crd.md
- M slides/k8s/csr-api.md
- M slides/k8s/daemonset.md
- M slides/k8s/dashboard.md
- M slides/k8s/declarative.md
- M slides/k8s/demo-apps.md
- M slides/k8s/deploymentslideshow.md
- M slides/k8s/disruptions.md
- M slides/k8s/dmuc-easy.md
- M slides/k8s/dmuc-hard.md
- M slides/k8s/dmuc-medium.md
- M slides/k8s/eck.md
- M slides/k8s/events.md
- M slides/k8s/exercise-configmap.md
- M slides/k8s/exercise-helm.md
- M slides/k8s/exercise-wordsmith.md
- M slides/k8s/exercise-yaml.md
- M slides/k8s/extending-api.md
- M slides/k8s/finalizers.md
- M slides/k8s/flux.md
- M slides/k8s/gitlab.md
- M slides/k8s/gitopstree.txt
- M slides/k8s/gitworkflows.md
- M slides/k8s/handson-mlops.md
- M slides/k8s/healthchecks-more.md
- M slides/k8s/healthchecks.md
- M slides/k8s/helm-chart-format.md
- M slides/k8s/helm-create-basic-chart.md
- M slides/k8s/helm-create-better-chart.md
- M slides/k8s/helm-dependencies.md
- M slides/k8s/helm-intro.md
- M slides/k8s/helm-secrets.md
- M slides/k8s/helm-values-schema-validation.md
- M slides/k8s/helmfile.md
- M slides/k8s/horizontal-pod-autoscaler.md
- M slides/k8s/hpa-v2.md
- M slides/k8s/ingress-advanced.md
- M slides/k8s/ingress-canary.md
- M slides/k8s/ingress-tls.md
- M slides/k8s/ingress.md
- M slides/k8s/interco.md
- M slides/k8s/internal-apis.md
- M slides/k8s/intro.md
- M slides/k8s/k9s.md
- M slides/k8s/kubebuilder.md
- M slides/k8s/kubectl-logs.md
- M slides/k8s/kubectl-run.md
- M slides/k8s/kubectlexpose.md
- M slides/k8s/kubectlget.md
- M slides/k8s/kubectlproxy.md
- M slides/k8s/kubectlscale.md
- M slides/k8s/kubenet.md
- M slides/k8s/kubercoins.md
- M slides/k8s/kustomize.md
- M slides/k8s/kyverno.md
- M slides/k8s/labels-annotations.md
- M slides/k8s/lastwords.md
- M slides/k8s/links-bridget.md
- M slides/k8s/links.md
- M slides/k8s/localkubeconfig.md
- M slides/k8s/logs-centralized.md
- M slides/k8s/logs-cli.md
- M slides/k8s/metrics-server.md
- M slides/k8s/mlops-headsup.md
- M slides/k8s/multinode.md
- M slides/k8s/namespaces.md
- M slides/k8s/netpol.md
- M slides/k8s/ollama-intro.md
- M slides/k8s/ollama-metrics.md
- M slides/k8s/ollama-reqlim.md
- M slides/k8s/openebs.md
- M slides/k8s/openid-connect.md
- M slides/k8s/operators-design.md
- M slides/k8s/operators-example.md
- M slides/k8s/operators.md
- M slides/k8s/ourapponkube.md
- M slides/k8s/owners-and-dependents.md
- M slides/k8s/pod-security-admission.md
- M slides/k8s/pod-security-intro.md
- M slides/k8s/pod-security-policies.md
- M slides/k8s/portworx.md
- M slides/k8s/prereqs-advanced.md
- M slides/k8s/prometheus-stack.md
- M slides/k8s/prometheus.md
- M slides/k8s/pv-pvc-sc.md
- M slides/k8s/queue-architecture.md
- M slides/k8s/record.md
- M slides/k8s/resource-limits.md
- M slides/k8s/rollout.md
- M slides/k8s/scalingdockercoins.md
- M slides/k8s/sealed-secrets.md
- M slides/k8s/secrets.md
- M slides/k8s/service-types.md
- M slides/k8s/setup-devel.md
- M slides/k8s/setup-managed.md
- M slides/k8s/setup-overview.md
- M slides/k8s/setup-selfhosted.md
- M slides/k8s/shippingimages.md
- M slides/k8s/stateful-failover.md
- M slides/k8s/statefulsets.md
- M slides/k8s/staticpods.md
- M slides/k8s/tilt.md
- M slides/k8s/user-cert.md
- M slides/k8s/versions-k8s.md
- M slides/k8s/volume-claim-templates.md
- M slides/k8s/volumes.md
- M slides/k8s/whatsnext.md
- M slides/k8s/yamldeploy.md
- M slides/k8s/ytt.md
- M slides/kadm-fullday.yml
- M slides/kadm-twodays.yml
- M slides/kube-adv.yml
- M slides/kube-fullday.yml
- M slides/kube-halfday.yml
- M slides/kube-selfpaced.yml
- M slides/kube-twodays.yml
- M slides/logistics-bridget.md
- M slides/logistics-template.md
- T slides/logistics.md
- M slides/markmaker.py
- M slides/mlops.yml
- M slides/qrcode.html
- M slides/remark-0.14.min.js
- M slides/remark.min.js
- M slides/requirements.txt
- M slides/runtime.txt
- M slides/shared/about-slides.md
- M slides/shared/chat-room-im.md
- M slides/shared/chat-room-slack.md
- M slides/shared/chat-room-teams.md
- M slides/shared/chat-room-twitch.md
- M slides/shared/chat-room-zoom-meeting.md
- M slides/shared/chat-room-zoom-webinar.md
- M slides/shared/composedown.md
- M slides/shared/composescale.md
- M slides/shared/connecting.md
- M slides/shared/contact.md
- M slides/shared/declarative.md
- M slides/shared/handson.md
- M slides/shared/hastyconclusions.md
- M slides/shared/prereqs.md
- M slides/shared/pwd.md
- M slides/shared/qrcode.md
- M slides/shared/sampleapp.md
- M slides/shared/thankyou.md
- M slides/shared/title.md
- M slides/shared/toc.md
- M slides/shared/webssh.md
- M slides/shared/yaml.md
- M slides/swarm-fullday.yml
- M slides/swarm-halfday.yml
- M slides/swarm-selfpaced.yml
- M slides/swarm-video.yml
- M slides/swarm/apiscope.md
- M slides/swarm/btp-manual.md
- M slides/swarm/cicd.md
- M slides/swarm/creatingswarm.md
- M slides/swarm/encryptionatrest.md
- M slides/swarm/extratips.md
- M slides/swarm/firstservice.md
- M slides/swarm/gui.md
- M slides/swarm/healthchecks.md
- M slides/swarm/hostingregistry.md
- M slides/swarm/intro.md
- M slides/swarm/ipsec.md
- M slides/swarm/leastprivilege.md
- M slides/swarm/links.md
- M slides/swarm/logging.md
- M slides/swarm/machine.md
- M slides/swarm/metrics.md
- M slides/swarm/morenodes.md
- M slides/swarm/namespaces.md
- M slides/swarm/netshoot.md
- M slides/swarm/nodeinfo.md
- M slides/swarm/operatingswarm.md
- M slides/swarm/ourapponswarm.md
- M slides/swarm/pickregistry.md
- M slides/swarm/rollingupdates.md
- M slides/swarm/secrets.md
- M slides/swarm/security.md
- M slides/swarm/stacks.md
- M slides/swarm/stateful.md
- M slides/swarm/swarmkit.md
- M slides/swarm/swarmmode.md
- M slides/swarm/swarmnbt.md
- M slides/swarm/swarmready.md
- M slides/swarm/swarmtools.md
- M slides/swarm/testingregistry.md
- M slides/swarm/updatingservices.md
- M slides/swarm/versions.md
- M slides/terraform/intro.md
- M slides/terraform/kubernetes.md
- M slides/terraform/networking-gke.md
- M slides/terraform/nodepools-gke.md
- M slides/terraform/nodepools.md
- M slides/terraform/quickstart-gke.md
- M slides/terraform/quickstart.md
- M slides/terraform/state.md
- M slides/terraform/variables.md
- M slides/words
- M slides/workshop.css
- M slides/workshop.html
+M  slides/Dockerfile
+M  slides/README.md
+M  slides/TODO
+A  slides/TODO.md
+M  slides/_redirects
+M  slides/appendcheck.py
+M  slides/autopilot/package-lock.json
+M  slides/autopilot/package.json
+M  slides/autopilot/remote.js
+M  slides/autopilot/requirements.txt
+M  slides/containers/Advanced_Dockerfiles.md
+M  slides/containers/Ambassadors.md
+M  slides/containers/Application_Configuration.md
+M  slides/containers/Background_Containers.md
+M  slides/containers/Building_Images_Interactively.md
+M  slides/containers/Building_Images_With_Dockerfiles.md
+M  slides/containers/Buildkit.md
+M  slides/containers/Cmd_And_Entrypoint.md
+M  slides/containers/Compose_For_Dev_Stacks.md
+M  slides/containers/Connecting_Containers_With_Links.md
+M  slides/containers/Container_Engines.md
+M  slides/containers/Container_Network_Model.md
+M  slides/containers/Container_Networking_Basics.md
+M  slides/containers/Containers_From_Scratch.md
+M  slides/containers/Copy_On_Write.md
+M  slides/containers/Copying_Files_During_Build.md
+M  slides/containers/Docker_History.md
+M  slides/containers/Docker_Machine.md
+M  slides/containers/Docker_Overview.md
+M  slides/containers/Dockerfile_Tips.md
+M  slides/containers/Ecosystem.md
+M  slides/containers/Exercise_Composefile.md
+M  slides/containers/Exercise_Dockerfile_Advanced.md
+M  slides/containers/Exercise_Dockerfile_Basic.md
+M  slides/containers/First_Containers.md
+M  slides/containers/Getting_Inside.md
+M  slides/containers/Init_Systems.md
+M  slides/containers/Initial_Images.md
+M  slides/containers/Installing_Docker.md
+M  slides/containers/Labels.md
+M  slides/containers/Local_Development_Workflow.md
+M  slides/containers/Logging.md
+M  slides/containers/Multi_Stage_Builds.md
+M  slides/containers/Namespaces_Cgroups.md
+M  slides/containers/Naming_And_Inspecting.md
+M  slides/containers/Network_Drivers.md
+M  slides/containers/Orchestration_Overview.md
+M  slides/containers/Pods_Anatomy.md
+M  slides/containers/Publishing_To_Docker_Hub.md
+M  slides/containers/Resource_Limits.md
+M  slides/containers/Start_And_Attach.md
+M  slides/containers/Training_Environment.md
+M  slides/containers/Windows_Containers.md
+M  slides/containers/Working_With_Volumes.md
+A  slides/containers/dockercoins.md
+M  slides/containers/intro.md
+M  slides/containers/links.md
+M  slides/count-slides.py
+M  slides/docker-compose.yaml
+M  slides/efrei.yml
+A  slides/efrei_day_1.yml
+A  slides/efrei_day_2.yml
+A  slides/efrei_day_3.yml
+A  slides/efrei_day_4.yml
+M  slides/exercises/appconfig-brief.md
+M  slides/exercises/appconfig-details.md
+M  slides/exercises/dmuc-brief.md
+M  slides/exercises/dmuc-details.md
+M  slides/exercises/healthchecks-brief.md
+M  slides/exercises/healthchecks-details.md
+M  slides/exercises/helm-generic-chart-brief.md
+M  slides/exercises/helm-generic-chart-details.md
+M  slides/exercises/helm-umbrella-chart-brief.md
+M  slides/exercises/helm-umbrella-chart-details.md
+M  slides/exercises/ingress-controller-brief.md
+M  slides/exercises/ingress-controller-details.md
+M  slides/exercises/ingress-secret-policy-brief.md
+M  slides/exercises/ingress-secret-policy-details.md
+M  slides/exercises/k8sfundamentals-brief.md
+M  slides/exercises/k8sfundamentals-details.md
+M  slides/exercises/kyverno-ingress-domain-name-brief.md
+M  slides/exercises/kyverno-ingress-domain-name-details.md
+M  slides/exercises/localcluster-brief.md
+M  slides/exercises/localcluster-details.md
+M  slides/exercises/netpol-brief.md
+M  slides/exercises/netpol-details.md
+M  slides/exercises/polykuberbac-brief.md
+M  slides/exercises/polykuberbac-details.md
+M  slides/exercises/rbac-brief.md
+M  slides/exercises/rbac-details.md
+M  slides/exercises/remotecluster-brief.md
+M  slides/exercises/remotecluster-details.md
+M  slides/exercises/reqlim-brief.md
+M  slides/exercises/reqlim-details.md
+M  slides/exercises/sealed-secrets-brief.md
+M  slides/exercises/sealed-secrets-details.md
+M  slides/exercises/tf-nodepools-brief.md
+M  slides/exercises/tf-nodepools-details.md
+M  slides/exercises/yaml-brief.md
+M  slides/exercises/yaml-details.md
+M  slides/images/aj-containers.jpeg
+M  slides/images/ambassador-diagram.odg
+M  slides/images/ambassador-diagram.png
+M  slides/images/api-request-lifecycle.png
+M  slides/images/argocd_architecture.png
+M  slides/images/argocdlogo.png
+M  slides/images/bell-curve.jpg
+M  slides/images/binpacking-1d-1.gif
+M  slides/images/binpacking-1d-2.gif
+M  slides/images/binpacking-2d.gif
+M  slides/images/binpacking-3d.gif
+M  slides/images/blackbelt.png
+M  slides/images/canary-cage.jpg
+M  slides/images/ci-cd-with-docker.png
+M  slides/images/cisco.png
+M  slides/images/cisco2.png
+M  slides/images/composeapp.png
+M  slides/images/composeup.gif
+M  slides/images/conductor.jpg
+A  slides/images/congrats.gif
+M  slides/images/container-background.jpg
+M  slides/images/container-layers.jpg
+M  slides/images/containers-as-lightweight-vms.png
+M  slides/images/control-planes/advanced-control-plane-split-events.svg
+M  slides/images/control-planes/advanced-control-plane.svg
+M  slides/images/control-planes/managed-kubernetes.svg
+M  slides/images/control-planes/non-dedicated-stacked-nodes.svg
+M  slides/images/control-planes/single-control-and-workers.svg
+M  slides/images/control-planes/single-node-dev.svg
+M  slides/images/control-planes/stacked-control-plane.svg
+M  slides/images/delay-hasher.png
+M  slides/images/delay-rng.png
+M  slides/images/demo.jpg
+M  slides/images/docker-ce-ee-lifecycle.png
+M  slides/images/docker-con-15-logo.svg
+M  slides/images/docker-ecosystem-2015.png
+M  slides/images/docker-engine-architecture.svg
+M  slides/images/docker-networking-default-bridge-linux.drawio
+M  slides/images/docker-networking-default-bridge-linux.png
+M  slides/images/docker-networking-networks-linux.drawio
+M  slides/images/docker-networking-networks-linux.png
+M  slides/images/docker-networking-networks-macwin.drawio
+M  slides/images/docker-networking-networks-macwin.png
+M  slides/images/docker-service-create.svg
+M  slides/images/dockercoins-2015.png
+M  slides/images/dockercoins-diagram.png
+M  slides/images/dockercoins-diagram.xml
+M  slides/images/dockercoins-multi-node.png
+M  slides/images/dockercoins-single-node.png
+M  slides/images/dockercoins.png
+M  slides/images/dockerd-and-containerd.png
+M  slides/images/dragons.jpg
+M  slides/images/efrei.png
+M  slides/images/end.jpg
+M  slides/images/entrypoint.jpg
+M  slides/images/equations.png
+M  slides/images/extra-details.png
+A  slides/images/floor_is_yours.jpg
+M  slides/images/fu-face.jpg
+M  slides/images/getting-inside.png
+M  slides/images/google_cloud.png
+M  slides/images/grafana-add-graph.png
+M  slides/images/grafana-add-source.png
+M  slides/images/heroku-first-homepage.png
+M  slides/images/hpa-v2-pa-latency.png
+M  slides/images/hpa-v2-pa-pods.png
+M  slides/images/ingress-lb.png
+M  slides/images/ingress-routing-mesh.png
+M  slides/images/k8s-arch1.png
+M  slides/images/k8s-arch2.png
+M  slides/images/k8s-arch3-thanks-weave.png
+M  slides/images/k8s-arch4-thanks-luxas.png
+M  slides/images/k8s-net-0-overview.svg
+M  slides/images/k8s-net-1-pod-to-pod.svg
+M  slides/images/k8s-net-2-pod-to-svc.svg
+M  slides/images/k8s-net-3-netpol.svg
+M  slides/images/k8s-net-4-overview.svg
+M  slides/images/keyboard.png
+M  slides/images/kibana.png
+M  slides/images/kubectl-create-deployment-slideshow/01.svg
+M  slides/images/kubectl-create-deployment-slideshow/02.svg
+M  slides/images/kubectl-create-deployment-slideshow/03.svg
+M  slides/images/kubectl-create-deployment-slideshow/04.svg
+M  slides/images/kubectl-create-deployment-slideshow/05.svg
+M  slides/images/kubectl-create-deployment-slideshow/06.svg
+M  slides/images/kubectl-create-deployment-slideshow/07.svg
+M  slides/images/kubectl-create-deployment-slideshow/08.svg
+M  slides/images/kubectl-create-deployment-slideshow/09.svg
+M  slides/images/kubectl-create-deployment-slideshow/10.svg
+M  slides/images/kubectl-create-deployment-slideshow/11.svg
+M  slides/images/kubectl-create-deployment-slideshow/12.svg
+M  slides/images/kubectl-create-deployment-slideshow/13.svg
+M  slides/images/kubectl-create-deployment-slideshow/14.svg
+M  slides/images/kubectl-create-deployment-slideshow/15.svg
+M  slides/images/kubectl-create-deployment-slideshow/16.svg
+M  slides/images/kubectl-create-deployment-slideshow/17.svg
+M  slides/images/kubectl-create-deployment-slideshow/18.svg
+M  slides/images/kubectl-create-deployment-slideshow/19.svg
+M  slides/images/kubernetes-services/11-CIP-by-addr.png
+M  slides/images/kubernetes-services/12-CIP-by-name.png
+M  slides/images/kubernetes-services/13-CIP-both.png
+M  slides/images/kubernetes-services/14-CIP-headless.png
+M  slides/images/kubernetes-services/31-LB-no-service.png
+M  slides/images/kubernetes-services/32-LB-plus-cip.png
+M  slides/images/kubernetes-services/33-LB-plus-lb.png
+M  slides/images/kubernetes-services/34-LB-internal-traffic.png
+M  slides/images/kubernetes-services/35-LB-pending.png
+M  slides/images/kubernetes-services/36-LB-ccm.png
+M  slides/images/kubernetes-services/37-LB-externalip.png
+M  slides/images/kubernetes-services/38-LB-external-traffic.png
+M  slides/images/kubernetes-services/39-LB-all-traffic.png
+M  slides/images/kubernetes-services/41-NP-why.png
+M  slides/images/kubernetes-services/42-NP-how-1.png
+M  slides/images/kubernetes-services/43-NP-how-2.png
+M  slides/images/kubernetes-services/44-NP-how-3.png
+M  slides/images/kubernetes-services/45-NP-how-4.png
+M  slides/images/kubernetes-services/46-NP-how-5.png
+M  slides/images/kubernetes-services/47-NP-only.png
+M  slides/images/kubernetes-services/61-ING.png
+M  slides/images/kubernetes-services/62-ING-path.png
+M  slides/images/kubernetes-services/63-ING-policy.png
+M  slides/images/kubernetes-services/64-ING-nolocal.png
+M  slides/images/kubernetes-services/README.md
+M  slides/images/kubernetes-services/kubernetes-services.drawio
+M  slides/images/kubernetes_pods.drawio
+M  slides/images/kubernetes_pods.svg
+M  slides/images/mario-red-shell.png
+M  slides/images/psa.jpeg
+M  slides/images/pwd-icons.png
+M  slides/images/qrcode_docs.google.com.png
+M  slides/images/registry-frontends.png
+M  slides/images/service-discovery.png
+M  slides/images/sharing-layers.jpg
+M  slides/images/shipping-indsutry-results.png
+M  slides/images/shipping-industry-problem.png
+M  slides/images/shipping-industry-solution.png
+M  slides/images/shipping-matrix-from-hell.png
+M  slides/images/shipping-matrix-solved.png
+M  slides/images/shipping-software-problem.png
+M  slides/images/shipping-software-solution.png
+M  slides/images/slack-qr-code.png
+M  slides/images/startrek-federation.jpg
+M  slides/images/swarm-mode.svg
+M  slides/images/swarm.png
+M  slides/images/tangram.gif
+M  slides/images/tesla.jpg
+M  slides/images/tetris-1.png
+M  slides/images/tetris-2.gif
+M  slides/images/tetris-3.png
+M  slides/images/title-advanced-dockerfiles.jpg
+M  slides/images/title-ambassador.jpg
+M  slides/images/title-background-containers.jpg
+M  slides/images/title-building-docker-images-with-a-dockerfile.jpg
+M  slides/images/title-connecting-containers-with-links.gif
+M  slides/images/title-container-networking-basics.jpg
+M  slides/images/title-copying-files-during-build.jpg
+M  slides/images/title-installing-docker.jpg
+M  slides/images/title-local-development-workflow-with-docker.jpg
+M  slides/images/title-naming-and-inspecting-containers.jpg
+M  slides/images/title-our-first-containers.jpg
+M  slides/images/title-our-training-environment.jpg
+M  slides/images/title-the-container-network-model.jpg
+M  slides/images/title-understanding-docker-images.png
+M  slides/images/title-working-with-volumes.jpg
+M  slides/images/traffic-graph.png
+M  slides/images/trainingwheels-error.png
+M  slides/images/trainingwheels-ok.png
+M  slides/images/trollface.png
+M  slides/images/vmware.png
+M  slides/images/warning.png
+M  slides/images/webapp-in-blue.png
+M  slides/images/webapp-in-red.png
+M  slides/images/welcome-to-nginx.png
+M  slides/images/windows-containers.jpg
+M  slides/images/you-get-a-cluster.jpg
+M  slides/images/you-get-five-vms.jpg
+M  slides/index.css
+M  slides/index.py
+M  slides/index.yaml
+M  slides/interstitials.txt
+M  slides/intro-fullday.yml
+M  slides/intro-selfpaced.yml
+M  slides/intro-twodays.yml
+M  slides/k8s/access-eks-cluster.md
+M  slides/k8s/accessinternal.md
+M  slides/k8s/admission.md
+M  slides/k8s/aggregation-layer.md
+M  slides/k8s/apilb.md
+M  slides/k8s/apiserver-deepdive.md
+M  slides/k8s/architecture.md
+M  slides/k8s/argocd.md
+M  slides/k8s/authn-authz.md
+M  slides/k8s/aws-eks.md
+M  slides/k8s/batch-jobs.md
+M  slides/k8s/bento-cnpg.md
+M  slides/k8s/bento-hpa.md
+M  slides/k8s/bento-intro.md
+M  slides/k8s/bento-rmq.md
+M  slides/k8s/bootstrap.md
+M  slides/k8s/build-with-docker.md
+M  slides/k8s/build-with-kaniko.md
+M  slides/k8s/buildshiprun-dockerhub.md
+M  slides/k8s/buildshiprun-selfhosted.md
+M  slides/k8s/cainjector.md
+M  slides/k8s/cert-manager.md
+M  slides/k8s/cloud-controller-manager.md
+M  slides/k8s/cluster-autoscaler.md
+M  slides/k8s/cluster-backup.md
+M  slides/k8s/cluster-sizing.md
+M  slides/k8s/cluster-upgrade.md
+M  slides/k8s/cni-internals.md
+M  slides/k8s/cni.md
+M  slides/k8s/concepts-k8s.md
+M  slides/k8s/configuration.md
+M  slides/k8s/consul.md
+M  slides/k8s/control-plane-auth.md
+M  slides/k8s/crd.md
+M  slides/k8s/csr-api.md
+M  slides/k8s/daemonset.md
+M  slides/k8s/dashboard.md
+M  slides/k8s/declarative.md
+M  slides/k8s/demo-apps.md
+M  slides/k8s/deploymentslideshow.md
+M  slides/k8s/disruptions.md
+M  slides/k8s/dmuc-easy.md
+M  slides/k8s/dmuc-hard.md
+M  slides/k8s/dmuc-medium.md
+M  slides/k8s/eck.md
+M  slides/k8s/events.md
+M  slides/k8s/exercise-configmap.md
+M  slides/k8s/exercise-helm.md
+M  slides/k8s/exercise-wordsmith.md
+M  slides/k8s/exercise-yaml.md
+M  slides/k8s/extending-api.md
+M  slides/k8s/finalizers.md
+M  slides/k8s/flux.md
+M  slides/k8s/gitlab.md
+M  slides/k8s/gitopstree.txt
+M  slides/k8s/gitworkflows.md
+M  slides/k8s/handson-mlops.md
+M  slides/k8s/healthchecks-more.md
+M  slides/k8s/healthchecks.md
+M  slides/k8s/helm-chart-format.md
+M  slides/k8s/helm-create-basic-chart.md
+M  slides/k8s/helm-create-better-chart.md
+M  slides/k8s/helm-dependencies.md
+M  slides/k8s/helm-intro.md
+M  slides/k8s/helm-secrets.md
+M  slides/k8s/helm-values-schema-validation.md
+M  slides/k8s/helmfile.md
+M  slides/k8s/horizontal-pod-autoscaler.md
+M  slides/k8s/hpa-v2.md
+M  slides/k8s/ingress-advanced.md
+M  slides/k8s/ingress-canary.md
+M  slides/k8s/ingress-tls.md
+M  slides/k8s/ingress.md
+M  slides/k8s/interco.md
+M  slides/k8s/internal-apis.md
+M  slides/k8s/intro.md
+M  slides/k8s/k9s.md
+M  slides/k8s/kubebuilder.md
+M  slides/k8s/kubectl-logs.md
+M  slides/k8s/kubectl-run.md
+M  slides/k8s/kubectlexpose.md
+M  slides/k8s/kubectlget.md
+M  slides/k8s/kubectlproxy.md
+M  slides/k8s/kubectlscale.md
+M  slides/k8s/kubenet.md
+M  slides/k8s/kubercoins.md
+MM slides/k8s/kustomize.md
+M  slides/k8s/kyverno.md
+M  slides/k8s/labels-annotations.md
+M  slides/k8s/lastwords.md
+M  slides/k8s/links-bridget.md
+M  slides/k8s/links.md
+M  slides/k8s/localkubeconfig.md
+M  slides/k8s/logs-centralized.md
+M  slides/k8s/logs-cli.md
+M  slides/k8s/metrics-server.md
+M  slides/k8s/mlops-headsup.md
+M  slides/k8s/multinode.md
+M  slides/k8s/namespaces.md
+MM slides/k8s/netpol.md
+M  slides/k8s/ollama-intro.md
+M  slides/k8s/ollama-metrics.md
+M  slides/k8s/ollama-reqlim.md
+M  slides/k8s/openebs.md
+M  slides/k8s/openid-connect.md
+M  slides/k8s/operators-design.md
+M  slides/k8s/operators-example.md
+M  slides/k8s/operators.md
+M  slides/k8s/ourapponkube.md
+M  slides/k8s/owners-and-dependents.md
+M  slides/k8s/pod-security-admission.md
+M  slides/k8s/pod-security-intro.md
+M  slides/k8s/pod-security-policies.md
+M  slides/k8s/portworx.md
+M  slides/k8s/prereqs-advanced.md
+M  slides/k8s/prometheus-stack.md
+M  slides/k8s/prometheus.md
+M  slides/k8s/pv-pvc-sc.md
+M  slides/k8s/queue-architecture.md
+M  slides/k8s/record.md
+M  slides/k8s/resource-limits.md
+M  slides/k8s/rollout.md
+M  slides/k8s/scalingdockercoins.md
+M  slides/k8s/sealed-secrets.md
+M  slides/k8s/secrets.md
+M  slides/k8s/service-types.md
+M  slides/k8s/setup-devel.md
+M  slides/k8s/setup-managed.md
+M  slides/k8s/setup-overview.md
+M  slides/k8s/setup-selfhosted.md
+M  slides/k8s/shippingimages.md
+M  slides/k8s/stateful-failover.md
+M  slides/k8s/statefulsets.md
+M  slides/k8s/staticpods.md
+M  slides/k8s/tilt.md
+M  slides/k8s/user-cert.md
+M  slides/k8s/versions-k8s.md
+M  slides/k8s/volume-claim-templates.md
+M  slides/k8s/volumes.md
+M  slides/k8s/whatsnext.md
+M  slides/k8s/yamldeploy.md
+M  slides/k8s/ytt.md
+M  slides/kadm-fullday.yml
+M  slides/kadm-twodays.yml
+M  slides/kube-adv.yml
+M  slides/kube-fullday.yml
+M  slides/kube-halfday.yml
+M  slides/kube-selfpaced.yml
+M  slides/kube-twodays.yml
+M  slides/logistics-bridget.md
+M  slides/logistics-template.md
+T  slides/logistics.md
+M  slides/markmaker.py
+M  slides/mlops.yml
+M  slides/qrcode.html
+M  slides/remark-0.14.min.js
+M  slides/remark.min.js
+M  slides/requirements.txt
+M  slides/runtime.txt
+M  slides/shared/about-slides.md
+M  slides/shared/chat-room-im.md
+M  slides/shared/chat-room-slack.md
+M  slides/shared/chat-room-teams.md
+M  slides/shared/chat-room-twitch.md
+M  slides/shared/chat-room-zoom-meeting.md
+M  slides/shared/chat-room-zoom-webinar.md
+M  slides/shared/composedown.md
+M  slides/shared/composescale.md
+M  slides/shared/connecting.md
+M  slides/shared/contact.md
+M  slides/shared/declarative.md
+M  slides/shared/handson.md
+M  slides/shared/hastyconclusions.md
+M  slides/shared/prereqs.md
+M  slides/shared/pwd.md
+M  slides/shared/qrcode.md
+M  slides/shared/sampleapp.md
+M  slides/shared/thankyou.md
+M  slides/shared/title.md
+M  slides/shared/toc.md
+M  slides/shared/webssh.md
+M  slides/shared/yaml.md
+M  slides/swarm-fullday.yml
+M  slides/swarm-halfday.yml
+M  slides/swarm-selfpaced.yml
+M  slides/swarm-video.yml
+M  slides/swarm/apiscope.md
+M  slides/swarm/btp-manual.md
+M  slides/swarm/cicd.md
+M  slides/swarm/creatingswarm.md
+M  slides/swarm/encryptionatrest.md
+M  slides/swarm/extratips.md
+M  slides/swarm/firstservice.md
+M  slides/swarm/gui.md
+M  slides/swarm/healthchecks.md
+M  slides/swarm/hostingregistry.md
+M  slides/swarm/intro.md
+M  slides/swarm/ipsec.md
+M  slides/swarm/leastprivilege.md
+M  slides/swarm/links.md
+M  slides/swarm/logging.md
+M  slides/swarm/machine.md
+M  slides/swarm/metrics.md
+M  slides/swarm/morenodes.md
+M  slides/swarm/namespaces.md
+M  slides/swarm/netshoot.md
+M  slides/swarm/nodeinfo.md
+M  slides/swarm/operatingswarm.md
+M  slides/swarm/ourapponswarm.md
+M  slides/swarm/pickregistry.md
+M  slides/swarm/rollingupdates.md
+M  slides/swarm/secrets.md
+M  slides/swarm/security.md
+M  slides/swarm/stacks.md
+M  slides/swarm/stateful.md
+M  slides/swarm/swarmkit.md
+M  slides/swarm/swarmmode.md
+M  slides/swarm/swarmnbt.md
+M  slides/swarm/swarmready.md
+M  slides/swarm/swarmtools.md
+M  slides/swarm/testingregistry.md
+M  slides/swarm/updatingservices.md
+M  slides/swarm/versions.md
+M  slides/terraform/intro.md
+M  slides/terraform/kubernetes.md
+M  slides/terraform/networking-gke.md
+M  slides/terraform/nodepools-gke.md
+M  slides/terraform/nodepools.md
+M  slides/terraform/quickstart-gke.md
+M  slides/terraform/quickstart.md
+M  slides/terraform/state.md
+M  slides/terraform/variables.md
+M  slides/words
+M  slides/workshop.css
+M  slides/workshop.html
  M snap/docker-influxdb.json
  M snap/psutil-file.yml
  M stacks/dockercoins
@@ -916,14 +926,6 @@ Password: **Something**
  M webhooks/admission/flask/Dockerfile
  M webhooks/admission/k8s/webhook-configuration.yaml
  M webhooks/admission/k8s/webhook-server.yaml
-?? slides/TODO.md
-?? slides/containers/dockercoins.md
-?? slides/efrei_day_1.yml
-?? slides/efrei_day_2.yml
-?? slides/efrei_day_3.yml
-?? slides/efrei_day_4.yml
-?? slides/images/congrats.gif
-?? slides/images/floor_is_yours.jpg
 
 ```
 
@@ -1317,7 +1319,7 @@ Never again "worked in dev - ops problem now!"
 
 ```bash
 git clone ...
-docker-compose up
+docker compose up
 ```
 
 With this, you can create development, integration, QA environments in minutes!
@@ -8464,7 +8466,7 @@ Compose enables a simple, powerful onboarding workflow:
 
 1. Checkout our code.
 
-2. Run `docker-compose up`.
+2. Run `docker compose up`.
 
 3. Our app is up and running!
 
@@ -8503,17 +8505,17 @@ class: pic
 
 2. Describe our stack of containers in a YAML file called `docker-compose.yml`
 
-3. `docker-compose up` (or `docker-compose up -d` to run in the background)
+3. `docker compose up` (or `docker compose up -d` to run in the background)
 
 4. Compose pulls and builds the required images, and starts the containers
 
 5. Compose shows the combined logs of all the containers
 
-   (if running in the background, use `docker-compose logs`)
+   (if running in the background, use `docker compose logs`)
 
 6. Hit Ctrl-C to stop the whole stack
 
-   (if running in the background, use `docker-compose stop`)
+   (if running in the background, use `docker compose stop`)
 
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
@@ -8522,11 +8524,11 @@ class: pic
 
 After making changes to our source code, we can:
 
-1. `docker-compose build` to rebuild container images
+1. `docker compose build` to rebuild container images
 
-2. `docker-compose up` to restart the stack with the new images
+2. `docker compose up` to restart the stack with the new images
 
-We can also combine both with `docker-compose up --build`
+We can also combine both with `docker compose up --build`
 
 Compose will be smart, and only recreate the containers that have changed.
 
@@ -8551,7 +8553,7 @@ cd trainingwheels
 Second step: start the app.
 
 ```bash
-docker-compose up
+dockerm compose up
 ```
 
 Watch Compose build and run the app.
@@ -8725,7 +8727,7 @@ For the full list, check: https://docs.docker.com/compose/compose-file/
 
   `frontcopy_www`, `frontcopy_www_1`, `frontcopy_db_1`
 
-- Alternatively, use `docker-compose -p frontcopy` 
+- Alternatively, use `docker compose -p frontcopy` 
 
   (to set the `--project-name` of a stack, which default to the dir name)
 
@@ -8736,10 +8738,10 @@ For the full list, check: https://docs.docker.com/compose/compose-file/
 
 ## Checking stack status
 
-We have `ps`, `docker ps`, and similarly, `docker-compose ps`:
+We have `ps`, `docker ps`, and similarly, `docker compose ps`:
 
 ```bash
-$ docker-compose ps
+$ docker compose ps
 Name                      Command             State           Ports          
 ----------------------------------------------------------------------------
 trainingwheels_redis_1   /entrypoint.sh red   Up      6379/tcp               
@@ -8759,13 +8761,13 @@ If you have started your application in the background with Compose and
 want to stop it easily, you can use the `kill` command:
 
 ```bash
-$ docker-compose kill
+$ docker compose kill
 ```
 
-Likewise, `docker-compose rm` will let you remove containers (after confirmation):
+Likewise, `docker compose rm` will let you remove containers (after confirmation):
 
 ```bash
-$ docker-compose rm
+$ docker compose rm
 Going to remove trainingwheels_redis_1, trainingwheels_www_1
 Are you sure? [yN] y
 Removing trainingwheels_redis_1...
@@ -8777,19 +8779,19 @@ Removing trainingwheels_www_1...
 
 ## Cleaning up (2)
 
-Alternatively, `docker-compose down` will stop and remove containers.
+Alternatively, `docker compose down` will stop and remove containers.
 
 It will also remove other resources, like networks that were created for the application.
 
 ```bash
-$ docker-compose down
+$ docker compose down
 Stopping trainingwheels_www_1 ... done
 Stopping trainingwheels_redis_1 ... done
 Removing trainingwheels_www_1 ... done
 Removing trainingwheels_redis_1 ... done
 ```
 
-Use `docker-compose down -v` to remove everything including volumes.
+Use `docker compose down -v` to remove everything including volumes.
 
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
@@ -8821,15 +8823,15 @@ Use `docker-compose down -v` to remove everything including volumes.
 
 - If the container is deleted, the volume gets orphaned
 
-- Example: `docker-compose down && docker-compose up`
+- Example: `docker   compose down && docker compose up`
 
   - the old volume still exists, detached from its container
 
   - a new volume gets created
 
-- `docker-compose down -v`/`--volumes` deletes volumes
+- `docker compose down -v`/`--volumes` deletes volumes
 
-  (but **not** `docker-compose down && docker-compose down -v`!)
+  (but **not** `docker compose down && docker compose down -v`!)
  
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
@@ -8849,9 +8851,9 @@ volumes:
 
 - Volume will be named `<project>_data`
 
-- It won't be orphaned with `docker-compose down`
+- It won't be orphaned with `docker compose down`
 
-- It will correctly be removed with `docker-compose down -v`
+- It will correctly be removed with `docker compose down -v`
 
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
@@ -8871,7 +8873,7 @@ services:
 
   (for migration, backups, disk usage accounting...)
 
-- Won't be removed by `docker-compose down -v`
+- Won't be removed by `docker compose down -v`
 
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
@@ -8907,7 +8909,7 @@ services:
 
 - This is used when bringing up individual services
 
-  (e.g. `docker-compose up blah` or `docker-compose run foo`)
+  (e.g. `docker compose up blah` or `docker compose run foo`)
 
 ⚠️ It doesn't make a service "wait" for another one to be up!
 
@@ -8928,7 +8930,7 @@ class: extra-details
 
   - `docker compose` command to deploy Compose stacks to some clouds
 
-  - progressively getting feature parity with `docker-compose`
+  - progressively getting feature parity with `docker compose`
 
   - also provides numerous improvements (e.g. leverages BuildKit by default)
 
@@ -12692,8 +12694,8 @@ services:
   ```bash
   export REGISTRY
   export TAG=v0.1
-  docker-compose build
-  docker-compose push
+  docker compose build
+  docker compose push
   ```
 
 ]
@@ -16099,15 +16101,15 @@ General workflow:
 
 .lab[
 
-- Change to a new directory:
+- Clone the repository:
   ```bash
-  mkdir ~/kustomcoins
+  git clone https://github.com/jpetazzo/kubercoins
   cd ~/kustomcoins
   ```
 
 - Run `kustomize create` with the kustomcoins repository:
   ```bash
-  kustomize create --resources https://github.com/jpetazzo/kubercoins
+  kustomize create --autodetect
   ```
 
 <!-- ```look at the files``` -->
@@ -16640,12 +16642,12 @@ spec:
 
 - Try to connect to testweb from a pod with the `run=testcurl` label:
   ```bash
-  kubectl run testcurl --rm -i --image=centos -- curl -m3 $IP
+  kubectl run testcurl --rm --restart=Never -i --image=curlimages/curl -- curl -m3 $IP
   ```
 
 - Try to connect to testweb with a different label:
   ```bash
-  kubectl run testkurl --rm -i --image=centos -- curl -m3 $IP
+  kubectl run testkurl --rm --restart=Never -i --image=curlimages/curl -- curl -m3 $IP
   ```
 
 ]
@@ -16878,38 +16880,39 @@ troubleshoot easily, without having to poke holes in our firewall.
 :FR:- Isolation réseau avec les *network policies*
 
 .debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]</textarea>
-    <script src="remark.min.js" type="text/javascript">
-    </script>
-    <script type="text/javascript">
-      var slideshow = remark.create({
-        ratio: '16:9',
-        highlightSpans: true,
-        slideNumberFormat: '%current%/%total%',
-        excludedClasses: ["self-paced"]
+  <script src="remark.min.js" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+    var slideshow = remark.create({
+      ratio: '16:9',
+      highlightSpans: true,
+      slideNumberFormat: '%current%/%total%',
+      excludedClasses: [@@EXCLUDE @@]
+    });
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: false });
+    slideshow.on('afterShowSlide', function (slide) {
+      mermaid.run({
+        nodes: document.querySelectorAll('div.remark-visible .mermaid'),
       });
-    </script>
-    <script type="module">
-      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: false });
-        slideshow.on('afterShowSlide', function (slide) {
-          mermaid.run({
-            nodes: document.querySelectorAll('div.remark-visible .mermaid'),
-          });
-        });
-        // Reminder, if you want to tinker with mermaid,
-        // you need to export it, for instance like this:
-        // window.mermaid = mermaid;
-    </script>
+    });
+    // Reminder, if you want to tinker with mermaid,
+    // you need to export it, for instance like this:
+    // window.mermaid = mermaid;
+  </script>
 
-    <!-- 
+  <!-- 
     These two scripts will be available only when loading the
     content using the pub/sub server. Otherwise, they'll just
     404 and that's OK.
     -->
-    <script src="/socket.io/socket.io.js">
-    </script>
-    <script src="/remote.js">
-    </script>
+  <script src="/socket.io/socket.io.js">
+  </script>
+  <script src="/remote.js">
+  </script>
 
-  </body>
+</body>
+
 </html>
