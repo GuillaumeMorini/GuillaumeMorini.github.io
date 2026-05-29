@@ -52,884 +52,11 @@ Password: **Something**
 
 .debug[
 ```
- M .gitignore
- M CHECKLIST.md
- M LICENSE
- M README.md
- M compose/frr-route-reflector/conf/bgpd.conf
- M compose/frr-route-reflector/conf/vtysh.conf
- M compose/frr-route-reflector/conf/zebra.conf
- M compose/frr-route-reflector/docker-compose.yaml
- M compose/kube-router-k8s-control-plane/docker-compose.yaml
- M compose/kube-router-k8s-control-plane/kuberouter.yaml
- M compose/simple-k8s-control-plane/docker-compose.yaml
- M dockercoins/Tiltfile
- M dockercoins/docker-compose.images.yml
- M dockercoins/docker-compose.logging.yml
- M dockercoins/docker-compose.yml
- M dockercoins/hasher/Dockerfile
- M dockercoins/hasher/hasher.rb
- M dockercoins/rng/Dockerfile
- M dockercoins/rng/rng.py
- M dockercoins/webui/Dockerfile
- M dockercoins/webui/files/d3.min.js
- M dockercoins/webui/files/index.html
- M dockercoins/webui/files/jquery-1.11.3.min.js
- M dockercoins/webui/files/rickshaw.min.css
- M dockercoins/webui/files/rickshaw.min.js
- M dockercoins/webui/webui.js
- M dockercoins/worker/Dockerfile
- M dockercoins/worker/worker.py
- M efk/README.md
- M efk/docker-compose.yml
- M efk/fluentd/Dockerfile
- M efk/fluentd/fluentd.conf
- M elk/docker-compose.yml
- M elk/logstash.conf
- M k8s/Tiltfile.helmchart
- M k8s/admission-configuration.yaml
- M k8s/canary.yaml
- M k8s/certbot.yaml
- M k8s/cm-certificate.yaml
- M k8s/cm-clusterissuer.yaml
- M k8s/coffee-1.yaml
- M k8s/coffee-2.yaml
- M k8s/coffee-3.yaml
- M k8s/coffees.yaml
- M k8s/consul-1.yaml
- M k8s/consul-2.yaml
- M k8s/consul-3.yaml
- M k8s/dashboard-insecure.yaml
- M k8s/dashboard-recommended.yaml
- M k8s/dashboard-with-token.yaml
- M k8s/docker-build.yaml
- M k8s/dockercoins.yaml
- M k8s/eck-cerebro.yaml
- M k8s/eck-elasticsearch.yaml
- M k8s/eck-filebeat.yaml
- M k8s/eck-kibana.yaml
- M k8s/eck-operator.yaml
- M k8s/efk.yaml
- M k8s/elasticsearch-cluster.yaml
- M k8s/elasticsearch-operator.yaml
- M k8s/event-node.yaml
- M k8s/event-pod.yaml
- M k8s/filebeat.yaml
- M k8s/grant-admin-to-dashboard.yaml
- M k8s/hackthecluster.yaml
- M k8s/hacktheplanet.yaml
- M k8s/haproxy.cfg
- M k8s/haproxy.yaml
- M k8s/hpa-v2-pa-httplat.yaml
- M k8s/ingress-v1.yaml
- M k8s/ingress-v1beta1.yaml
- M k8s/ingress.yaml
- M k8s/just-a-pod.yaml
- M k8s/kaniko-build.yaml
- M k8s/kyverno-ingress-domain-name-1.yaml
- M k8s/kyverno-ingress-domain-name-2a.yaml
- M k8s/kyverno-ingress-domain-name-2b.yaml
- M k8s/kyverno-ingress-domain-name-2c.yaml
- M k8s/kyverno-ingress-domain-name-3.yaml
- M k8s/kyverno-namespace-setup.yaml
- M k8s/kyverno-pod-color-1.yaml
- M k8s/kyverno-pod-color-2.yaml
- M k8s/kyverno-pod-color-3.yaml
- M k8s/kyverno-tls-for-ingress.yaml
- M k8s/local-path-storage.yaml
- M k8s/metrics-server.yaml
- M k8s/mounter.yaml
- M k8s/netpol-allow-testcurl-for-testweb.yaml
- M k8s/netpol-deny-all-for-testweb.yaml
- M k8s/netpol-dockercoins.yaml
- M k8s/nginx-1-without-volume.yaml
- M k8s/nginx-2-with-volume.yaml
- M k8s/nginx-3-with-git.yaml
- M k8s/nginx-4-with-init.yaml
- M k8s/openebs-pod.yaml
- M k8s/persistent-consul.yaml
- M k8s/pizza-1.yaml
- M k8s/pizza-2.yaml
- M k8s/pizza-3.yaml
- M k8s/pizza-4.yaml
- M k8s/pizza-5.yaml
- M k8s/pizzas.yaml
- M k8s/pod-disruption-budget.yaml
- M k8s/portworx.yaml
- M k8s/postgres.yaml
- M k8s/psp-privileged.yaml
- M k8s/psp-restricted.yaml
- M k8s/pv.yaml
- M k8s/pvc.yaml
- M k8s/rainbow.yaml
- M k8s/registry.yaml
- M k8s/socat.yaml
- M k8s/storage-class.yaml
- M k8s/sysctl.yaml
- M k8s/tilt-registry.yaml
- M k8s/traefik-v1.yaml
- M k8s/traefik-v2.yaml
- M k8s/traefik.yaml
- M k8s/user=jean.doe.yaml
- M k8s/volumes-for-consul.yaml
- M k8s/ytt/1-variables/app.yaml
- M k8s/ytt/2-functions/app.yaml
- M k8s/ytt/3-labels/app.yaml
- M k8s/ytt/4-data/app.yaml
- M k8s/ytt/4-data/schema.yaml
- M k8s/ytt/5-factor/app.yaml
- M k8s/ytt/5-factor/schema.yaml
- M k8s/ytt/6-template/app.yaml
- M k8s/ytt/6-template/schema.yaml
- M k8s/ytt/7-morevalues/app.yaml
- M k8s/ytt/7-morevalues/schema.yaml
- M k8s/ytt/8-library/_ytt_lib/component/deployment.yaml
- M k8s/ytt/8-library/_ytt_lib/component/schema.yaml
- M k8s/ytt/8-library/_ytt_lib/component/service.yaml
- M k8s/ytt/8-library/app.yaml
- M k8s/ytt/8-library/schema.yaml
- M k8s/ytt/9-overlay/_ytt_lib/component/deployment.yaml
- M k8s/ytt/9-overlay/_ytt_lib/component/schema.yaml
- M k8s/ytt/9-overlay/_ytt_lib/component/service.yaml
- M k8s/ytt/9-overlay/app.yaml
- M k8s/ytt/9-overlay/rng-healthcheck.yaml
- M k8s/ytt/9-overlay/schema.yaml
- M k8s/ytt/9-overlay/worker-scaling.yaml
- M netlify.toml
- M prepare-eks/users.txt
- M prepare-labs/README.md
- M prepare-labs/cncsetup.sh
- M prepare-labs/docker.png
- M prepare-labs/lib/cli.sh
- M prepare-labs/lib/colors.sh
- M prepare-labs/lib/commands.sh
- M prepare-labs/lib/containerd-config.toml
- M prepare-labs/lib/find-ubuntu-ami.sh
- M prepare-labs/lib/pssh.sh
- M prepare-labs/lib/tailhist.html
- M prepare-labs/settings/admin-kubenet.env
- M prepare-labs/settings/admin-kuberouter.env
- M prepare-labs/settings/admin-monokube.env
- M prepare-labs/settings/admin-oldversion.env
- M prepare-labs/settings/admin-polykube.env
- M prepare-labs/settings/admin-test.env
- M prepare-labs/settings/docker.env
- M prepare-labs/settings/konk.env
- M prepare-labs/settings/kubernetes.env
- M prepare-labs/settings/largekube.env
- M prepare-labs/settings/mk8s.env
- M prepare-labs/settings/portal.env
- M prepare-labs/tags
- M prepare-labs/templates/cards.html
- M prepare-labs/templates/cards.yaml
- M prepare-labs/templates/clusters.csv
- M prepare-labs/terraform/many-kubernetes/locals.tf
- M prepare-labs/terraform/many-kubernetes/main.tf
- M prepare-labs/terraform/many-kubernetes/one-kubernetes-config.tf
- M prepare-labs/terraform/many-kubernetes/one-kubernetes-config/README.md
- M prepare-labs/terraform/many-kubernetes/one-kubernetes-module/README.md
- M prepare-labs/terraform/many-kubernetes/one-kubernetes-provider.tf
- M prepare-labs/terraform/many-kubernetes/providers.tf
- M prepare-labs/terraform/many-kubernetes/stage2.tmpl
- M prepare-labs/terraform/many-kubernetes/variables.tf
- M prepare-labs/terraform/one-kubernetes/aws/common.tf
- M prepare-labs/terraform/one-kubernetes/aws/config.tf
- M prepare-labs/terraform/one-kubernetes/aws/main.tf
- M prepare-labs/terraform/one-kubernetes/aws/outputs.tf
- M prepare-labs/terraform/one-kubernetes/aws/provider.tf
- M prepare-labs/terraform/one-kubernetes/aws/variables.tf
- M prepare-labs/terraform/one-kubernetes/azure/common.tf
- M prepare-labs/terraform/one-kubernetes/azure/config.tf
- M prepare-labs/terraform/one-kubernetes/azure/main.tf
- M prepare-labs/terraform/one-kubernetes/azure/outputs.tf
- M prepare-labs/terraform/one-kubernetes/azure/provider.tf
- M prepare-labs/terraform/one-kubernetes/azure/variables.tf
- M prepare-labs/terraform/one-kubernetes/civo/common.tf
- M prepare-labs/terraform/one-kubernetes/civo/config.tf
- M prepare-labs/terraform/one-kubernetes/civo/main.tf
- M prepare-labs/terraform/one-kubernetes/civo/outputs.tf
- M prepare-labs/terraform/one-kubernetes/civo/provider.tf
- M prepare-labs/terraform/one-kubernetes/civo/variables.tf
- M prepare-labs/terraform/one-kubernetes/common.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/common.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/config.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/main.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/outputs.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/provider.tf
- M prepare-labs/terraform/one-kubernetes/digitalocean/variables.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/common.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/config.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/main.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/outputs.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/provider.tf
- M prepare-labs/terraform/one-kubernetes/exoscale/variables.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/common.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/config.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/locals.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/main.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/network.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/outputs.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/provider.tf
- M prepare-labs/terraform/one-kubernetes/googlecloud/variables.tf
- M prepare-labs/terraform/one-kubernetes/linode/common.tf
- M prepare-labs/terraform/one-kubernetes/linode/config.tf
- M prepare-labs/terraform/one-kubernetes/linode/main.tf
- M prepare-labs/terraform/one-kubernetes/linode/outputs.tf
- M prepare-labs/terraform/one-kubernetes/linode/provider.tf
- M prepare-labs/terraform/one-kubernetes/linode/variables.tf
- M prepare-labs/terraform/one-kubernetes/oci/common.tf
- M prepare-labs/terraform/one-kubernetes/oci/config.tf
- M prepare-labs/terraform/one-kubernetes/oci/main.tf
- M prepare-labs/terraform/one-kubernetes/oci/network.tf
- M prepare-labs/terraform/one-kubernetes/oci/outputs.tf
- M prepare-labs/terraform/one-kubernetes/oci/provider.tf
- M prepare-labs/terraform/one-kubernetes/oci/variables.tf
- M prepare-labs/terraform/one-kubernetes/ovh/common.tf
- M prepare-labs/terraform/one-kubernetes/ovh/config.tf
- M prepare-labs/terraform/one-kubernetes/ovh/main.tf
- M prepare-labs/terraform/one-kubernetes/ovh/outputs.tf
- M prepare-labs/terraform/one-kubernetes/ovh/provider.tf
- M prepare-labs/terraform/one-kubernetes/ovh/variables.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/common.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/config.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/main.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/outputs.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/provider.tf
- M prepare-labs/terraform/one-kubernetes/scaleway/variables.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/common.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/config.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/main.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/outputs.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/provider.tf
- M prepare-labs/terraform/one-kubernetes/vcluster/variables.tf
- M prepare-labs/terraform/providers/aws/config.tf
- M prepare-labs/terraform/providers/aws/variables.tf
- M prepare-labs/terraform/providers/azure/config.tf
- M prepare-labs/terraform/providers/azure/variables.tf
- M prepare-labs/terraform/providers/civo/config.tf
- M prepare-labs/terraform/providers/civo/variables.tf
- M prepare-labs/terraform/providers/digitalocean/config.tf
- M prepare-labs/terraform/providers/digitalocean/variables.tf
- M prepare-labs/terraform/providers/exoscale/config.tf
- M prepare-labs/terraform/providers/exoscale/variables.tf
- M prepare-labs/terraform/providers/googlecloud/config.tf
- M prepare-labs/terraform/providers/googlecloud/variables.tf
- M prepare-labs/terraform/providers/hetzner/config.tf
- M prepare-labs/terraform/providers/hetzner/variables.tf
- M prepare-labs/terraform/providers/linode/config.tf
- M prepare-labs/terraform/providers/linode/variables.tf
- M prepare-labs/terraform/providers/oci/config.tf
- M prepare-labs/terraform/providers/oci/variables.tf
- M prepare-labs/terraform/providers/openstack/config.tf
- M prepare-labs/terraform/providers/openstack/variables.tf
- M prepare-labs/terraform/providers/ovh/config.tf
- M prepare-labs/terraform/providers/ovh/variables.tf
- M prepare-labs/terraform/providers/scaleway/config.tf
- M prepare-labs/terraform/providers/scaleway/variables.tf
- M prepare-labs/terraform/providers/vcluster/config.tf
- M prepare-labs/terraform/providers/vcluster/variables.tf
- M prepare-labs/terraform/virtual-machines/aws/common.tf
- M prepare-labs/terraform/virtual-machines/aws/config.tf
- M prepare-labs/terraform/virtual-machines/aws/main.tf
- M prepare-labs/terraform/virtual-machines/aws/provider.tf
- M prepare-labs/terraform/virtual-machines/aws/variables.tf
- M prepare-labs/terraform/virtual-machines/azure/common.tf
- M prepare-labs/terraform/virtual-machines/azure/config.tf
- M prepare-labs/terraform/virtual-machines/azure/main.tf
- M prepare-labs/terraform/virtual-machines/azure/network.tf
- M prepare-labs/terraform/virtual-machines/azure/provider.tf
- M prepare-labs/terraform/virtual-machines/azure/variables.tf
- M prepare-labs/terraform/virtual-machines/common.tf
- M prepare-labs/terraform/virtual-machines/digitalocean/common.tf
- M prepare-labs/terraform/virtual-machines/digitalocean/config.tf
- M prepare-labs/terraform/virtual-machines/digitalocean/main.tf
- M prepare-labs/terraform/virtual-machines/digitalocean/provider.tf
- M prepare-labs/terraform/virtual-machines/digitalocean/variables.tf
- M prepare-labs/terraform/virtual-machines/hetzner/common.tf
- M prepare-labs/terraform/virtual-machines/hetzner/config.tf
- M prepare-labs/terraform/virtual-machines/hetzner/main.tf
- M prepare-labs/terraform/virtual-machines/hetzner/provider.tf
- M prepare-labs/terraform/virtual-machines/hetzner/variables.tf
- M prepare-labs/terraform/virtual-machines/linode/common.tf
- M prepare-labs/terraform/virtual-machines/linode/config.tf
- M prepare-labs/terraform/virtual-machines/linode/main.tf
- M prepare-labs/terraform/virtual-machines/linode/provider.tf
- M prepare-labs/terraform/virtual-machines/linode/variables.tf
- M prepare-labs/terraform/virtual-machines/oci/common.tf
- M prepare-labs/terraform/virtual-machines/oci/config.tf
- M prepare-labs/terraform/virtual-machines/oci/main.tf
- M prepare-labs/terraform/virtual-machines/oci/network.tf
- M prepare-labs/terraform/virtual-machines/oci/provider.tf
- M prepare-labs/terraform/virtual-machines/oci/variables.tf
- M prepare-labs/terraform/virtual-machines/openstack/common.tf
- M prepare-labs/terraform/virtual-machines/openstack/config.tf
- M prepare-labs/terraform/virtual-machines/openstack/main.tf
- M prepare-labs/terraform/virtual-machines/openstack/network.tf
- M prepare-labs/terraform/virtual-machines/openstack/provider.tf
- M prepare-labs/terraform/virtual-machines/openstack/requires_tfvars
- M prepare-labs/terraform/virtual-machines/openstack/tfvars.example
- M prepare-labs/terraform/virtual-machines/openstack/variables.tf
- M prepare-labs/terraform/virtual-machines/scaleway/common.tf
- M prepare-labs/terraform/virtual-machines/scaleway/config.tf
- M prepare-labs/terraform/virtual-machines/scaleway/main.tf
- M prepare-labs/terraform/virtual-machines/scaleway/provider.tf
- M prepare-labs/terraform/virtual-machines/scaleway/variables.tf
- M prepare-labs/www/README
- M prepare-labs/www/index.html
- M prepare-labs/www/logo-bento.svg
- M prepare-labs/www/logo-kubernetes.png
- M prepare-labs/www/qrcode.min.js
- M prepare-local/.gitignore
- M prepare-local/README.md
- M prepare-local/Vagrantfile
- M prepare-local/ansible.cfg
- M prepare-local/inventory
- M prepare-local/private-key
- M prepare-local/provisioning.yml
- M prepare-local/ssh-config
- M prepare-local/vagrant.yml
- M prepare-machine/README.md
- M prom/Dockerfile
- M prom/prometheus.yml
-M  slides/Dockerfile
-M  slides/README.md
-M  slides/TODO
-A  slides/TODO.md
-M  slides/_redirects
-M  slides/appendcheck.py
-M  slides/autopilot/package-lock.json
-M  slides/autopilot/package.json
-M  slides/autopilot/remote.js
-M  slides/autopilot/requirements.txt
-M  slides/containers/Advanced_Dockerfiles.md
-M  slides/containers/Ambassadors.md
-M  slides/containers/Application_Configuration.md
-M  slides/containers/Background_Containers.md
-M  slides/containers/Building_Images_Interactively.md
-M  slides/containers/Building_Images_With_Dockerfiles.md
-M  slides/containers/Buildkit.md
-M  slides/containers/Cmd_And_Entrypoint.md
-M  slides/containers/Compose_For_Dev_Stacks.md
-M  slides/containers/Connecting_Containers_With_Links.md
-M  slides/containers/Container_Engines.md
-M  slides/containers/Container_Network_Model.md
-M  slides/containers/Container_Networking_Basics.md
-M  slides/containers/Containers_From_Scratch.md
-M  slides/containers/Copy_On_Write.md
-M  slides/containers/Copying_Files_During_Build.md
-M  slides/containers/Docker_History.md
-M  slides/containers/Docker_Machine.md
-M  slides/containers/Docker_Overview.md
-M  slides/containers/Dockerfile_Tips.md
-M  slides/containers/Ecosystem.md
-M  slides/containers/Exercise_Composefile.md
-M  slides/containers/Exercise_Dockerfile_Advanced.md
-M  slides/containers/Exercise_Dockerfile_Basic.md
-M  slides/containers/First_Containers.md
-M  slides/containers/Getting_Inside.md
-M  slides/containers/Init_Systems.md
-M  slides/containers/Initial_Images.md
-M  slides/containers/Installing_Docker.md
-M  slides/containers/Labels.md
-M  slides/containers/Local_Development_Workflow.md
-M  slides/containers/Logging.md
-M  slides/containers/Multi_Stage_Builds.md
-M  slides/containers/Namespaces_Cgroups.md
-M  slides/containers/Naming_And_Inspecting.md
-M  slides/containers/Network_Drivers.md
-M  slides/containers/Orchestration_Overview.md
-M  slides/containers/Pods_Anatomy.md
-M  slides/containers/Publishing_To_Docker_Hub.md
-M  slides/containers/Resource_Limits.md
-M  slides/containers/Start_And_Attach.md
-M  slides/containers/Training_Environment.md
-M  slides/containers/Windows_Containers.md
-M  slides/containers/Working_With_Volumes.md
-A  slides/containers/dockercoins.md
-M  slides/containers/intro.md
-M  slides/containers/links.md
-M  slides/count-slides.py
-M  slides/docker-compose.yaml
-M  slides/efrei.yml
-A  slides/efrei_day_1.yml
-A  slides/efrei_day_2.yml
-A  slides/efrei_day_3.yml
-A  slides/efrei_day_4.yml
-M  slides/exercises/appconfig-brief.md
-M  slides/exercises/appconfig-details.md
-M  slides/exercises/dmuc-brief.md
-M  slides/exercises/dmuc-details.md
-M  slides/exercises/healthchecks-brief.md
-M  slides/exercises/healthchecks-details.md
-M  slides/exercises/helm-generic-chart-brief.md
-M  slides/exercises/helm-generic-chart-details.md
-M  slides/exercises/helm-umbrella-chart-brief.md
-M  slides/exercises/helm-umbrella-chart-details.md
-M  slides/exercises/ingress-controller-brief.md
-M  slides/exercises/ingress-controller-details.md
-M  slides/exercises/ingress-secret-policy-brief.md
-M  slides/exercises/ingress-secret-policy-details.md
-M  slides/exercises/k8sfundamentals-brief.md
-M  slides/exercises/k8sfundamentals-details.md
-M  slides/exercises/kyverno-ingress-domain-name-brief.md
-M  slides/exercises/kyverno-ingress-domain-name-details.md
-M  slides/exercises/localcluster-brief.md
-M  slides/exercises/localcluster-details.md
-M  slides/exercises/netpol-brief.md
-M  slides/exercises/netpol-details.md
-M  slides/exercises/polykuberbac-brief.md
-M  slides/exercises/polykuberbac-details.md
-M  slides/exercises/rbac-brief.md
-M  slides/exercises/rbac-details.md
-M  slides/exercises/remotecluster-brief.md
-M  slides/exercises/remotecluster-details.md
-M  slides/exercises/reqlim-brief.md
-M  slides/exercises/reqlim-details.md
-M  slides/exercises/sealed-secrets-brief.md
-M  slides/exercises/sealed-secrets-details.md
-M  slides/exercises/tf-nodepools-brief.md
-M  slides/exercises/tf-nodepools-details.md
-M  slides/exercises/yaml-brief.md
-M  slides/exercises/yaml-details.md
-M  slides/images/aj-containers.jpeg
-M  slides/images/ambassador-diagram.odg
-M  slides/images/ambassador-diagram.png
-M  slides/images/api-request-lifecycle.png
-M  slides/images/argocd_architecture.png
-M  slides/images/argocdlogo.png
-M  slides/images/bell-curve.jpg
-M  slides/images/binpacking-1d-1.gif
-M  slides/images/binpacking-1d-2.gif
-M  slides/images/binpacking-2d.gif
-M  slides/images/binpacking-3d.gif
-M  slides/images/blackbelt.png
-M  slides/images/canary-cage.jpg
-M  slides/images/ci-cd-with-docker.png
-M  slides/images/cisco.png
-M  slides/images/cisco2.png
-M  slides/images/composeapp.png
-M  slides/images/composeup.gif
-M  slides/images/conductor.jpg
-A  slides/images/congrats.gif
-M  slides/images/container-background.jpg
-M  slides/images/container-layers.jpg
-M  slides/images/containers-as-lightweight-vms.png
-M  slides/images/control-planes/advanced-control-plane-split-events.svg
-M  slides/images/control-planes/advanced-control-plane.svg
-M  slides/images/control-planes/managed-kubernetes.svg
-M  slides/images/control-planes/non-dedicated-stacked-nodes.svg
-M  slides/images/control-planes/single-control-and-workers.svg
-M  slides/images/control-planes/single-node-dev.svg
-M  slides/images/control-planes/stacked-control-plane.svg
-M  slides/images/delay-hasher.png
-M  slides/images/delay-rng.png
-M  slides/images/demo.jpg
-M  slides/images/docker-ce-ee-lifecycle.png
-M  slides/images/docker-con-15-logo.svg
-M  slides/images/docker-ecosystem-2015.png
-M  slides/images/docker-engine-architecture.svg
-M  slides/images/docker-networking-default-bridge-linux.drawio
-M  slides/images/docker-networking-default-bridge-linux.png
-M  slides/images/docker-networking-networks-linux.drawio
-M  slides/images/docker-networking-networks-linux.png
-M  slides/images/docker-networking-networks-macwin.drawio
-M  slides/images/docker-networking-networks-macwin.png
-M  slides/images/docker-service-create.svg
-M  slides/images/dockercoins-2015.png
-M  slides/images/dockercoins-diagram.png
-M  slides/images/dockercoins-diagram.xml
-M  slides/images/dockercoins-multi-node.png
-M  slides/images/dockercoins-single-node.png
-M  slides/images/dockercoins.png
-M  slides/images/dockerd-and-containerd.png
-M  slides/images/dragons.jpg
-M  slides/images/efrei.png
-M  slides/images/end.jpg
-M  slides/images/entrypoint.jpg
-M  slides/images/equations.png
-M  slides/images/extra-details.png
-A  slides/images/floor_is_yours.jpg
-M  slides/images/fu-face.jpg
-M  slides/images/getting-inside.png
-M  slides/images/google_cloud.png
-M  slides/images/grafana-add-graph.png
-M  slides/images/grafana-add-source.png
-M  slides/images/heroku-first-homepage.png
-M  slides/images/hpa-v2-pa-latency.png
-M  slides/images/hpa-v2-pa-pods.png
-M  slides/images/ingress-lb.png
-M  slides/images/ingress-routing-mesh.png
-M  slides/images/k8s-arch1.png
-M  slides/images/k8s-arch2.png
-M  slides/images/k8s-arch3-thanks-weave.png
-M  slides/images/k8s-arch4-thanks-luxas.png
-M  slides/images/k8s-net-0-overview.svg
-M  slides/images/k8s-net-1-pod-to-pod.svg
-M  slides/images/k8s-net-2-pod-to-svc.svg
-M  slides/images/k8s-net-3-netpol.svg
-M  slides/images/k8s-net-4-overview.svg
-M  slides/images/keyboard.png
-M  slides/images/kibana.png
-M  slides/images/kubectl-create-deployment-slideshow/01.svg
-M  slides/images/kubectl-create-deployment-slideshow/02.svg
-M  slides/images/kubectl-create-deployment-slideshow/03.svg
-M  slides/images/kubectl-create-deployment-slideshow/04.svg
-M  slides/images/kubectl-create-deployment-slideshow/05.svg
-M  slides/images/kubectl-create-deployment-slideshow/06.svg
-M  slides/images/kubectl-create-deployment-slideshow/07.svg
-M  slides/images/kubectl-create-deployment-slideshow/08.svg
-M  slides/images/kubectl-create-deployment-slideshow/09.svg
-M  slides/images/kubectl-create-deployment-slideshow/10.svg
-M  slides/images/kubectl-create-deployment-slideshow/11.svg
-M  slides/images/kubectl-create-deployment-slideshow/12.svg
-M  slides/images/kubectl-create-deployment-slideshow/13.svg
-M  slides/images/kubectl-create-deployment-slideshow/14.svg
-M  slides/images/kubectl-create-deployment-slideshow/15.svg
-M  slides/images/kubectl-create-deployment-slideshow/16.svg
-M  slides/images/kubectl-create-deployment-slideshow/17.svg
-M  slides/images/kubectl-create-deployment-slideshow/18.svg
-M  slides/images/kubectl-create-deployment-slideshow/19.svg
-M  slides/images/kubernetes-services/11-CIP-by-addr.png
-M  slides/images/kubernetes-services/12-CIP-by-name.png
-M  slides/images/kubernetes-services/13-CIP-both.png
-M  slides/images/kubernetes-services/14-CIP-headless.png
-M  slides/images/kubernetes-services/31-LB-no-service.png
-M  slides/images/kubernetes-services/32-LB-plus-cip.png
-M  slides/images/kubernetes-services/33-LB-plus-lb.png
-M  slides/images/kubernetes-services/34-LB-internal-traffic.png
-M  slides/images/kubernetes-services/35-LB-pending.png
-M  slides/images/kubernetes-services/36-LB-ccm.png
-M  slides/images/kubernetes-services/37-LB-externalip.png
-M  slides/images/kubernetes-services/38-LB-external-traffic.png
-M  slides/images/kubernetes-services/39-LB-all-traffic.png
-M  slides/images/kubernetes-services/41-NP-why.png
-M  slides/images/kubernetes-services/42-NP-how-1.png
-M  slides/images/kubernetes-services/43-NP-how-2.png
-M  slides/images/kubernetes-services/44-NP-how-3.png
-M  slides/images/kubernetes-services/45-NP-how-4.png
-M  slides/images/kubernetes-services/46-NP-how-5.png
-M  slides/images/kubernetes-services/47-NP-only.png
-M  slides/images/kubernetes-services/61-ING.png
-M  slides/images/kubernetes-services/62-ING-path.png
-M  slides/images/kubernetes-services/63-ING-policy.png
-M  slides/images/kubernetes-services/64-ING-nolocal.png
-M  slides/images/kubernetes-services/README.md
-M  slides/images/kubernetes-services/kubernetes-services.drawio
-M  slides/images/kubernetes_pods.drawio
-M  slides/images/kubernetes_pods.svg
-M  slides/images/mario-red-shell.png
-M  slides/images/psa.jpeg
-M  slides/images/pwd-icons.png
-M  slides/images/qrcode_docs.google.com.png
-M  slides/images/registry-frontends.png
-M  slides/images/service-discovery.png
-M  slides/images/sharing-layers.jpg
-M  slides/images/shipping-indsutry-results.png
-M  slides/images/shipping-industry-problem.png
-M  slides/images/shipping-industry-solution.png
-M  slides/images/shipping-matrix-from-hell.png
-M  slides/images/shipping-matrix-solved.png
-M  slides/images/shipping-software-problem.png
-M  slides/images/shipping-software-solution.png
-M  slides/images/slack-qr-code.png
-M  slides/images/startrek-federation.jpg
-M  slides/images/swarm-mode.svg
-M  slides/images/swarm.png
-M  slides/images/tangram.gif
-M  slides/images/tesla.jpg
-M  slides/images/tetris-1.png
-M  slides/images/tetris-2.gif
-M  slides/images/tetris-3.png
-M  slides/images/title-advanced-dockerfiles.jpg
-M  slides/images/title-ambassador.jpg
-M  slides/images/title-background-containers.jpg
-M  slides/images/title-building-docker-images-with-a-dockerfile.jpg
-M  slides/images/title-connecting-containers-with-links.gif
-M  slides/images/title-container-networking-basics.jpg
-M  slides/images/title-copying-files-during-build.jpg
-M  slides/images/title-installing-docker.jpg
-M  slides/images/title-local-development-workflow-with-docker.jpg
-M  slides/images/title-naming-and-inspecting-containers.jpg
-M  slides/images/title-our-first-containers.jpg
-M  slides/images/title-our-training-environment.jpg
-M  slides/images/title-the-container-network-model.jpg
-M  slides/images/title-understanding-docker-images.png
-M  slides/images/title-working-with-volumes.jpg
-M  slides/images/traffic-graph.png
-M  slides/images/trainingwheels-error.png
-M  slides/images/trainingwheels-ok.png
-M  slides/images/trollface.png
-M  slides/images/vmware.png
-M  slides/images/warning.png
-M  slides/images/webapp-in-blue.png
-M  slides/images/webapp-in-red.png
-M  slides/images/welcome-to-nginx.png
-M  slides/images/windows-containers.jpg
-M  slides/images/you-get-a-cluster.jpg
-M  slides/images/you-get-five-vms.jpg
-M  slides/index.css
-M  slides/index.py
-M  slides/index.yaml
-M  slides/interstitials.txt
-M  slides/intro-fullday.yml
-M  slides/intro-selfpaced.yml
-M  slides/intro-twodays.yml
-M  slides/k8s/access-eks-cluster.md
-M  slides/k8s/accessinternal.md
-M  slides/k8s/admission.md
-M  slides/k8s/aggregation-layer.md
-M  slides/k8s/apilb.md
-M  slides/k8s/apiserver-deepdive.md
-M  slides/k8s/architecture.md
-M  slides/k8s/argocd.md
-M  slides/k8s/authn-authz.md
-M  slides/k8s/aws-eks.md
-M  slides/k8s/batch-jobs.md
-M  slides/k8s/bento-cnpg.md
-M  slides/k8s/bento-hpa.md
-M  slides/k8s/bento-intro.md
-M  slides/k8s/bento-rmq.md
-M  slides/k8s/bootstrap.md
-M  slides/k8s/build-with-docker.md
-M  slides/k8s/build-with-kaniko.md
-M  slides/k8s/buildshiprun-dockerhub.md
-M  slides/k8s/buildshiprun-selfhosted.md
-M  slides/k8s/cainjector.md
-M  slides/k8s/cert-manager.md
-M  slides/k8s/cloud-controller-manager.md
-M  slides/k8s/cluster-autoscaler.md
-M  slides/k8s/cluster-backup.md
-M  slides/k8s/cluster-sizing.md
-M  slides/k8s/cluster-upgrade.md
-M  slides/k8s/cni-internals.md
-M  slides/k8s/cni.md
-M  slides/k8s/concepts-k8s.md
-M  slides/k8s/configuration.md
-M  slides/k8s/consul.md
-M  slides/k8s/control-plane-auth.md
-M  slides/k8s/crd.md
-M  slides/k8s/csr-api.md
-M  slides/k8s/daemonset.md
-M  slides/k8s/dashboard.md
-M  slides/k8s/declarative.md
-M  slides/k8s/demo-apps.md
-M  slides/k8s/deploymentslideshow.md
-M  slides/k8s/disruptions.md
-M  slides/k8s/dmuc-easy.md
-M  slides/k8s/dmuc-hard.md
-M  slides/k8s/dmuc-medium.md
-M  slides/k8s/eck.md
-M  slides/k8s/events.md
-M  slides/k8s/exercise-configmap.md
-M  slides/k8s/exercise-helm.md
-M  slides/k8s/exercise-wordsmith.md
-M  slides/k8s/exercise-yaml.md
-M  slides/k8s/extending-api.md
-M  slides/k8s/finalizers.md
-M  slides/k8s/flux.md
-M  slides/k8s/gitlab.md
-M  slides/k8s/gitopstree.txt
-M  slides/k8s/gitworkflows.md
-M  slides/k8s/handson-mlops.md
-M  slides/k8s/healthchecks-more.md
-M  slides/k8s/healthchecks.md
-M  slides/k8s/helm-chart-format.md
-M  slides/k8s/helm-create-basic-chart.md
-M  slides/k8s/helm-create-better-chart.md
-M  slides/k8s/helm-dependencies.md
-M  slides/k8s/helm-intro.md
-M  slides/k8s/helm-secrets.md
-M  slides/k8s/helm-values-schema-validation.md
-M  slides/k8s/helmfile.md
-M  slides/k8s/horizontal-pod-autoscaler.md
-M  slides/k8s/hpa-v2.md
-M  slides/k8s/ingress-advanced.md
-M  slides/k8s/ingress-canary.md
-M  slides/k8s/ingress-tls.md
-M  slides/k8s/ingress.md
-M  slides/k8s/interco.md
-M  slides/k8s/internal-apis.md
-M  slides/k8s/intro.md
-M  slides/k8s/k9s.md
-M  slides/k8s/kubebuilder.md
-M  slides/k8s/kubectl-logs.md
-M  slides/k8s/kubectl-run.md
-M  slides/k8s/kubectlexpose.md
-M  slides/k8s/kubectlget.md
-M  slides/k8s/kubectlproxy.md
-M  slides/k8s/kubectlscale.md
-M  slides/k8s/kubenet.md
-M  slides/k8s/kubercoins.md
-MM slides/k8s/kustomize.md
-M  slides/k8s/kyverno.md
-M  slides/k8s/labels-annotations.md
-M  slides/k8s/lastwords.md
-M  slides/k8s/links-bridget.md
-M  slides/k8s/links.md
-M  slides/k8s/localkubeconfig.md
-M  slides/k8s/logs-centralized.md
-M  slides/k8s/logs-cli.md
-M  slides/k8s/metrics-server.md
-M  slides/k8s/mlops-headsup.md
-M  slides/k8s/multinode.md
-M  slides/k8s/namespaces.md
-MM slides/k8s/netpol.md
-M  slides/k8s/ollama-intro.md
-M  slides/k8s/ollama-metrics.md
-M  slides/k8s/ollama-reqlim.md
-M  slides/k8s/openebs.md
-M  slides/k8s/openid-connect.md
-M  slides/k8s/operators-design.md
-M  slides/k8s/operators-example.md
-M  slides/k8s/operators.md
-M  slides/k8s/ourapponkube.md
-M  slides/k8s/owners-and-dependents.md
-M  slides/k8s/pod-security-admission.md
-M  slides/k8s/pod-security-intro.md
-M  slides/k8s/pod-security-policies.md
-M  slides/k8s/portworx.md
-M  slides/k8s/prereqs-advanced.md
-M  slides/k8s/prometheus-stack.md
-M  slides/k8s/prometheus.md
-M  slides/k8s/pv-pvc-sc.md
-M  slides/k8s/queue-architecture.md
-M  slides/k8s/record.md
-M  slides/k8s/resource-limits.md
-M  slides/k8s/rollout.md
-M  slides/k8s/scalingdockercoins.md
-M  slides/k8s/sealed-secrets.md
-M  slides/k8s/secrets.md
-M  slides/k8s/service-types.md
-M  slides/k8s/setup-devel.md
-M  slides/k8s/setup-managed.md
-M  slides/k8s/setup-overview.md
-M  slides/k8s/setup-selfhosted.md
-M  slides/k8s/shippingimages.md
-M  slides/k8s/stateful-failover.md
-M  slides/k8s/statefulsets.md
-M  slides/k8s/staticpods.md
-M  slides/k8s/tilt.md
-M  slides/k8s/user-cert.md
-M  slides/k8s/versions-k8s.md
-M  slides/k8s/volume-claim-templates.md
-M  slides/k8s/volumes.md
-M  slides/k8s/whatsnext.md
-M  slides/k8s/yamldeploy.md
-M  slides/k8s/ytt.md
-M  slides/kadm-fullday.yml
-M  slides/kadm-twodays.yml
-M  slides/kube-adv.yml
-M  slides/kube-fullday.yml
-M  slides/kube-halfday.yml
-M  slides/kube-selfpaced.yml
-M  slides/kube-twodays.yml
-M  slides/logistics-bridget.md
-M  slides/logistics-template.md
-T  slides/logistics.md
-M  slides/markmaker.py
-M  slides/mlops.yml
-M  slides/qrcode.html
-M  slides/remark-0.14.min.js
-M  slides/remark.min.js
-M  slides/requirements.txt
-M  slides/runtime.txt
-M  slides/shared/about-slides.md
-M  slides/shared/chat-room-im.md
-M  slides/shared/chat-room-slack.md
-M  slides/shared/chat-room-teams.md
-M  slides/shared/chat-room-twitch.md
-M  slides/shared/chat-room-zoom-meeting.md
-M  slides/shared/chat-room-zoom-webinar.md
-M  slides/shared/composedown.md
-M  slides/shared/composescale.md
-M  slides/shared/connecting.md
-M  slides/shared/contact.md
-M  slides/shared/declarative.md
-M  slides/shared/handson.md
-M  slides/shared/hastyconclusions.md
-M  slides/shared/prereqs.md
-M  slides/shared/pwd.md
-M  slides/shared/qrcode.md
-M  slides/shared/sampleapp.md
-M  slides/shared/thankyou.md
-M  slides/shared/title.md
-M  slides/shared/toc.md
-M  slides/shared/webssh.md
-M  slides/shared/yaml.md
-M  slides/swarm-fullday.yml
-M  slides/swarm-halfday.yml
-M  slides/swarm-selfpaced.yml
-M  slides/swarm-video.yml
-M  slides/swarm/apiscope.md
-M  slides/swarm/btp-manual.md
-M  slides/swarm/cicd.md
-M  slides/swarm/creatingswarm.md
-M  slides/swarm/encryptionatrest.md
-M  slides/swarm/extratips.md
-M  slides/swarm/firstservice.md
-M  slides/swarm/gui.md
-M  slides/swarm/healthchecks.md
-M  slides/swarm/hostingregistry.md
-M  slides/swarm/intro.md
-M  slides/swarm/ipsec.md
-M  slides/swarm/leastprivilege.md
-M  slides/swarm/links.md
-M  slides/swarm/logging.md
-M  slides/swarm/machine.md
-M  slides/swarm/metrics.md
-M  slides/swarm/morenodes.md
-M  slides/swarm/namespaces.md
-M  slides/swarm/netshoot.md
-M  slides/swarm/nodeinfo.md
-M  slides/swarm/operatingswarm.md
-M  slides/swarm/ourapponswarm.md
-M  slides/swarm/pickregistry.md
-M  slides/swarm/rollingupdates.md
-M  slides/swarm/secrets.md
-M  slides/swarm/security.md
-M  slides/swarm/stacks.md
-M  slides/swarm/stateful.md
-M  slides/swarm/swarmkit.md
-M  slides/swarm/swarmmode.md
-M  slides/swarm/swarmnbt.md
-M  slides/swarm/swarmready.md
-M  slides/swarm/swarmtools.md
-M  slides/swarm/testingregistry.md
-M  slides/swarm/updatingservices.md
-M  slides/swarm/versions.md
-M  slides/terraform/intro.md
-M  slides/terraform/kubernetes.md
-M  slides/terraform/networking-gke.md
-M  slides/terraform/nodepools-gke.md
-M  slides/terraform/nodepools.md
-M  slides/terraform/quickstart-gke.md
-M  slides/terraform/quickstart.md
-M  slides/terraform/state.md
-M  slides/terraform/variables.md
-M  slides/words
-M  slides/workshop.css
-M  slides/workshop.html
- M snap/docker-influxdb.json
- M snap/psutil-file.yml
- M stacks/dockercoins
- M stacks/dockercoins+gelf.yml
- M stacks/dockercoins+healthcheck.yml
- M stacks/dockercoins.yml
- M stacks/elk.yml
- M stacks/portainer.yml
- M stacks/prometheus+config.yml
- M stacks/prometheus.yml
- M stacks/registry.yml
- M stacks/visualizer.yml
- M webhooks/admission/README.md
- M webhooks/admission/docker-compose.yml
- M webhooks/admission/flask/Dockerfile
- M webhooks/admission/k8s/webhook-configuration.yaml
- M webhooks/admission/k8s/webhook-server.yaml
+?? backup_untracked/
 
 ```
 
-These slides have been built from commit: 906b2b2
+These slides have been built from commit: 1ddd5e4
 
 
 [shared/title.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/shared/title.md)]
@@ -939,7 +66,7 @@ These slides have been built from commit: 906b2b2
 - Hello! I am Guillaume Morini ([@GuillaumeMorini])
    - I have worked at PSA Peugeot Citroën <img src="images/psa.jpeg" alt="PSA" width="64"/>, PMU 🏇, Cisco <img src="images/cisco2.png" alt="Cisco" width="64"/>, Docker 🐳, VMware <img src="images/vmware.png" alt="VMware" width="32"/>and Google Cloud <img src="images/google_cloud.png" alt="Google Cloud" width="32"/>
 
-- The training will run for 3 hours and 30 minutes
+- The training will run for 4 hours, with a 30 minutes break in the middle
 
 - Feel free to interrupt for questions at any time. 
   - *Especially when you see full screen container pictures!*
@@ -1098,19 +225,55 @@ name: toc-part-5
 ## Part 5
 
 - [Namespaces](#toc-namespaces)
+
 - [Shipping images with a registry](#toc-shipping-images-with-a-registry)
+
 - [Running our application on Kubernetes](#toc-running-our-application-on-kubernetes)
+
 - [Accessing internal services](#toc-accessing-internal-services)
+
 - [Accessing the API with `kubectl proxy`](#toc-accessing-the-api-with-kubectl-proxy)
+
 - [Daemon sets](#toc-daemon-sets)
+
 - [Labels and selectors](#toc-labels-and-selectors)
+
 - [Rolling updates](#toc-rolling-updates)
+
+
+.debug[(auto-generated TOC)]
+---
+name: toc-part-6
+
+## Part 6
+
 - [Managing stacks with Helm](#toc-managing-stacks-with-helm)
+
 - [Helm chart format](#toc-helm-chart-format)
+
 - [Helm and invalid values](#toc-helm-and-invalid-values)
+
 - [Helm secrets](#toc-helm-secrets)
+
+- [Creating a basic chart](#toc-creating-a-basic-chart)
+
+- [Creating better Helm charts](#toc-creating-better-helm-charts)
+
+- [Charts using other charts](#toc-charts-using-other-charts)
+
 - [Kustomize](#toc-kustomize)
+
+
+.debug[(auto-generated TOC)]
+---
+name: toc-part-7
+
+## Part 7
+
 - [Network policies](#toc-network-policies)
+
+- [TP k8s : Network policies](#toc-tp-ks--network-policies)
+
 
 .debug[(auto-generated TOC)]
 
@@ -8503,7 +7666,7 @@ class: pic
 
 1. Write Dockerfiles
 
-2. Describe our stack of containers in a YAML file called `docker-compose.yml`
+2. Describe our stack of containers in a YAML file (the "Compose file")
 
 3. `docker compose up` (or `docker compose up -d` to run in the background)
 
@@ -8553,7 +7716,7 @@ cd trainingwheels
 Second step: start the app.
 
 ```bash
-dockerm compose up
+docker compose up
 ```
 
 Watch Compose build and run the app.
@@ -8583,7 +7746,18 @@ After ten seconds (or if we press `^C` again) it will forcibly kill them.
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
 
-## The `docker-compose.yml` file
+## The Compose file
+
+* Historically: docker-compose.yml or .yaml
+
+* Recently (kind of): can also be named compose.yml or .yaml
+
+(Since [version 1.28.6, March 2021](https://docs.docker.com/compose/releases/release-notes/#1286))
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Example
 
 Here is the file used in the demo:
 
@@ -8615,9 +7789,9 @@ services:
 
 A Compose file has multiple sections:
 
-* `version` is mandatory. (Typically use "3".)
-
 * `services` is mandatory. Each service corresponds to a container.
+
+* `version` is optional (it used to be mandatory). It can be ignored.
 
 * `networks` is optional and indicates to which networks containers should be connected.
   <br/>(By default, containers will be connected on a private, per-compose-file network.)
@@ -8627,17 +7801,17 @@ A Compose file has multiple sections:
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
 
+class: extra-details
+
 ## Compose file versions
 
 * Version 1 is legacy and shouldn't be used.
 
-  (If you see a Compose file without `version` and `services`, it's a legacy v1 file.)
+  (If you see a Compose file without a `services` block, it's a legacy v1 file.)
 
 * Version 2 added support for networks and volumes.
 
 * Version 3 added support for deployment options (scaling, rolling updates, etc).
-
-* Typically use `version: "3"`.
 
 The [Docker documentation](https://docs.docker.com/compose/compose-file/)
 has excellent information about the Compose file format if you need to know more about versions.
@@ -8645,7 +7819,7 @@ has excellent information about the Compose file format if you need to know more
 .debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/containers/Compose_For_Dev_Stacks.md)]
 ---
 
-## Containers in `docker-compose.yml`
+## Containers in Compose file
 
 Each service in the YAML file must contain either `build`, or `image`.
 
@@ -8823,7 +7997,7 @@ Use `docker compose down -v` to remove everything including volumes.
 
 - If the container is deleted, the volume gets orphaned
 
-- Example: `docker   compose down && docker compose up`
+- Example: `docker compose down && docker compose up`
 
   - the old volume still exists, detached from its container
 
@@ -8930,6 +8104,7 @@ class: extra-details
 
   - `docker compose` command to deploy Compose stacks to some clouds
 
+  - in Go instead of Python
   - progressively getting feature parity with `docker compose`
 
   - also provides numerous improvements (e.g. leverages BuildKit by default)
@@ -9706,6 +8881,113 @@ class: title
 .debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
 ---
 
+## Managed ≠ managed
+
+- Managed Kubernetes ≠ managed hosting
+
+- Managed hosting typically means that the hosting provider takes care of:
+
+  - installation, upgrades, time-sensitive security patches, backups
+
+  - logging and metrics collection
+
+  - setting up supervision, alerts, and on-call rotation
+
+- Managed Kubernetes typically means that the hosting provider takes care of:
+
+  - installation
+
+  - maybe upgrades (kind of; you typically need to initiate/coordinate them)
+
+  - and that's it!
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## "Managed" Kubernetes
+
+- "Managed Kubernetes" gives us the equivalent of a raw VM
+
+- We still need to add a lot of things to make it production-ready
+
+  (upgrades, logging, supervision...)
+
+- We also need some almost-essential components that don't always come out of the box
+
+  - ingress controller
+
+  - network policy controller
+
+  - storage class...
+
+📽️[How to make Kubernetes ryhme with production readiness](https://www.youtube.com/watch?v=6G4v-ZE6OHI
+)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Observability
+
+- Logging, metrics, traces...
+
+- Pick a solution (self-hosted, as-a-service?)
+
+- Configure control plane, nodes, various components
+
+- Set up dashboards, track important metrics
+
+  (e.g. on AWS, track inter-AZ and external traffic per app to avoid $$$ surprises)
+
+- Set up supervision, on-call notifications, on-call rotation
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Backups
+
+- Full machine backups of the nodes?
+
+  (not very effective)
+
+- Backup of control plane data?
+
+  (important; it's not always possible to obtain etcd backups)
+
+- Backup of persistent volumes?
+
+  (good idea; but not always effective)
+
+- App-level backups, e.g. database dumps, log-shipping?
+
+  (more effective and reliable; more work depending on the app and database)
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## Upgrades
+
+- Control plane
+
+  *typically automated by the provider; but might cause breakage*
+
+- Nodes
+
+  *best case scenario: can be done in-place; otherwise: requires provisioning new nodes*
+
+- Additional components (ingress controller, operators, etc.)
+
+  *depends wildly of the components!*
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
+## It's dangerous to go alone!
+
+Don't hesitate to hire help before going to production with your first K8S app!
+
+.debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
+---
+
 ## Node management
 
 - Most "Turnkey Solutions" offer fully managed control planes
@@ -9775,7 +9057,7 @@ class: title
 
 - There are too many options to list them all
 
-  (check [this page](https://kubernetes.io/partners/#conformance) for an overview!)
+  (check [this page](https://kubernetes.io/partners/#iframe-landscape-conformance) for an overview!)
 
 .debug[[k8s/setup-overview.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/setup-overview.md)]
 ---
@@ -14491,7 +13773,7 @@ class: title
 .nav[
 [Previous part](#toc-rolling-updates)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-6)
 |
 [Next part](#toc-helm-chart-format)
 ]
@@ -14587,26 +13869,6 @@ class: title
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
 
-## CNCF graduation status
-
-- On April 30th 2020, Helm was the 10th project to *graduate* within the CNCF
-
-  (alongside Containerd, Prometheus, and Kubernetes itself)
-
-- This is an acknowledgement by the CNCF for projects that
-
-  *demonstrate thriving adoption, an open governance process,
-  <br/>
-  and a strong commitment to community, sustainability, and inclusivity.*
-
-- See [CNCF announcement](https://www.cncf.io/announcement/2020/04/30/cloud-native-computing-foundation-announces-helm-graduation/)
-  and [Helm announcement](https://helm.sh/blog/celebrating-helms-cncf-graduation/)
-
-- In other words: Helm is here to stay
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
 ## Helm concepts
 
 - `helm` is a CLI tool
@@ -14670,46 +13932,6 @@ or `apt` tools).
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
 
-## Helm 2 vs Helm 3
-
-- Helm 3 was released [November 13, 2019](https://helm.sh/blog/helm-3-released/)
-
-- Charts remain compatible between Helm 2 and Helm 3
-
-- The CLI is very similar (with minor changes to some commands)
-
-- The main difference is that Helm 2 uses `tiller`, a server-side component
-
-- Helm 3 doesn't use `tiller` at all, making it simpler (yay!)
-
-- If you see references to `tiller` in a tutorial, documentation... that doc is obsolete!
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
-class: extra-details
-
-## What was the problem with `tiller`?
-
-- With Helm 3:
-
-  - the `helm` CLI communicates directly with the Kubernetes API
-
-  - it creates resources (deployments, services...) with our credentials
-
-- With Helm 2:
-
-  - the `helm` CLI communicates with `tiller`, telling `tiller` what to do
-
-  - `tiller` then communicates with the Kubernetes API, using its own credentials
-
-- This indirect model caused significant permissions headaches
-
-- It also made it more complicated to embed Helm in other tools
-
-.debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
----
-
 ## Installing Helm
 
 - If the `helm` CLI is not installed in your environment, install it
@@ -14728,8 +13950,6 @@ class: extra-details
   ```
 
 ]
-
-(To install Helm 2, replace `get-helm-3` with `get`.)
 
 .debug[[k8s/helm-intro.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-intro.md)]
 ---
@@ -15010,7 +14230,7 @@ class: title
 .nav[
 [Previous part](#toc-managing-stacks-with-helm)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-6)
 |
 [Next part](#toc-helm-and-invalid-values)
 ]
@@ -15307,7 +14527,7 @@ class: title
 .nav[
 [Previous part](#toc-helm-chart-format)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-6)
 |
 [Next part](#toc-helm-secrets)
 ]
@@ -15532,9 +14752,9 @@ class: title
 .nav[
 [Previous part](#toc-helm-and-invalid-values)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-6)
 |
-[Next part](#toc-kustomize)
+[Next part](#toc-creating-a-basic-chart)
 ]
 
 .debug[(automatically generated title slide)]
@@ -15816,15 +15036,1347 @@ class: pic
 
 ---
 
+name: toc-creating-a-basic-chart
+class: title
+
+ Creating a basic chart
+
+.nav[
+[Previous part](#toc-helm-secrets)
+|
+[Back to table of contents](#toc-part-6)
+|
+[Next part](#toc-creating-better-helm-charts)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Creating a basic chart
+
+- We are going to show a way to create a *very simplified* chart
+
+- In a real chart, *lots of things* would be templatized
+
+  (Resource names, service types, number of replicas...)
+
+.lab[
+
+- Create a sample chart:
+  ```bash
+  helm create dockercoins
+  ```
+
+- Move away the sample templates and create an empty template directory:
+  ```bash
+  mv dockercoins/templates dockercoins/default-templates
+  mkdir dockercoins/templates
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Adding the manifests of our app
+
+- There is a convenient `dockercoins.yml` in the repo
+
+.lab[
+
+- Copy the YAML file to the `templates` subdirectory in the chart:
+  ```bash
+  curl -Lo dockercoins/templates/dockercoins.yaml https://raw.githubusercontent.com/GuillaumeMorini/orchestration-workshop/refs/heads/main/k8s/dockercoins.yaml  ```
+
+]
+
+- Note: it is probably easier to have multiple YAML files
+
+  (rather than a single, big file with all the manifests)
+
+- But that works too!
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Testing our Helm chart
+
+- Our Helm chart is now ready
+
+  (as surprising as it might seem!)
+
+.lab[
+
+- Let's try to install the chart:
+  ```
+  helm install helmcoins dockercoins
+  ```
+  (`helmcoins` is the name of the release; `dockercoins` is the local path of the chart)
+
+]
+
+--
+
+- If the application is already deployed, this will fail:
+```
+Error: rendered manifests contain a resource that already exists.
+Unable to continue with install: existing resource conflict:
+kind: Service, namespace: default, name: hasher
+```
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Switching to another namespace
+
+- If there is already a copy of dockercoins in the current namespace:
+
+  - we can switch with `kubens` or `kubectl config set-context`
+
+  - we can also tell Helm to use a different namespace
+
+.lab[
+
+- Create a new namespace:
+  ```bash
+  kubectl create namespace helmcoins
+  ```
+
+- Deploy our chart in that namespace:
+  ```bash
+  helm install helmcoins dockercoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Helm releases are namespaced
+
+- Let's try to see the release that we just deployed
+
+.lab[
+
+- List Helm releases:
+  ```bash
+  helm list
+  ```
+
+]
+
+Our release doesn't show up!
+
+We have to specify its namespace (or switch to that namespace).
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Specifying the namespace
+
+- Try again, with the correct namespace
+
+.lab[
+
+- List Helm releases in `helmcoins`:
+  ```bash
+  helm list --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Checking our new copy of DockerCoins
+
+- We can check the worker logs, or the web UI
+
+.lab[
+
+- Retrieve the NodePort number of the web UI:
+  ```bash
+  kubectl get service webui --namespace=helmcoins
+  ```
+
+- Open it in a web browser
+
+- Look at the worker logs:
+  ```bash
+  kubectl logs deploy/worker --tail=10 --follow --namespace=helmcoins
+  ```
+
+]
+
+Note: it might take a minute or two for the worker to start.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Discussion, shortcomings
+
+- Helm (and Kubernetes) best practices recommend to add a number of annotations
+
+  (e.g. `app.kubernetes.io/name`, `helm.sh/chart`, `app.kubernetes.io/instance` ...)
+
+- Our basic chart doesn't have any of these
+
+- Our basic chart doesn't use any template tag
+
+- Does it make sense to use Helm in that case?
+
+- *Yes,* because Helm will:
+
+  - track the resources created by the chart
+
+  - save successive revisions, allowing us to rollback
+
+[Helm docs](https://helm.sh/docs/topics/chart_best_practices/labels/)
+and [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+have details about recommended annotations and labels.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Cleaning up
+
+- Let's remove that chart before moving on
+
+.lab[
+
+- Delete the release (don't forget to specify the namespace):
+  ```bash
+  helm delete helmcoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Tips when writing charts
+
+- It is not necessary to `helm install`/`upgrade` to test a chart
+
+- If we just want to look at the generated YAML, use `helm template`:
+  ```bash
+  helm template ./my-chart
+  helm template release-name ./my-chart
+  ```
+
+- Of course, we can use `--set` and `--values` too
+
+- Note that this won't fully validate the YAML!
+
+  (e.g. if there is `apiVersion: klingon` it won't complain)
+
+- This can be used when trying things out
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Exploring the templating system
+
+Try to put something like this in a file in the `templates` directory:
+
+```yaml
+hello: {{ .Values.service.port }}
+comment: {{/* something completely.invalid !!!  */}}
+type: {{ .Values.service | typeOf | printf }}
+### print complex value
+{{ .Values.service | toYaml }}
+### indent it
+indented:
+{{ .Values.service | toYaml | indent 2 }}
+```
+
+Then run `helm template`.
+
+The result is not a valid YAML manifest, but this is a great debugging tool!
+
+???
+
+:EN:- Writing a basic Helm chart for the whole app
+:FR:- Écriture d'un *chart* Helm simplifié
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-basic-chart.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-creating-better-helm-charts
+class: title
+
+ Creating better Helm charts
+
+.nav[
+[Previous part](#toc-creating-a-basic-chart)
+|
+[Back to table of contents](#toc-part-6)
+|
+[Next part](#toc-charts-using-other-charts)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Creating better Helm charts
+
+- We are going to create a chart with the helper `helm create`
+
+- This will give us a chart implementing lots of Helm best practices
+
+  (labels, annotations, structure of the `values.yaml` file ...)
+
+- We will use that chart as a generic Helm chart
+
+- We will use it to deploy DockerCoins
+
+- Each component of DockerCoins will have its own *release*
+
+- In other words, we will "install" that Helm chart multiple times
+
+  (one time per component of DockerCoins)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Creating a generic chart
+
+- Rather than starting from scratch, we will use `helm create`
+
+- This will give us a basic chart that we will customize
+
+.lab[
+
+- Create a basic chart:
+  ```bash
+  cd ~
+  helm create helmcoins
+  ```
+
+]
+
+This creates a basic chart in the directory `helmcoins`.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## What's in the basic chart?
+
+- The basic chart will create a Deployment and a Service
+
+- Optionally, it will also include an Ingress
+
+- If we don't pass any values, it will deploy the `nginx` image
+
+- We can override many things in that chart
+
+- Let's try to deploy DockerCoins components with that chart!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Writing `values.yaml` for our components
+
+- We need to write one `values.yaml` file for each component
+
+  (hasher, redis, rng, webui, worker)
+
+- We will start with the `values.yaml` of the chart, and remove what we don't need
+
+- We will create 5 files:
+
+  hasher.yaml, redis.yaml, rng.yaml, webui.yaml, worker.yaml
+
+- In each file, we want to have:
+  ```yaml
+    image:
+      repository: IMAGE-REPOSITORY-NAME
+      tag: IMAGE-TAG
+  ```
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Getting started
+
+- For component X, we want to use the image dockercoins/X:v0.1
+
+  (for instance, for rng, we want to use the image dockercoins/rng:v0.1)
+
+- Exception: for redis, we want to use the official image redis:latest
+
+.lab[
+
+- Write YAML files for the 5 components, with the following model:
+  ```yaml
+    image:
+      repository: `IMAGE-REPOSITORY-NAME` (e.g. dockercoins/worker)
+      tag: `IMAGE-TAG` (e.g. v0.1)
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deploying DockerCoins components
+
+- For convenience, let's work in a separate namespace
+
+.lab[
+
+- Create a new namespace (if it doesn't already exist):
+  ```bash
+  kubectl create namespace helmcoins
+  ```
+
+- Switch to that namespace:
+  ```bash
+  kns helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deploying the chart
+
+- To install a chart, we can use the following command:
+  ```bash
+  helm install COMPONENT-NAME CHART-DIRECTORY
+  ```
+
+- We can also use the following command, which is *idempotent*:
+  ```bash
+  helm upgrade COMPONENT-NAME CHART-DIRECTORY --install
+  ```
+
+.lab[
+
+- Install the 5 components of DockerCoins:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins --install --values=$COMPONENT.yaml
+    done
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+class: extra-details
+
+## "Idempotent"
+
+- Idempotent = that can be applied multiple times without changing the result
+
+  (the word is commonly used in maths and computer science)
+
+- In this context, this means:
+
+  - if the action (installing the chart) wasn't done, do it
+
+  - if the action was already done, don't do anything
+
+- Ideally, when such an action fails, it can be retried safely
+
+  (as opposed to, e.g., installing a new release each time we run it)
+
+- Other example: `kubectl apply -f some-file.yaml`
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Checking what we've done
+
+- Let's see if DockerCoins is working!
+
+.lab[
+
+- Check the logs of the worker:
+  ```bash
+  kubectl logs -l app=worker
+  ```
+
+- Look at the resources that were created:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+There are *many* issues to fix!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Can't pull image
+
+- It looks like our images can't be found
+
+.lab[
+
+- Use `kubectl describe` on any of the pods in error
+
+]
+
+- We're trying to pull `rng:1.16.0` instead of `rng:v0.1`!
+
+- Where does that `1.16.0` tag come from?
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Inspecting our template
+
+- Let's look at the `templates/` directory
+
+  (and try to find the one generating the Deployment resource)
+
+.lab[
+
+- Show the structure of the `helmcoins` chart that Helm generated:
+  ```bash
+  tree helmcoins
+  ```
+
+- Check the file `helmcoins/templates/deployment.yaml`
+
+- Look for the `image:` parameter
+
+]
+
+*The image tag references `{{ .Chart.AppVersion }}`. Where does that come from?*
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## The `.Chart` variable
+
+- `.Chart` is a map corresponding to the values in `Chart.yaml`
+
+- Let's look for `AppVersion` there!
+
+.lab[
+
+- Check the file `helmcoins/Chart.yaml`
+
+- Look for the `appVersion:` parameter
+
+]
+
+(Yes, the case is different between the template and the Chart file.)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Using the correct tags
+
+- If we change `AppVersion` to `v0.1`, it will change for *all* deployments
+
+  (including redis)
+
+- Instead, let's change the *template* to use `{{ .Values.image.tag }}`
+
+  (to match what we've specified in our values YAML files)
+
+.lab[
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- Replace `{{ .Chart.AppVersion }}` with `{{ .Values.image.tag }}`
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Upgrading to use the new template
+
+- Technically, we just made a new version of the *chart*
+
+- To use the new template, we need to *upgrade* the release to use that chart
+
+.lab[
+
+- Upgrade all components:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins
+    done
+  ```
+
+- Check how our pods are doing:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+We should see all pods "Running". But ... not all of them are READY.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Troubleshooting readiness
+
+- `hasher`, `rng`, `webui` should show up as `1/1 READY`
+
+- But `redis` and `worker` should show up as `0/1 READY`
+
+- Why?
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Troubleshooting pods
+
+- The easiest way to troubleshoot pods is to look at *events*
+
+- We can look at all the events on the cluster (with `kubectl get events`)
+
+- Or we can use `kubectl describe` on the objects that have problems
+
+  (`kubectl describe` will retrieve the events related to the object)
+
+.lab[
+
+- Check the events for the redis pods:
+  ```bash
+  kubectl describe pod -l app.kubernetes.io/name=redis
+  ```
+
+]
+
+It's failing both its liveness and readiness probes!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Healthchecks
+
+- The default chart defines healthchecks doing HTTP requests on port 80
+
+- That won't work for redis and worker
+
+  (redis is not HTTP, and not on port 80; worker doesn't even listen)
+
+--
+
+- We could remove or comment out the healthchecks
+
+- We could also make them conditional
+
+- This sounds more interesting, let's do that!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Conditionals
+
+- We need to enclose the healthcheck block with:
+
+  `{{ if false }}` at the beginning (we can change the condition later)
+
+  `{{ end }}` at the end
+
+.lab[
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- Add `{{ if false }}` on the line before `livenessProbe`
+
+- Add `{{ end }}` after the `readinessProbe` section
+
+  (see next slide for details)
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+This is what the new YAML should look like (added lines in yellow):
+
+```yaml
+        ports:
+          - name: http
+            containerPort: 80
+            protocol: TCP
+        `{{ if false }}`
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        `{{ end }}`
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+```
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Testing the new chart
+
+- We need to upgrade all the services again to use the new chart
+
+.lab[
+
+- Upgrade all components:
+  ```bash
+    for COMPONENT in hasher redis rng webui worker; do
+      helm upgrade $COMPONENT helmcoins
+    done
+  ```
+
+- Check how our pods are doing:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+Everything should now be running!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## What's next?
+
+- Is this working now?
+
+.lab[
+
+- Let's check the logs of the worker:
+  ```bash
+  stern worker
+  ```
+
+]
+
+This error might look familiar ... The worker can't resolve `redis`.
+
+Typically, that error means that the `redis` service doesn't exist.
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Checking services
+
+- What about the services created by our chart?
+
+.lab[
+
+- Check the list of services:
+  ```bash
+  kubectl get services
+  ```
+
+]
+
+They are named `COMPONENT-helmcoins` instead of just `COMPONENT`.
+
+We need to change that!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Where do the service names come from?
+
+- Look at the YAML template used for the services
+
+- It should be using `{{ include "helmcoins.fullname" }}`
+
+- `include` indicates a *template block* defined somewhere else
+
+.lab[
+
+- Find where that `fullname` thing is defined:
+  ```bash
+  grep define.*fullname helmcoins/templates/*
+  ```
+
+]
+
+It should be in `_helpers.tpl`.
+
+We can look at the definition, but it's fairly complex ...
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Changing service names
+
+- Instead of that `{{ include }}` tag, let's use the name of the release
+
+- The name of the release is available as `{{ .Release.Name }}`
+
+.lab[
+
+- Edit `helmcoins/templates/service.yaml`
+
+- Replace the service name with `{{ .Release.Name }}`
+
+- Upgrade all the releases to use the new chart
+
+- Confirm that the services now have the right names
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Is it working now?
+
+- If we look at the worker logs, it appears that the worker is still stuck
+
+- What could be happening?
+
+--
+
+- The redis service is not on port 80!
+
+- Let's see how the port number is set
+
+- We need to look at both the *deployment* template and the *service* template
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Service template
+
+- In the service template, we have the following section:
+  ```yaml
+    ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  ```
+
+- `port` is the port on which the service is "listening"
+
+  (i.e. to which our code needs to connect)
+
+- `targetPort` is the port on which the pods are listening
+
+- The `name` is not important (it's OK if it's `http` even for non-HTTP traffic)
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Setting the redis port
+
+- Let's add a `service.port` value to the redis release
+
+.lab[
+
+- Edit `redis.yaml` to add:
+  ```yaml
+    service:
+      port: 6379
+  ```
+
+- Apply the new values file:
+  ```bash
+  helm upgrade redis helmcoins --values=redis.yaml
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Deployment template
+
+- If we look at the deployment template, we see this section:
+  ```yaml
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+  ```
+
+- The container port is hard-coded to 80
+
+- We'll change it to use the port number specified in the values
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Changing the deployment template
+
+.lab[  
+
+- Edit `helmcoins/templates/deployment.yaml`
+
+- The line with `containerPort` should be:
+  ```yaml
+  containerPort: {{ .Values.service.port }}
+  ```
+
+]
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Apply changes
+
+- Re-run the for loop to execute `helm upgrade` one more time
+
+- Check the worker logs
+
+- This time, it should be working!
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+## Extra steps
+
+- We don't need to create a service for the worker
+
+- We can put the whole service block in a conditional
+
+  (this will require additional changes in other files referencing the service)
+
+- We can set the webui to be a NodePort service
+
+- We can change the number of workers with `replicaCount`
+
+- And much more!
+
+???
+
+:EN:- Writing better Helm charts for app components
+:FR:- Écriture de *charts* composant par composant
+
+.debug[[k8s/helm-create-better-chart.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-create-better-chart.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-charts-using-other-charts
+class: title
+
+ Charts using other charts
+
+.nav[
+[Previous part](#toc-creating-better-helm-charts)
+|
+[Back to table of contents](#toc-part-6)
+|
+[Next part](#toc-kustomize)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Charts using other charts
+
+- Helm charts can have *dependencies* on other charts
+
+- These dependencies will help us to share or reuse components
+
+  (so that we write and maintain less manifests, less templates, less code!)
+
+- As an example, we will use a community chart for Redis
+
+- This will help people who write charts, and people who use them
+
+- ... And potentially remove a lot of code! ✌️
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Redis in DockerCoins
+
+- In the DockerCoins demo app, we have 5 components:
+
+  - 2 internal webservices
+  - 1 worker
+  - 1 public web UI
+  - 1 Redis data store
+
+- Every component is running some custom code, except Redis
+
+- Every component is using a custom image, except Redis
+
+  (which is using the official `redis` image)
+
+- Could we use a standard chart for Redis?
+
+- Yes! Dependencies to the rescue!
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Adding our dependency
+
+- First, we will add the dependency to the `Chart.yaml` file
+
+- Then, we will ask Helm to download that dependency
+
+- We will also *lock* the dependency
+
+  (lock it to a specific version, to ensure reproducibility)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Declaring the dependency
+
+- First, let's edit `Chart.yaml`
+
+.lab[
+
+- In `Chart.yaml`, fill the `dependencies` section:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: 11.0.5
+        repository: https://charts.bitnami.com/bitnami
+        condition: redis.enabled
+  ```
+
+]
+
+Where do that `repository` and `version` come from?
+
+We're assuming here that we did our research,
+or that our resident Helm expert advised us to
+use Bitnami's Redis chart.
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Conditions
+
+- The `condition` field gives us a way to enable/disable the dependency:
+  ```yaml
+  conditions: redis.enabled
+  ```
+
+- Here, we can disable Redis with the Helm flag `--set redis.enabled=false`
+
+  (or set that value in a `values.yaml` file)
+
+- Of course, this is mostly useful for *optional* dependencies
+
+  (otherwise, the app ends up being broken since it'll miss a component)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Lock & Load!
+
+- After adding the dependency, we ask Helm to pin an download it
+
+.lab[
+
+- Ask Helm:
+  ```bash
+  helm dependency update
+  ```
+
+  (Or `helm dep up`)
+
+]
+
+- This wil create `Chart.lock` and fetch the dependency
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## What's `Chart.lock`?
+
+- This is a common pattern with dependencies
+
+  (see also: `Gemfile.lock`, `package.json.lock`, and many others)
+
+- This lets us define loose dependencies in `Chart.yaml`
+
+  (e.g. "version 11.whatever, but below 12")
+
+- But have the exact version used in `Chart.lock`
+
+- This ensures reproducible deployments
+
+- `Chart.lock` can (should!) be added to our source tree
+
+- `Chart.lock` can (should!) regularly be updated
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Loose dependencies
+
+- Here is an example of loose version requirement:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: ">=11, <12"
+        repository: https://charts.bitnami.com/bitnami
+  ```
+
+- This makes sure that we have the most recent version in the 11.x train
+
+- ... But without upgrading to version 12.x
+
+  (because it might be incompatible)
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## `build` vs `update`
+
+- Helm actually offers two commands to manage dependencies:
+
+  `helm dependency build` = fetch dependencies listed in `Chart.lock`
+
+  `helm dependency update` = update `Chart.lock` (and run `build`)
+
+- When the dependency gets updated, we can/should:
+
+  - `helm dep up` (update `Chart.lock` and fetch new chart)
+
+  - test!
+
+  - if everything is fine, `git add Chart.lock` and commit
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Where are my dependencies?
+
+- Dependencies are downloaded to the `charts/` subdirectory
+
+- When they're downloaded, they stay in compressed format (`.tgz`)
+
+- Should we commit them to our code repository?
+
+- Pros:
+
+  - more resilient to internet/mirror failures/decomissioning
+
+- Cons:
+
+  - can add a lot of weight to the repo if charts are big or change often
+
+  - this can be solved by extra tools like git-lfs
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Dependency tuning
+
+- DockerCoins expects the `redis` Service to be named `redis`
+
+- Our Redis chart uses a different Service name by default
+
+- Service name is `{{ template "redis.fullname" . }}-master`
+
+- `redis.fullname` looks like this:
+  ```
+    {{- define "redis.fullname" -}}
+    {{- if .Values.fullnameOverride -}}
+    {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+    [...]
+    {{- end }}
+    {{- end }}
+  ```
+
+- How do we fix this?
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Setting dependency variables
+
+- If we set `fullnameOverride` to `redis`:
+
+  - the `{{ template ... }}` block will output `redis`
+
+  - the Service name will be `redis-master`
+
+- A parent chart can set values for its dependencies
+
+- For example, in the parent's `values.yaml`:
+
+  ```yaml
+    redis:                    # Name of the dependency
+      fullnameOverride: redis # Value passed to redis
+      cluster:                # Other values passed to redis
+        enabled: false
+  ```
+
+- User can also set variables with `--set=` or with `--values=`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Passing templates
+
+- We can even pass template `{{ include "template.name" }}`, but warning:
+
+   - need to be evaluated with the `tpl` function, on the child side
+
+   - evaluated in the context of the child, with no access to parent variables
+
+<!-- FIXME this probably deserves an example, but I can't imagine one right now 😅 -->
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Getting rid of the `-master`
+
+- Even if we set that `fullnameOverride`, the Service name will be `redis-master`
+
+- To remove the `-master` suffix, we need to edit the chart itself
+
+- To edit the Redis chart, we need to *embed* it in our own chart
+
+- We need to:
+
+  - decompress the chart
+
+  - adjust `Chart.yaml` accordingly
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Embedding a dependency
+
+.lab[
+
+- Decompress the chart:
+  ```yaml
+  cd charts
+  tar zxf redis-*.tgz
+  cd ..
+  ```
+
+- Edit `Chart.yaml` and update the `dependencies` section:
+  ```yaml
+    dependencies:
+      - name: redis
+        version: '*' # No need to constraint version, from local files
+  ```
+
+- Run `helm dep update`
+
+]
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Updating the dependency
+
+- Now we can edit the Service name
+
+  (it should be in `charts/redis/templates/redis-master-svc.yaml`)
+
+- Then try to deploy the whole chart!
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+## Embedding a dependency multiple times
+
+- What if we need multiple copies of the same subchart?
+
+  (for instance, if we need two completely different Redis servers)
+
+- We can declare a dependency multiple times, and specify an `alias`:
+  ```yaml
+  dependencies:
+    - name: redis
+      version: '*'
+      alias: querycache
+    - name: redis
+      version: '*'
+      alias: celeryqueue
+  ```
+
+- `.Chart.Name` will be set to the `alias`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Determining if we're in a subchart
+
+- `.Chart.IsRoot` indicates if we're in the top-level chart or in a sub-chart
+
+- Useful in charts that are designed to be used standalone or as dependencies
+
+- Example: generic chart
+
+  - when used standalone (`.Chart.IsRoot` is `true`), use `.Release.Name`
+
+  - when used as a subchart e.g. with multiple aliases, use `.Chart.Name`
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: extra-details
+
+## Compatibility with Helm 2
+
+- Chart `apiVersion: v1` is the only version supported by Helm 2
+
+- Chart v1 is also supported by Helm 3
+
+- Use v1 if you want to be compatible with Helm 2
+
+- Instead of `Chart.yaml`, dependencies are defined in `requirements.yaml`
+
+  (and we should commit `requirements.lock` instead of `Chart.lock`)
+
+???
+
+:EN:- Depending on other charts
+:EN:- Charts within charts
+
+:FR:- Dépendances entre charts
+:FR:- Un chart peut en cacher un autre
+
+.debug[[k8s/helm-dependencies.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/helm-dependencies.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/aerial-view-of-containers.jpg)]
+
+---
+
 name: toc-kustomize
 class: title
 
  Kustomize
 
 .nav[
-[Previous part](#toc-helm-secrets)
+[Previous part](#toc-charts-using-other-charts)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-6)
 |
 [Next part](#toc-network-policies)
 ]
@@ -16027,29 +16579,6 @@ configMapGenerator:
 .debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
 ---
 
-class: extra-details
-
-## Hashicorp go-getter
-
-- Some versions of Kustomize support additional forms for remote resources
-
-- Examples:
-
-  https://releases.hello.io/k/1.0.zip (remote archive)
-
-  https://releases.hello.io/k/1.0.zip//some-subdir (subdirectory in archive)
-
-- This relies on [hashicorp/go-getter](https://github.com/hashicorp/go-getter#url-format)
-
-- ... But it prevents Kustomize inclusion in `kubectl`
-
-- Avoid them!
-
-- See [kustomize#3578](https://github.com/kubernetes-sigs/kustomize/issues/3578) for details
-
-.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
----
-
 ## Managing `kustomization.yaml`
 
 - There are many ways to manage `kustomization.yaml` files, including:
@@ -16057,8 +16586,6 @@ class: extra-details
   - the `kustomize` CLI
 
   - opening the file with our favorite text editor
-
-  - ~~web wizards like [Replicated Ship](https://www.replicated.com/ship/)~~ (deprecated)
 
 - Let's see these in action!
 
@@ -16131,34 +16658,6 @@ General workflow:
 
 - The `kustomize` tool is still needed if we want to use `create`, `edit`, ...
 
-- Kubernetes 1.14 to 1.20 uses Kustomize 2.0.3
-
-- Kubernetes 1.21 jumps to Kustomize 4.1.2
-
-- Future versions should track Kustomize updates more closely
-
-.debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
----
-
-class: extra-details
-
-## Differences between 2.0.3 and later
-
-- Kustomize 2.1 / 3.0 deprecates `bases` (they should be listed in `resources`)
-
-  (this means that "modern" `kustomize edit add resource` won't work with "old" `kubectl apply -k`)
-
-- Kustomize 2.1 introduces `replicas` and `envs`
-
-- Kustomize 3.1 introduces multipatches
-
-- Kustomize 3.2 introduce inline patches in `kustomization.yaml`
-
-- Kustomize 3.3 to 3.10 is mostly internal refactoring
-
-- Kustomize 4.0 drops go-getter again
-
-- Kustomize 4.1 allows patching kind and name
 
 .debug[[k8s/kustomize.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/kustomize.md)]
 ---
@@ -16368,7 +16867,7 @@ patches:
 
 class: pic
 
-.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/blue-containers.jpg)]
 
 ---
 
@@ -16380,9 +16879,9 @@ class: title
 .nav[
 [Previous part](#toc-kustomize)
 |
-[Back to table of contents](#toc-part-5)
+[Back to table of contents](#toc-part-7)
 |
-[Next part](#toc-)
+[Next part](#toc-tp-ks--network-policies)
 ]
 
 .debug[(automatically generated title slide)]
@@ -16550,7 +17049,7 @@ The `curl` command should show us the "Welcome to nginx!" page.
 
 - Apply the policy in this YAML file:
   ```bash
-    kubectl apply -f ~/container.training/k8s/netpol-deny-all-for-testweb.yaml
+    kubectl apply -f netpol-deny-all-for-testweb.yaml
   ```
 
 - Check if we can still access the server:
@@ -16601,7 +17100,7 @@ spec:
 
 - Apply another policy:
   ```bash
-  kubectl apply -f ~/container.training/k8s/netpol-allow-testcurl-for-testweb.yaml
+  kubectl apply -f netpol-allow-testcurl-for-testweb.yaml
   ```
 
 ]
@@ -16705,112 +17204,6 @@ The second command will fail and time out after 3 seconds.
 
   - external access has to be enabled explicitly
 
-- Let's see what this would look like for the DockerCoins app!
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Network policies for DockerCoins
-
-- We are going to apply two policies
-
-- The first policy will prevent traffic from other namespaces
-
-- The second policy will allow traffic to the `webui` pods
-
-- That's all we need for that app!
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Blocking traffic from other namespaces
-
-This policy selects all pods in the current namespace.
-
-It allows traffic only from pods in the current namespace.
-
-(An empty `podSelector` means "all pods.")
-
-```yaml
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: deny-from-other-namespaces
-spec:
-  podSelector: {}
-  ingress:
-  - from:
-    - podSelector: {}
-```
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Allowing traffic to `webui` pods
-
-This policy selects all pods with label `app=webui`.
-
-It allows traffic from any source.
-
-(An empty `from` field means "all sources.")
-
-```yaml
-kind: NetworkPolicy
-apiVersion: networking.k8s.io/v1
-metadata:
-  name: allow-webui
-spec:
-  podSelector:
-    matchLabels:
-      app: webui
-  ingress:
-  - from: []
-```
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Applying both network policies
-
-- Both network policies are declared in the file [k8s/netpol-dockercoins.yaml](https://github.com/jpetazzo/container.training/tree/master/k8s/netpol-dockercoins.yaml)
-
-.lab[
-
-- Apply the network policies:
-  ```bash
-  kubectl apply -f ~/container.training/k8s/netpol-dockercoins.yaml
-  ```
-
-- Check that we can still access the web UI from outside
-  <br/>
-  (and that the app is still working correctly!)
-
-- Check that we can't connect anymore to `rng` or `hasher` through their ClusterIP
-
-]
-
-Note: using `kubectl proxy` or `kubectl port-forward` allows us to connect
-regardless of existing network policies. This allows us to debug and
-troubleshoot easily, without having to poke holes in our firewall.
-
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
----
-
-## Cleaning up our network policies
-
-- The network policies that we have installed block all traffic to the default namespace
-
-- We should remove them, otherwise further demos and exercises will fail!
-
-.lab[
-
-- Remove all network policies:
-  ```bash
-  kubectl delete networkpolicies --all
-  ```
-
-]
-
 .debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
 ---
 
@@ -16879,15 +17272,128 @@ troubleshoot easily, without having to poke holes in our firewall.
 :EN:- Isolating workloads with Network Policies
 :FR:- Isolation réseau avec les *network policies*
 
-.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]</textarea>
+.debug[[k8s/netpol.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next part](https://prettypictures.container.training/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-tp-ks--network-policies
+class: title
+
+ TP k8s : Network policies
+
+.nav[
+[Previous part](#toc-network-policies)
+|
+[Back to table of contents](#toc-part-7)
+|
+[Next part](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# TP k8s : Network policies
+
+- We will connect to the Kubernetes master VM
+
+- We will clone the TP repository
+
+.lab[
+
+- Clone the repository on your VM:
+  ```bash
+  git clone https://github.com/GuillaumeMorini/TP-Kubernetes
+  ```
+
+]
+
+- This repository has the applications to deploy but no network policies.
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## What's this application?
+
+
+- The demo for this part of the workshop is a distributed application with multiple components. 
+
+- Version 1 of the app has a legacy backend service, which is fronted by a facade. There's a client application which talks to the facade to use backend services.
+
+- Version 2 of the app introduces a payment service. The service isn't directly accessible - only via a queue. Backend services can publish request messages to the queue, and the payments service can process them and publish response messages to the queue.
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+class: pic
+
+![Diagram showing the applications](images/netpol-app.png)
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+class: pic
+
+![Diagram showing the applications v2](images/netpol-app-2.png)
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Why using Network policies
+
+--
+
+- The app has been badly configured though, so every service is trying to use every other service. 
+- We'll use network policies enforced by Calico to make sure traffic flows where it should.
+
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Goal of the TP
+
+- Deploy the app v1 using kubectl commands
+
+- Write 4 network policies to filter the traffic
+
+- Deploy the app v2 using kubectl commands
+
+- Write 3 network policies to filter the traffic specific to this v2
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## What I ask
+
+- Work by group on this TP
+
+- Provide a detailed report of all the steps of this TP
+
+- One report per group (be sure to put the 2 or 3 names on the report)
+
+- Use PDF format for the report
+
+- Send me the report through Teams private message or through email
+
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]
+---
+
+## Up to you
+
+
+![The floor is yours](images/floor_is_yours.jpg)
+.debug[[k8s/netpol-tp.md](https://github.com/GuillaumeMorini/orchestration-workshop/tree/efrei/slides/k8s/netpol-tp.md)]</textarea>
   <script src="remark.min.js" type="text/javascript">
   </script>
   <script type="text/javascript">
     var slideshow = remark.create({
       ratio: '16:9',
       highlightSpans: true,
-      slideNumberFormat: '%current%/%total%',
-      excludedClasses: [@@EXCLUDE @@]
+      slideNumberFormat: '%current%/%total%'
     });
   </script>
   <script type="module">
